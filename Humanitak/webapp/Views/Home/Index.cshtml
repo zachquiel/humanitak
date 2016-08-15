@@ -1,0 +1,44 @@
+﻿<!-- MAIN CONTENT -->
+<div id="content">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa-fw fa fa-home"></i>
+            Home
+        </h1>
+    </div>
+    <br /><br /><br />
+    <h3 style="line-height: 2em">
+        <ul>
+            <li class="@Html.RouteIf("Empresas", "active")">
+                <a href="@Url.Action("Index", "Empresas", new {@id = ViewData["id"]})" title="Empresas" style="color: black !important"><i class="fa fa-lg fa-fw fa-building txt-color-black"></i> <span class="menu-item-parent">Empresas</span></a>
+            </li>
+            <li class="@Html.RouteIf("Usuarios", "active")">
+                <a href="@Url.Action("Index", "Usuarios", new {@id = ViewData["id"]})" title="Usuarios" style="color: black !important"><i class="fa fa-lg fa-fw fa-users txt-color-black"></i> <span class="menu-item-parent">Usuarios</span></a>
+            </li>
+            <li class="@Html.RouteIf("Dispersiones", "active")">
+                <a href="@Url.Action("Index", "Dispersiones", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-heart txt-color-black"></i> <span class="menu-item-parent">Dispersiones de fondos</span></a>
+            </li>
+            <li class="@Html.RouteIf("Prestamos", "active")">
+                <a href="@Url.Action("Index", "Prestamos", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-usd txt-color-black"></i> <span class="menu-item-parent">Préstamos</span></a>
+            </li>
+            <li class="@Html.RouteIf("NominaEmpleado", "active")">
+                <a href="@Url.Action("Index", "NominaEmpleado", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-credit-card txt-color-black"></i> <span class="menu-item-parent">Nómina de empleado</span></a>
+            </li>
+            <li class="@Html.RouteIf("Curriculum", "active")">
+                <a href="@Url.Action("Index", "Curriculum", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-paperclip txt-color-black"></i> <span class="menu-item-parent">Curriculums</span></a>
+            </li>
+            <li class="@Html.RouteIf("Cuenta", "active")">
+                <a href="@Url.Action("Index", "Cuenta", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-user txt-color-black"></i> <span class="menu-item-parent">Mi Cuenta</span></a>
+            </li>
+            <li class="@Html.RouteIf("Incidencias", "active")">
+                <a href="@Url.Action("Index", "Incidencias", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-exclamation-triangle txt-color-black"></i> <span class="menu-item-parent">Modulo de incidencias</span></a>
+            </li>
+            <!--<li class="@Html.RouteIf("Administracion", "active")">
+                <a href="@Url.Action("Index", "Administracion", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-cogs txt-color-black"></i> <span class="menu-item-parent">Modulo administrativo</span></a>
+            </li>-->
+        </ul>
+    </h3>
+</div>
+<!-- END MAIN CONTENT -->
+@section pagespecific {
+}

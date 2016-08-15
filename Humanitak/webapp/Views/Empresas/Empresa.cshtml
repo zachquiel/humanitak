@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Empresa";
+}
+
+<h2>@Html.Label(ViewData["id"].ToString()) - Empresa Dummy</h2>
+
+<h3 style="line-height: 2em">
+    <ul>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Nominas", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-money txt-color-black"></i> <span class="menu-item-parent">Nómina</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Empleados", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-users txt-color-black"></i> <span class="menu-item-parent">Catálogo de Empleados</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Departamento", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-laptop txt-color-black"></i> <span class="menu-item-parent">Catálogo de Departamentos</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Puesto", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-sitemap txt-color-black"></i> <span class="menu-item-parent">Catálogo de Puestos</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Percepciones", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-tag txt-color-black"></i> <span class="menu-item-parent">Percepciones y Deducciones</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Configuracion", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-cog txt-color-black"></i> <span class="menu-item-parent">Configuración de la Empresa</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Acumulados", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-search txt-color-black"></i> <span class="menu-item-parent">Búsqueda de acumulados</span></a>
+        </li>
+    </ul>
+</h3>
