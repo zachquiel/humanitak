@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "Dispersion de fondos";
+}
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-bank fa-fw "></i>
+            Dispersión de fondos
+        </h1>
+    </div>
+</div>
+
+<div style="margin-left: 10%">
+    <table width="50%">
+        <tr>
+            <td width="40%">
+                Porcentaje de IMSS sobre nómina:
+            </td>
+            <td width="10%">20%</td>
+        </tr>
+        <tr>
+            <td>
+                Comisón:
+            </td>
+            <td>5%</td>
+        </tr>
+        <tr>
+            <td>
+                IVA:
+            </td>
+            <td>16%</td>
+        </tr>
+        @if (ViewData["id"].ToString() == "1" || ViewData["id"].ToString() == "2") {
+            
+            if (ViewData["id"].ToString() == "2") {
+                @:<tr>
+                @:<td>
+                @:Monto a dispersar:
+                @:</td>
+                @:<td>
+                @:$20,000.00
+                @:</td>
+                @:</tr>
+            } else {
+                @:<tr>
+                @:<td colspan="2">
+                @:Monto a dispersar:
+                @:</td>
+                @:</tr>
+                @:<tr>
+                @:<td>
+                @:Empresa C:
+                @:</td>
+                @:<td>
+                @:$20,000.00
+                @:</td>
+                @:</tr>
+                @:<tr>
+                @:<td>
+                @:Empresa D:
+                @:</td>
+                @:<td>
+                @:$20,000.00
+                @:</td>
+                @:</tr>
+                @:<tr>
+                @:<td>
+                @:Total:
+                @:</td>
+                @:<td>
+                @:$40,000.00
+                @:</td>
+                @:</tr>
+            }
+            @:<tr>
+            @:<td colspan="2" align="center">
+            @:<button class="btn btn-primary" onclick="GetResult()">Ejecutar</button>
+            @:</td>
+            @:</tr>
+        } else {
+            @:<tr>
+            @:<td colspan="2" align="center">
+            @:Las dispersiones sólo las puede realizar la empresa matriz
+            @:</td>
+            @:</tr>
+        }
+    </table>
+    <div id="result1" style="display: none">
+        <table width="50%">
+            <tr>
+                <td>Monto dispersado (Empresa C):</td>
+                <td>$16,000.00</td>
+            </tr>
+            <tr style="border-bottom: solid 1px black">
+                <td>Monto dispersado (Empresa D):</td>
+                <td>$16,000.00</td>
+            </tr>
+            <tr>
+                <td>Monto total dispersado:</td>
+                <td>$32,000.00</td>
+            </tr>
+            <tr>
+                <td>IMSS (Empresa C):</td>
+                <td>$8,000.00</td>
+            </tr>
+            <tr style="border-bottom: solid 1px black">
+                <td>IMSS (Empresa D):</td>
+                <td>$8,000.00</td>
+            </tr>
+            <tr>
+                <td>Total IMSS</td>
+                <td>$8,000.00</td>
+            </tr>
+            <tr style="border-bottom: solid 2px black">
+                <td>Comisión</td>
+                <td>$2,000.00</td>
+            </tr>
+            <tr>
+                <td>Subtotal</td>
+                <td>$42,000.00</td>
+            </tr>
+            <tr style="border-bottom: solid 4px black">
+                <td>IVA</td>
+                <td>$6,720.00</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td>$48,720.00</td>
+            </tr>
+        </table>
+    </div>
+    <div id="result2" style="display: none">
+        <table width="50%">
+            <tr>
+                <td>Monto dispersado:</td>
+                <td>$16,000.00</td>
+            </tr>
+            <tr>
+                <td>IMSS</td>
+                <td>$4,000.00</td>
+            </tr>
+            <tr style="border-bottom: solid 2px black">
+                <td>Comisión</td>
+                <td>$1,000.00</td>
+            </tr>
+            <tr>
+                <td>Subtotal</td>
+                <td>$21,000.00</td>
+            </tr>
+            <tr style="border-bottom: solid 4px black">
+                <td>IVA</td>
+                <td>$3,360.00</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td>$24,360.00</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    function GetResult() {
+        $.get("/Empresas/GetResult", function (data) {
+            @if (ViewData["id"].ToString() == "1") {
+                @:$("#result1").css("display", "block");
+                        } else {
+                @:$("#result2").css("display", "block");
+            }
+        });
+    }
+</script>

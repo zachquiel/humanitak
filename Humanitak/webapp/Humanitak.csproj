@@ -1020,6 +1020,7 @@
     <Content Include="Views\Curriculum\Index.cshtml" />
     <Content Include="Views\Cuenta\Index.cshtml" />
     <Content Include="Views\Incidencias\Index.cshtml" />
+    <Content Include="Views\Empresas\Dispersion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

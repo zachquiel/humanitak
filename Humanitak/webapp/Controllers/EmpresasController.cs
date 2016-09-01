@@ -70,5 +70,17 @@ namespace SmartAdminMvc.Controllers
         {
             return View();
         }
+
+        // GET: Nueva
+        public ActionResult Dispersion(int id)
+        {
+            ViewData.Add("id", id);
+            return View();
+        }
+
+        public ActionResult GetResult() {
+            string message = "Welcome";
+            return new JsonResult { Data = message, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
     }
 }
