@@ -26,7 +26,10 @@
             <a href="@Url.Action("Index", "Configuracion", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-cog txt-color-black"></i> <span class="menu-item-parent">Configuración de la Empresa</span></a>
         </li>
         <li class="@Html.RouteIf("Empresas", "active")">
-            <a href="@Url.Action("Index", "Acumulados", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-search txt-color-black"></i> <span class="menu-item-parent">Búsqueda de acumulados</span></a>
+            <a href="@Url.Action("Index", "Acumulados", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-search txt-color-black"></i> <span class="menu-item-parent">Búsqueda de acumulados</span></a>
+        </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Dispersion", "Empresas", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-bank txt-color-black"></i> <span class="menu-item-parent">Dispersión de Fondos</span></a>
         </li>
     </ul>
 </h3>
