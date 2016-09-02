@@ -14,26 +14,28 @@
 <div style="margin-left: 10%">
     <table width="50%">
         <tr>
-            <td width="40%">
+            <td width="15%">
                 Porcentaje de IMSS sobre nómina:
             </td>
-            <td width="10%">20%</td>
+            <td width="10%"><input class="form-control spinner-left spinner1" id="spinner1" name="spinner" value="20" type="text"></td>
         </tr>
         <tr>
             <td>
                 Comisón:
             </td>
-            <td>5%</td>
+            <td><input class="form-control spinner-left spinner2" id="spinner2" name="spinner" value="5" type="text"></td>
         </tr>
         <tr>
             <td>
                 IVA:
             </td>
-            <td>16%</td>
+            <td><input class="form-control spinner-left spinner3" id="spinner3" name="spinner" value="16" type="text"></td>
         </tr>
-        @if (ViewData["id"].ToString() == "1" || ViewData["id"].ToString() == "2") {
-            
-            if (ViewData["id"].ToString() == "2") {
+        @if (ViewData["id"].ToString() == "1" || ViewData["id"].ToString() == "2")
+        {
+
+            if (ViewData["id"].ToString() == "2")
+            {
                 @:<tr>
                 @:<td>
                 @:Monto a dispersar:
@@ -42,7 +44,9 @@
                 @:$20,000.00
                 @:</td>
                 @:</tr>
-            } else {
+            }
+            else
+            {
                 @:<tr>
                 @:<td colspan="2">
                 @:Monto a dispersar:
@@ -78,7 +82,9 @@
             @:<button class="btn btn-primary" onclick="GetResult()">Ejecutar</button>
             @:</td>
             @:</tr>
-        } else {
+        }
+        else
+        {
             @:<tr>
             @:<td colspan="2" align="center">
             @:Las dispersiones sólo las puede realizar la empresa matriz
@@ -90,43 +96,43 @@
         <table width="50%">
             <tr>
                 <td>Monto dispersado (Empresa C):</td>
-                <td>$16,000.00</td>
+                <td id="disp1"></td>
             </tr>
             <tr style="border-bottom: solid 1px black">
                 <td>Monto dispersado (Empresa D):</td>
-                <td>$16,000.00</td>
+                <td id="disp2"></td>
             </tr>
             <tr>
                 <td>Monto total dispersado:</td>
-                <td>$32,000.00</td>
+                <td id="disp3"></td>
             </tr>
             <tr>
                 <td>IMSS (Empresa C):</td>
-                <td>$8,000.00</td>
+                <td id="imss1"></td>
             </tr>
             <tr style="border-bottom: solid 1px black">
                 <td>IMSS (Empresa D):</td>
-                <td>$8,000.00</td>
+                <td id="imss2"></td>
             </tr>
             <tr>
                 <td>Total IMSS</td>
-                <td>$8,000.00</td>
+                <td id="imss3"></td>
             </tr>
             <tr style="border-bottom: solid 2px black">
                 <td>Comisión</td>
-                <td>$2,000.00</td>
+                <td id="comision"></td>
             </tr>
             <tr>
                 <td>Subtotal</td>
-                <td>$42,000.00</td>
+                <td id="subtotal"></td>
             </tr>
             <tr style="border-bottom: solid 4px black">
                 <td>IVA</td>
-                <td>$6,720.00</td>
+                <td id="iva"></td>
             </tr>
             <tr>
                 <td>Total</td>
-                <td>$48,720.00</td>
+                <td id="total"></td>
             </tr>
         </table>
     </div>
@@ -134,39 +140,133 @@
         <table width="50%">
             <tr>
                 <td>Monto dispersado:</td>
-                <td>$16,000.00</td>
+                <td id="disp"></td>
             </tr>
             <tr>
                 <td>IMSS</td>
-                <td>$4,000.00</td>
+                <td id="imss"></td>
             </tr>
             <tr style="border-bottom: solid 2px black">
                 <td>Comisión</td>
-                <td>$1,000.00</td>
+                <td id="comision1"></td>
             </tr>
             <tr>
                 <td>Subtotal</td>
-                <td>$21,000.00</td>
+                <td id="subtotal1"></td>
             </tr>
             <tr style="border-bottom: solid 4px black">
                 <td>IVA</td>
-                <td>$3,360.00</td>
+                <td id="iva1"></td>
             </tr>
             <tr>
                 <td>Total</td>
-                <td>$24,360.00</td>
+                <td id="total1"></td>
             </tr>
         </table>
     </div>
 </div>
+
 <script>
     function GetResult() {
         $.get("/Empresas/GetResult", function (data) {
-            @if (ViewData["id"].ToString() == "1") {
-                @:$("#result1").css("display", "block");
-                        } else {
+            @if (ViewData["id"].ToString() == "1")
+            {
+                @:var imss1 = parseInt($("#spinner1").attr("aria-valuenow")) / 100;
+                            @:imss1 = 20000 * imss1;
+                            @:var disp1 = 20000 - imss1;
+                            @:var imss2 = parseInt($("#spinner1").attr("aria-valuenow")) / 100;
+                            @:imss2 = 20000 * imss2;
+                            @:var disp2 = 20000 - imss2;
+                            @:var comision = parseInt($("#spinner2").attr("aria-valuenow")) / 100;
+                            @:comision = Math.round(20000 * comision);
+                            @:var iva = parseInt($("#spinner3").attr("aria-valuenow")) / 100;
+                            @:iva = (disp1 + disp2 + imss1 + imss2 + comision) * iva;
+                            @:$("#disp1").html("$" + disp1.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#disp2").html("$" + disp2.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#disp3").html("$" + (disp1 + disp2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#imss1").html("$" + imss1.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#imss2").html("$" + imss2.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#imss3").html("$" + (imss1 + imss2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#comision").html("$" + comision.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#subtotal").html("$" + (disp1 + disp2 + imss1 + imss2 + comision).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#iva").html("$" + iva.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#total").html("$" + (disp1 + disp2 + imss1 + imss2 + comision + iva).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                            @:$("#result1").css("display", "block");
+                        }
+            else
+            {
+
+                @:var imss1 = parseInt($("#spinner1").attr("aria-valuenow")) / 100;
+                @:imss1 = 20000 * imss1;
+                @:var disp1 = 20000 - imss1;
+                @:var comision = parseInt($("#spinner2").attr("aria-valuenow")) / 100;
+                @:comision = Math.round(20000 * comision);
+                @:var iva = parseInt($("#spinner3").attr("aria-valuenow")) / 100;
+                @:iva = (disp1 + imss1 + comision) * iva;
+                @:$("#disp").html("$" + disp1.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                @:$("#imss").html("$" + imss1.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                @:$("#comision1").html("$" + comision.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                @:$("#subtotal1").html("$" + (disp1 + imss1 + comision).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                @:$("#iva1").html("$" + iva.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
+                @:$("#total1").html("$" + (disp1 + imss1 + comision + iva).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00");
                 @:$("#result2").css("display", "block");
             }
         });
     }
 </script>
+
+
+@section pagespecific {
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="/scripts/plugin/maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="/scripts/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="/scripts/plugin/clockpicker/clockpicker.min.js"></script>
+    <script src="/scripts/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
+    <script src="/scripts/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+    <script src="/scripts/plugin/ion-slider/ion.rangeSlider.min.js"></script>
+    <script src="/scripts/plugin/bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <script src="/scripts/plugin/colorpicker/bootstrap-colorpicker.min.js"></script>
+    <script src="/scripts/plugin/knob/jquery.knob.min.js"></script>
+    <script src="/scripts/plugin/x-editable/moment.min.js"></script>
+    <script src="/scripts/plugin/x-editable/jquery.mockjax.min.js"></script>
+    <script src="/scripts/plugin/x-editable/x-editable.min.js"></script>
+    <script src="/scripts/plugin/typeahead/typeahead.min.js"></script>
+    <script src="/scripts/plugin/typeahead/typeaheadjs.min.js"></script>
+
+    <script type="text/javascript">
+
+        // DO NOT REMOVE : GLOBAL FUNCTIONS!
+
+        $(document).ready(function() {
+
+            // PAGE RELATED SCRIPTS
+
+            // Spinners
+            $("#spinner1").spinner({
+                min: 1,
+                max: 99,
+                start: 20
+            });
+
+            $("#spinner2").spinner({
+                min: 1,
+                max: 99,
+                start: 5
+            });
+
+            $("#spinner3").spinner({
+                min: 1,
+                max: 99,
+                start: 16
+            });
+
+            $(".ui-spinner-input").after("<span style='display:inline'>%</span>");
+
+            $(".spinner-left").css("display", "inline");
+            $(".spinner-left").css("width", "40%");
+            $(".spinner-left").css("padding-left", "5px");
+            $(".spinner-left").css("padding-right", "0");
+            $(".ui-spinner").css("width", "35%");
+        })
+    </script>
+}
