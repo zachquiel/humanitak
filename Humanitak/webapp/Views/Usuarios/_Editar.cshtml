@@ -1,0 +1,24 @@
+﻿@using SmartAdminMvc.ViewModels
+@model AccountUpdateViewModel
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" aria-hidden="true" id="laX">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                Editar Usuario
+            </h4>
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            @Html.Partial("_EditarMain", Model)
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    $("#laX").on("click", function () {
+        $("#editModal").modal('hide');
+        location.reload();
+    });
+</script>

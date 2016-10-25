@@ -11,6 +11,7 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SmartAdminMvc.Models;
+using SmartAdminMvc.ViewModels;
 
 #endregion
 
@@ -41,7 +42,7 @@ namespace SmartAdminMvc.Controllers
             EnsureLoggedOut();
 
             // Store the originating URL so we can attach it to a form field
-            var viewModel = new AccountLoginModel { ReturnUrl = returnUrl };
+            var viewModel = new AccountLoginViewModel { ReturnUrl = returnUrl };
 
             return View(viewModel);
         }
@@ -50,30 +51,30 @@ namespace SmartAdminMvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AccountLoginModel viewModel)
+        public async Task<ActionResult> Login(AccountLoginViewModel viewViewModel)
         {
-            // Ensure we have a valid viewModel to work with
+            // Ensure we have a valid viewViewModel to work with
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View(viewViewModel);
 
             // Verify if a user exists with the provided identity information
-            var user = await _manager.FindByEmailAsync(viewModel.Email);
+            var user = await _manager.FindByEmailAsync(viewViewModel.Email);
 
             // If a user was found
             if (user != null)
             {
                 // Then create an identity for it and sign it in
-                await SignInAsync(user, viewModel.RememberMe);
-
+                await SignInAsync(user, viewViewModel.RememberMe);
+                
                 // If the user came from a specific page, redirect back to it
-                return RedirectToLocal(viewModel.ReturnUrl);
+                return RedirectToLocal(viewViewModel.ReturnUrl);
             }
 
             // No existing user was found that matched the given criteria
             ModelState.AddModelError("", "Invalid username or password.");
 
             // If we got this far, something failed, redisplay form
-            return View(viewModel);
+            return View(viewViewModel);
         }
 
         // GET: /account/error
@@ -93,37 +94,37 @@ namespace SmartAdminMvc.Controllers
             // We do not want to use any existing identity information
             EnsureLoggedOut();
 
-            return View(new AccountRegistrationModel());
+            return View(new AccountRegistrationViewModel());
         }
 
         // POST: /account/register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(AccountRegistrationModel viewModel)
+        public async Task<ActionResult> Register(AccountRegistrationViewModel viewViewModel)
         {
-            // Ensure we have a valid viewModel to work with
+            /*// Ensure we have a valid viewViewModel to work with
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View(viewViewModel);
 
             // Prepare the identity with the provided information
-            var user = new IdentityUser
+            var user = new User
             {
-                UserName = viewModel.Username ?? viewModel.Email,
-                Email = viewModel.Email
+                UserName = viewViewModel.Username ?? viewViewModel.Email,
+                Email = viewViewModel.Email
             };
 
             // Try to create a user with the given identity
             try
             {
-                var result = await _manager.CreateAsync(user, viewModel.Password);
+                var result = await _manager.CreateAsync(user, viewViewModel.Password);
 
                 // If the user could not be created
                 if (!result.Succeeded) {
                     // Add all errors to the page so they can be used to display what went wrong
                     AddErrors(result);
 
-                    return View(viewModel);
+                    return View(viewViewModel);
                 }
 
                 // If the user was able to be created we can sign it in immediately
@@ -137,8 +138,9 @@ namespace SmartAdminMvc.Controllers
                 // Add all errors to the page so they can be used to display what went wrong
                 AddErrors(ex);
 
-                return View(viewModel);
-            }
+                return View(viewViewModel);
+            }*/
+            return View(viewViewModel);
         }
 
         // POST: /account/Logout
@@ -192,14 +194,15 @@ namespace SmartAdminMvc.Controllers
                 Logout();
         }
 
-        private async Task SignInAsync(IdentityUser user, bool isPersistent)
+        private async Task SignInAsync(User user, bool isPersistent)
         {
             // Clear any lingering authencation data
             FormsAuthentication.SignOut();
 
             // Create a claims based identity for the current user
             var identity = await _manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-
+            user.LastAccess = DateTime.Now;
+            await _manager.UpdateAsync(user);
             // Write the authentication cookie
             FormsAuthentication.SetAuthCookie(identity.Name, isPersistent);
         }

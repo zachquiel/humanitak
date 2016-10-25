@@ -1012,7 +1012,6 @@
     <Content Include="Views\Configuracion\Index.cshtml" />
     <Content Include="Views\Acumulados\Index.cshtml" />
     <Content Include="Views\Usuarios\Index.cshtml" />
-    <Content Include="Views\Usuarios\Nuevo.cshtml" />
     <Content Include="Views\Dispersiones\Index.cshtml" />
     <Content Include="Views\Prestamo\Index.cshtml" />
     <Content Include="Views\Prestamo\Detalle.cshtml" />
@@ -1021,6 +1020,13 @@
     <Content Include="Views\Cuenta\Index.cshtml" />
     <Content Include="Views\Incidencias\Index.cshtml" />
     <Content Include="Views\Empresas\Dispersion.cshtml" />
+    <Content Include="Views\Usuarios\_Editar.cshtml" />
+    <Content Include="Views\Usuarios\_Nuevo.cshtml" />
+    <Content Include="Views\Usuarios\_EditarMain.cshtml" />
+    <Content Include="Views\Usuarios\_NuevoMain.cshtml" />
+    <Content Include="Views\Usuarios\_Eliminar.cshtml" />
+    <Content Include="Views\Empresas\_Nueva.cshtml" />
+    <Content Include="Views\Empresas\_Eliminar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1034,7 +1040,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Helpers\BaseUserStore.cs" />
     <Compile Include="App_Helpers\DashRouteHandler.cs" />
+    <Compile Include="App_Helpers\DataContext.cs" />
     <Compile Include="App_Helpers\StringExtensions.cs" />
     <Compile Include="App_Helpers\UserManager.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -1062,17 +1070,95 @@
     <Compile Include="Controllers\PrestamoController.cs" />
     <Compile Include="Controllers\PuestoController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Extensions\Entity.cs" />
+    <Compile Include="Extensions\String.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Migrations\201610120029420_InitialCreate.cs" />
+    <Compile Include="Migrations\201610120029420_InitialCreate.Designer.cs">
+      <DependentUpon>201610120029420_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610120049567_UserChanges.cs" />
+    <Compile Include="Migrations\201610120049567_UserChanges.Designer.cs">
+      <DependentUpon>201610120049567_UserChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610120138012_UserChanges2.cs" />
+    <Compile Include="Migrations\201610120138012_UserChanges2.Designer.cs">
+      <DependentUpon>201610120138012_UserChanges2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610122143571_UserChanges1.cs" />
+    <Compile Include="Migrations\201610122143571_UserChanges1.Designer.cs">
+      <DependentUpon>201610122143571_UserChanges1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610240654153_Empresas.cs" />
+    <Compile Include="Migrations\201610240654153_Empresas.Designer.cs">
+      <DependentUpon>201610240654153_Empresas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610240749009_Empresas1.cs" />
+    <Compile Include="Migrations\201610240749009_Empresas1.Designer.cs">
+      <DependentUpon>201610240749009_Empresas1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610240801144_Empresas2.cs" />
+    <Compile Include="Migrations\201610240801144_Empresas2.Designer.cs">
+      <DependentUpon>201610240801144_Empresas2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610241015379_Empresas3.cs" />
+    <Compile Include="Migrations\201610241015379_Empresas3.Designer.cs">
+      <DependentUpon>201610241015379_Empresas3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610241027564_Empresas4.cs" />
+    <Compile Include="Migrations\201610241027564_Empresas4.Designer.cs">
+      <DependentUpon>201610241027564_Empresas4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ViewModels\AccountForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\AccountLoginViewModel.cs" />
+    <Compile Include="ViewModels\AccountRegistrationViewModel.cs" />
+    <Compile Include="ViewModels\AccountResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\AccountUpdateViewModel.cs" />
+    <Compile Include="Models\Enterprise.cs" />
+    <Compile Include="Models\EnterpriseImage.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\EnterpriseInsertViewModel.cs" />
+    <Compile Include="ViewModels\EnterpriseReference.cs" />
+    <Compile Include="ViewModels\EnterpriseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\realestate\thumbs\" />
     <Folder Include="Views\Administracion\" />
     <Folder Include="Views\Puestos\" />
     <Folder Include="Views\Usuario\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201610120029420_InitialCreate.resx">
+      <DependentUpon>201610120029420_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610120049567_UserChanges.resx">
+      <DependentUpon>201610120049567_UserChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610120138012_UserChanges2.resx">
+      <DependentUpon>201610120138012_UserChanges2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610122143571_UserChanges1.resx">
+      <DependentUpon>201610122143571_UserChanges1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610240654153_Empresas.resx">
+      <DependentUpon>201610240654153_Empresas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610240749009_Empresas1.resx">
+      <DependentUpon>201610240749009_Empresas1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610240801144_Empresas2.resx">
+      <DependentUpon>201610240801144_Empresas2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610241015379_Empresas3.resx">
+      <DependentUpon>201610241015379_Empresas3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610241027564_Empresas4.resx">
+      <DependentUpon>201610241027564_Empresas4.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,4 @@
-﻿@model AccountRegistrationModel
+﻿@model SmartAdminMvc.ViewModels.AccountRegistrationViewModel
 @{
     ViewBag.PageId = "extr-page";
 }
@@ -22,21 +22,21 @@
                         <section>
                             <label class="input">
                                 <i class="icon-append fa fa-user"></i>
-                                <input type="text" name="username" placeholder="Username" id="username" autocomplete="off" value="@Model.Username">
+                                <input type="text" name="username" placeholder="Username" id="username" autocomplete="off" value="@{ /*Model.Username */}">
                                 <b class="tooltip tooltip-bottom-right">(Optional) Used to display the profile name on the website</b>
                             </label>
                         </section>
                         <section>
                             <label class="input">
                                 <i class="icon-append fa fa-envelope"></i>
-                                <input type="email" name="email" placeholder="Email address" id="email" autocomplete="off" value="@Model.Email">
+                                <input type="email" name="email" placeholder="Email address" id="email" autocomplete="off" value="@{ /*Model.Email*/ }">
                                 <b class="tooltip tooltip-bottom-right">Needed to enter the website</b>
                             </label>
                         </section>
                         <section>
                             <label class="input">
                                 <i class="icon-append fa fa-envelope"></i>
-                                <input type="email" name="emailConfirm" placeholder="Confirm email address" autocomplete="off" value="@Model.EmailConfirm">
+                                <input type="email" name="emailConfirm" placeholder="Confirm email address" autocomplete="off" value="@{ /*Model.EmailConfirm*/ }">
                                 <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                             </label>
                         </section>

@@ -67,6 +67,16 @@ D:\humanitak\Humanitak\webapp\bin\System.Web.Razor.xml
 D:\humanitak\Humanitak\webapp\bin\System.Web.WebPages.xml
 D:\humanitak\Humanitak\webapp\bin\System.Web.WebPages.Deployment.xml
 D:\humanitak\Humanitak\webapp\bin\System.Web.WebPages.Razor.xml
-D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csprojResolveAssemblyReference.cache
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.InitialCreate.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.UserChanges.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.UserChanges2.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.UserChanges1.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas1.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas2.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csproj.GenerateResource.Cache
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.dll
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.pdb
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas3.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas4.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csprojResolveAssemblyReference.cache

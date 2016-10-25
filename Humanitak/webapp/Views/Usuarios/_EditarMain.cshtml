@@ -1,0 +1,151 @@
+﻿@using SmartAdminMvc.ViewModels
+@model AccountUpdateViewModel
+<form action="@Url.Action("_EditarMain", "Usuarios")" method="POST" id="editForm" class="smart-form client-form" autocomplete="off">
+    @Html.ValidationBootstrap()
+    @if (Model.Processed) {
+        <header style="background-color:@(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header><!--#fff0f0 -->
+    }
+    <fieldset>
+        <div class="row">
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-prepend fa fa-user"></i>
+                    <input type="text" name="firstName" placeholder="Nombres" value="@Model.FirstName">
+                </label>
+            </section>
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-prepend fa fa-user"></i>
+                    <input type="text" name="lastName" placeholder="Apellidos" autocomplete="off" value="@Model.LastName">
+                </label>
+            </section>
+        </div>
+
+        <div class="row">
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-prepend fa fa-envelope-o"></i>
+                    <input type="email" name="email" placeholder="E-mail" value="@Model.Email" readonly="readonly">
+                </label>
+            </section>
+            <section class="col col-6">
+                <label class="select">
+                    <select name="userType" value="@Model.UserType">
+                        <option value="0" disabled="">Nivel de Permisos</option>
+                        <option value="Administrador" @if (Model.UserType == "Administrador") {
+                                                          @("selected=\"\"")
+                                                      }> Administrador</option>
+                        <option value="Reportes" @if (Model.UserType == "Reportes") {
+                                                     @("selected=\"\"")
+                                                 }>Reportes</option>
+                        <option value="Nómina" @if (Model.UserType == "Nómina") {
+                                                   @("selected=\"\"")
+                                               }>Nómina</option>
+                    </select> <i></i>
+                </label>
+            </section>
+        </div>
+        <div class="row">
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-prepend fa fa-building"></i>
+                    <input type="text" name="businessType" placeholder="Tipo/Empresa" value="@Model.BusinessType">
+                </label>
+            </section>
+            <section class="col col-6">
+                <label class="checkbox">
+                    <input type="checkbox" validate="" name="canIssuePayments" @if (Model.CanIssuePayments == "1") {
+                                                                                   @("checked")
+                                                                               } value="@Model.CanIssuePayments">
+                    <i></i>Capacidad de aprobación de Nómina
+                </label>
+            </section>
+        </div>
+    </fieldset>
+    <footer>
+        <button type="button" id="submit" class="btn btn-primary">
+            Guardar
+        </button>
+        <button type="button" id="close" class="btn btn-default">
+            Cerrar
+        </button>
+
+    </footer>
+</form>
+
+
+<!-- END MAIN CONTENT -->
+<script type="text/javascript">
+    $("#close").on("click", function () {
+        $("#editModal").modal('hide');
+        location.reload();
+    });
+    
+    $("#submit").on("click", function () {
+        var firstName = $('[name="firstName"]').val();
+        var lastName = $('[name="lastName"]').val();
+        var email = $('[name="email"]').val();
+        var userType = $('[name="userType"]').val();
+        var businessType = $('[name="businessType"]').val();
+        var canIssuePayments = $('[name="canIssuePayments"]').val();
+        $.ajax({
+                url: "/Usuarios/_EditarMain",
+                type: "POST",
+                data: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    userType: userType,
+                    businessType: businessType,
+                    canIssuePayments: canIssuePayments
+                }
+            })
+            .done(function (partialViewResult) {
+                $("#partialContent").html(partialViewResult);
+            });
+    });
+    // Validation
+    $(function () {
+        // Validation
+        $("#editForm").validate({
+            // Rules for form validation
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 20
+                },
+                passwordConfirm: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 20,
+                    equalTo: '#password'
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                email: {
+                    required: 'Please enter your email address',
+                    email: 'Please enter a VALID email address'
+                },
+                password: {
+                    required: 'Please enter your password'
+                },
+                passwordConfirm: {
+                    required: 'Please enter your password one more time',
+                    equalTo: 'Please enter the same password as above'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
