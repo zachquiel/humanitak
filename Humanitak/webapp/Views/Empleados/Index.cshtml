@@ -1,4 +1,8 @@
-﻿			<!-- MAIN CONTENT -->
+﻿@using System.Globalization
+@using SmartAdminMvc.Extensions
+@using SmartAdminMvc.ViewModels
+@model EnterpriseInfoViewModel
+			<!-- MAIN CONTENT -->
 <div id="content">
 
     <div class="row">
@@ -58,7 +62,7 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body no-padding">
-                            @Html.ActionLink("Nuevo Empleado", "Nuevo")
+                            <a data-toggle="modal" onclick="showModal('#newModal', '#newModalBody', 0, @Model.Id)" style="cursor: pointer">Nuevo Empleado</a>
                             <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%">
                                 <thead>
                                     <tr>
@@ -75,108 +79,38 @@
                                         <th data-class="expand">Grupo</th>
                                         <th data-class="expand">Alta Seguro Social </th>
                                         <th data-class="expand">Correo Electrónico</th>
-                                        <th data-class="expand">Tipo y duración de contrato </th>
+                                        <th data-class="expand">Tipo de contrato </th>
                                         <th data-class="expand">Fecha de inicio del contrato </th>
                                         <th data-class="expand">Fecha de finalización </th>
                                         <th data-class="expand">Fecha del contrato indefinido</th>
+                                        <th data-class="expand">Editar</th>
+                                        <th data-class="expand">Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @foreach (var item in Model.Employees) {
                                     <tr>
-                                        <td>1</td>
-                                        <td>Juan Escutia</td>
-                                        <td>Empresa C</td>
-                                        <td>Ago 1 2010</td>
-                                        <td>Ago 1 1980</td>
-                                        <td>No</td>
-                                        <td>0000111122223333</td>
-                                        <td>$31,000</td>
-                                        <td>Sistemas</td>
-                                        <td>Desarrollador</td>
-                                        <td>1</td>
-                                        <td>Ene 1 2000 </td>
-                                        <td>juan@ejemplo.com</td>
-                                        <td>Permanente</td>
-                                        <td>Ago 1 2010</td>
-                                        <td></td>
-                                        <td>Ago 1 2010</td>
+                                        <td style="vertical-align: middle">@item.Id</td>
+                                        <td style="vertical-align: middle">@item.Name</td>
+                                        <td style="vertical-align: middle">@item.PayingEnterpriseName</td>
+                                        <td style="vertical-align: middle">@item.StartDate.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
+                                        <td style="vertical-align: middle">@item.DoB.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
+                                        <td style="vertical-align: middle">@(item.HasSocialSecurity == "0" ? "No" : "Sí")</td>
+                                        <td style="vertical-align: middle">@item.AccountNumber</td>
+                                        <td style="vertical-align: middle">@item.DailySalary</td>
+                                        <td style="vertical-align: middle">@item.DepartmentName</td>
+                                        <td style="vertical-align: middle">@item.PositionName</td>
+                                        <td style="vertical-align: middle">@item.GroupName</td>
+                                        <td style="vertical-align: middle">@item.SsRegistrationDate.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
+                                        <td style="vertical-align: middle">@item.Email</td>
+                                        <td style="vertical-align: middle">@(item.PermanentContractDate == null ? "Temporal" : "Permanente")</td>
+                                        <td style="vertical-align: middle">@item.StartContractDate.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
+                                        <td style="vertical-align: middle">@(item.EndContractDate != null ? ((DateTime)item.EndContractDate).ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper() : "")</td>
+                                        <td style="vertical-align: middle">@(item.PermanentContractDate != null ? ((DateTime)item.PermanentContractDate).ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper() : "")</td>
+                                        <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="showModal('#newModal', '#newModalBody', '@item.Id', '@item.EnterpriseId', false)"><i class="fa fa-pencil-square-o fa-fw editor_edit"></i></a></h3></td>
+                                        <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="showModal('#deleteModal', '#deleteModalBody', '@item.Id', '@item.EnterpriseId', false)"><i class="fa fa-trash-o fa-fw editor_remove"></i></a></h3></td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Juan Escutia</td>
-                                        <td>Empresa D</td>
-                                        <td>Ago 1 2010</td>
-                                        <td>Ago 1 1980</td>
-                                        <td>No</td>
-                                        <td>0000111122223333</td>
-                                        <td>$31,000</td>
-                                        <td>Sistemas</td>
-                                        <td>Desarrollador</td>
-                                        <td>1</td>
-                                        <td>Ene 1 2000 </td>
-                                        <td>juan@ejemplo.com</td>
-                                        <td>Permanente</td>
-                                        <td>Ago 1 2010</td>
-                                        <td></td>
-                                        <td>Ago 1 2010</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Juan Escutia</td>
-                                        <td>Empresa D</td>
-                                        <td>Ago 1 2010</td>
-                                        <td>Ago 1 1980</td>
-                                        <td>No</td>
-                                        <td>0000111122223333</td>
-                                        <td>$31,000</td>
-                                        <td>Sistemas</td>
-                                        <td>Desarrollador</td>
-                                        <td>1</td>
-                                        <td>Ene 1 2000 </td>
-                                        <td>juan@ejemplo.com</td>
-                                        <td>Permanente</td>
-                                        <td>Ago 1 2010</td>
-                                        <td></td>
-                                        <td>Ago 1 2010</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Juan Escutia</td>
-                                        <td>Empresa C</td>
-                                        <td>Ago 1 2010</td>
-                                        <td>Ago 1 1980</td>
-                                        <td>No</td>
-                                        <td>0000111122223333</td>
-                                        <td>$31,000</td>
-                                        <td>Sistemas</td>
-                                        <td>Desarrollador</td>
-                                        <td>1</td>
-                                        <td>Ene 1 2000 </td>
-                                        <td>juan@ejemplo.com</td>
-                                        <td>Permanente</td>
-                                        <td>Ago 1 2010</td>
-                                        <td></td>
-                                        <td>Ago 1 2010</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Juan Escutia</td>
-                                        <td>Empresa C</td>
-                                        <td>Ago 1 2010</td>
-                                        <td>Ago 1 1980</td>
-                                        <td>No</td>
-                                        <td>0000111122223333</td>
-                                        <td>$31,000</td>
-                                        <td>Sistemas</td>
-                                        <td>Desarrollador</td>
-                                        <td>1</td>
-                                        <td>Ene 1 2000 </td>
-                                        <td>juan@ejemplo.com</td>
-                                        <td>Permanente</td>
-                                        <td>Ago 1 2010</td>
-                                        <td></td>
-                                        <td>Ago 1 2010</td>
-                                    </tr>
+                                }
                                 </tbody>
                             </table>
 
@@ -199,14 +133,24 @@
 
     </section>
     <!-- end widget grid -->
-    <div id="myModal">
-        <div id="mydiv2"></div>
+    <div class="modal fade" id="newModal" data-url='@Url.Action("_Upsert", "Empleados")' tabindex="-1" role="dialog">
+        <div id="newModalBody"></div>
+    </div>
+    <div class="modal fade" id="deleteModal" data-url='@Url.Action("_Delete", "Empleados")' tabindex="-1" role="dialog">
+        <div id="deleteModalBody"></div>
     </div>
 </div>
 <!-- END MAIN CONTENT -->
 @section pagespecific {
     <script type="text/javascript">
 
+        function showModal(modalContainerId, modalBodyId, employeeId, enterpriseId) {
+            var url = $(modalContainerId).data('url');
+            $.get(url, { employeeId: employeeId, enterpriseId: enterpriseId }, function (data) {
+                $(modalBodyId).html(data);
+                $(modalContainerId).modal('show');
+            });
+        }
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
     var editor;
     $(document).ready(function () {

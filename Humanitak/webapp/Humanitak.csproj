@@ -47,11 +47,13 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -1002,12 +1004,8 @@
     <Content Include="Views\Nominas\Resumen.cshtml" />
     <Content Include="Views\Nominas\Dias.cshtml" />
     <Content Include="Views\Empleados\Index.cshtml" />
-    <Content Include="Views\Empleados\Nuevo.cshtml" />
     <Content Include="Views\Departamento\Index.cshtml" />
-    <Content Include="Views\Departamento\Nuevo.cshtml" />
-    <Content Include="Views\Departamento\Percepcion.cshtml" />
     <Content Include="Views\Puesto\Index.cshtml" />
-    <Content Include="Views\Puesto\Nuevo.cshtml" />
     <Content Include="Views\Percepciones\Index.cshtml" />
     <Content Include="Views\Configuracion\Index.cshtml" />
     <Content Include="Views\Acumulados\Index.cshtml" />
@@ -1027,6 +1025,17 @@
     <Content Include="Views\Usuarios\_Eliminar.cshtml" />
     <Content Include="Views\Empresas\_Nueva.cshtml" />
     <Content Include="Views\Empresas\_Eliminar.cshtml" />
+    <Content Include="Views\Puesto\_Upsert.cshtml" />
+    <Content Include="Views\Puesto\_Delete.cshtml" />
+    <Content Include="Views\Percepciones\_Upsert.cshtml" />
+    <Content Include="Views\Percepciones\_Delete.cshtml" />
+    <Content Include="Views\Percepciones\_AddSpecial.cshtml" />
+    <Content Include="Views\Percepciones\_DeleteSpecial.cshtml" />
+    <Content Include="Views\Departamento\_Upsert.cshtml" />
+    <Content Include="Views\Departamento\_Delete.cshtml" />
+    <Content Include="Views\Empleados\_Upsert.cshtml" />
+    <Content Include="Views\Empleados\_Delete.cshtml" />
+    <Content Include="Views\Empleados\Nuevo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1111,7 +1120,49 @@
     <Compile Include="Migrations\201610241027564_Empresas4.Designer.cs">
       <DependentUpon>201610241027564_Empresas4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610262320322_EmpresasInternos.cs" />
+    <Compile Include="Migrations\201610262320322_EmpresasInternos.Designer.cs">
+      <DependentUpon>201610262320322_EmpresasInternos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610271656264_EmpresasInternos1.cs" />
+    <Compile Include="Migrations\201610271656264_EmpresasInternos1.Designer.cs">
+      <DependentUpon>201610271656264_EmpresasInternos1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610271817475_EmpresasInternos2.cs" />
+    <Compile Include="Migrations\201610271817475_EmpresasInternos2.Designer.cs">
+      <DependentUpon>201610271817475_EmpresasInternos2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610271909040_EmpresasInternos3.cs" />
+    <Compile Include="Migrations\201610271909040_EmpresasInternos3.Designer.cs">
+      <DependentUpon>201610271909040_EmpresasInternos3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610272017570_EmpresasInternos4.cs" />
+    <Compile Include="Migrations\201610272017570_EmpresasInternos4.Designer.cs">
+      <DependentUpon>201610272017570_EmpresasInternos4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610272244153_EmpresasInternos5.cs" />
+    <Compile Include="Migrations\201610272244153_EmpresasInternos5.Designer.cs">
+      <DependentUpon>201610272244153_EmpresasInternos5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610272311452_EmpresasInternos6.cs" />
+    <Compile Include="Migrations\201610272311452_EmpresasInternos6.Designer.cs">
+      <DependentUpon>201610272311452_EmpresasInternos6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610280004102_EmpresasInternos7.cs" />
+    <Compile Include="Migrations\201610280004102_EmpresasInternos7.Designer.cs">
+      <DependentUpon>201610280004102_EmpresasInternos7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610280355465_Empleados.cs" />
+    <Compile Include="Migrations\201610280355465_Empleados.Designer.cs">
+      <DependentUpon>201610280355465_Empleados.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Perception.cs" />
+    <Compile Include="Models\Position.cs" />
+    <Compile Include="Models\SpecialPerception.cs" />
     <Compile Include="ViewModels\AccountForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\AccountLoginViewModel.cs" />
     <Compile Include="ViewModels\AccountRegistrationViewModel.cs" />
@@ -1121,9 +1172,21 @@
     <Compile Include="Models\EnterpriseImage.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DepartmentReferenceViewModel.cs" />
+    <Compile Include="ViewModels\DepartmentViewModel.cs" />
+    <Compile Include="ViewModels\EmployeeReferenceViewModel.cs" />
+    <Compile Include="ViewModels\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\EnterpriseInfoViewModel.cs" />
     <Compile Include="ViewModels\EnterpriseInsertViewModel.cs" />
     <Compile Include="ViewModels\EnterpriseReference.cs" />
     <Compile Include="ViewModels\EnterpriseViewModel.cs" />
+    <Compile Include="ViewModels\GroupReferenceViewModel.cs" />
+    <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\PerceptionReferenceViewModel.cs" />
+    <Compile Include="ViewModels\PerceptionViewModel.cs" />
+    <Compile Include="ViewModels\PositionViewModel.cs" />
+    <Compile Include="ViewModels\SpecialPerceptionInsertViewModel.cs" />
+    <Compile Include="ViewModels\SpecialPerceptionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\realestate\thumbs\" />
@@ -1158,6 +1221,33 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610241027564_Empresas4.resx">
       <DependentUpon>201610241027564_Empresas4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610262320322_EmpresasInternos.resx">
+      <DependentUpon>201610262320322_EmpresasInternos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610271656264_EmpresasInternos1.resx">
+      <DependentUpon>201610271656264_EmpresasInternos1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610271817475_EmpresasInternos2.resx">
+      <DependentUpon>201610271817475_EmpresasInternos2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610271909040_EmpresasInternos3.resx">
+      <DependentUpon>201610271909040_EmpresasInternos3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610272017570_EmpresasInternos4.resx">
+      <DependentUpon>201610272017570_EmpresasInternos4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610272244153_EmpresasInternos5.resx">
+      <DependentUpon>201610272244153_EmpresasInternos5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610272311452_EmpresasInternos6.resx">
+      <DependentUpon>201610272311452_EmpresasInternos6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610280004102_EmpresasInternos7.resx">
+      <DependentUpon>201610280004102_EmpresasInternos7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610280355465_Empleados.resx">
+      <DependentUpon>201610280355465_Empleados.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

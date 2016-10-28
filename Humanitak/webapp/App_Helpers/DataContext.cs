@@ -9,5 +9,11 @@ namespace SmartAdminMvc.App_Helpers {
         public DbSet<User> Users { get; set; }
         public DbSet<Enterprise> Enterprises { get; set; }
         public DbSet<EnterpriseImage> EnterpriseImages { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Perception> Perceptions { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<SpecialPerception> SpecialPerceptions { get; set; }
+        public DbSet<Group> Groups { get; set; }
     }
 }

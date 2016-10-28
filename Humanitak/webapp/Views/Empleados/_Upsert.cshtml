@@ -1,0 +1,395 @@
+﻿@using SmartAdminMvc.ViewModels
+@model EmployeeViewModel
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            @if (string.IsNullOrEmpty(Model.Name))
+            {
+                <h4 class="modal-title">Nuevo Empleado </h4>
+            }
+            else
+            {
+                <h4 class="modal-title">Editar Empleado </h4>
+            }
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_Upsert", "Empleados")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed) {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
+                }
+                else {
+                    if (!string.IsNullOrEmpty(Model.Name)) {
+                         <input type="hidden" name="id" id="id" value="@Model.Id"/>
+                     }
+                    <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.EnterpriseId"/>
+                    <fieldset>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="firstName" placeholder="Nombres" value="@Model.FirstName">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="lastName" placeholder="Apellidos" value="@Model.LastName">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="checkbox">
+                                <input type="checkbox" validate="" name="hasSocialSecurity" id="hasSocialSecurity"
+                                       value="@(Model.HasSocialSecurity == "1" ? "On" : "")" @Html.Raw((Model.HasSocialSecurity == "1") ? "checked" : "")>
+                                <i></i>¿Tiene Seguro Social?
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="ssn" placeholder="NSS" value="@Model.Ssn">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="curp" placeholder="CURP" value="@Model.Curp">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="rfc" placeholder="RFC" value="@Model.Rfc">
+                            </label>
+                        </section>
+                    </div>
+
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="email" placeholder="Correo electrónico" value="@Model.Email">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="gender" value="@Model.Gender">
+                                    <option @Html.Raw((Model.Gender == "0") ? "selected=\"\"" : "") value="0" selected="" disabled="">Sexo</option>
+                                    <option @Html.Raw((Model.Gender == "F") ? "selected=\"\"" : "") value="F">F</option>
+                                    <option @Html.Raw((Model.Gender == "M") ? "selected=\"\"" : "") value="M">M</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="number" name="dailySalary" placeholder="Salario" value="@(Model.DailySalary == 0 ? "" : Model.DailySalary.ToString())">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="departmentId" value="@Model.DepartmentId">
+                                    <option value="0" @Html.Raw((Model.DepartmentId == -1) ? "selected=\"\"" : "") disabled="">Departamento</option>
+                                    @foreach (var item in Model.Departments) {
+                                        <option @Html.Raw((Model.DepartmentId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                                    }
+                                    <option @Html.Raw((Model.DepartmentId == 0) ? "selected=\"\"" : "") value="0">Ninguno</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="positionId" value="@Model.PositionId">
+                                    <option value="0" @Html.Raw((Model.PositionId == -1) ? "selected=\"\"" : "") disabled="">Puesto</option>
+                                    @foreach (var item in Model.Positions) {
+                                        <option @Html.Raw((Model.PositionId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                                    }
+                                    <option @Html.Raw((Model.PositionId == 0) ? "selected=\"\"" : "") value="0">Ninguno</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="groupId" value="@Model.GroupId">
+                                    <option value="0" @Html.Raw((Model.GroupId == -1) ? "selected=\"\"" : "") disabled="">Grupo</option>
+                                    @foreach (var item in Model.Groups) {
+                                        <option @Html.Raw((Model.GroupId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                                    }
+                                    <option @Html.Raw((Model.GroupId == 0) ? "selected=\"\"" : "") value="0">Ninguno</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                <input type="text" id="startDate" name="startDate" placeholder="Fecha de Alta" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartDate == DateTime.MinValue ? "" : Model.StartDate.ToString("dd/MM/yy"))"/>
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="offdays" value="@Model.OffDays">
+                                    <option @Html.Raw((Model.OffDays == "0") ? "selected=\"\"" : "") value="0" selected="" disabled="">Descanso</option>
+                                    <option @Html.Raw((Model.OffDays == "Lunes") ? "selected=\"\"" : "") value="Lunes">Lunes</option>
+                                    <option @Html.Raw((Model.OffDays == "Martes") ? "selected=\"\"" : "") value="Martes">Martes</option>
+                                    <option @Html.Raw((Model.OffDays == "Miércoles") ? "selected=\"\"" : "") value="Miércoles">Miércoles</option>
+                                    <option @Html.Raw((Model.OffDays == "Jueves") ? "selected=\"\"" : "") value="Jueves">Jueves</option>
+                                    <option @Html.Raw((Model.OffDays == "Viernes") ? "selected=\"\"" : "") value="Viernes">Viernes</option>
+                                    <option @Html.Raw((Model.OffDays == "Sábado") ? "selected=\"\"" : "") value="Sábado">Sábado</option>
+                                    <option @Html.Raw((Model.OffDays == "Domingo") ? "selected=\"\"" : "") value="Domingo">Domingo</option>
+                                    <option @Html.Raw((Model.OffDays == "Sábado y Domingo") ? "selected=\"\"" : "") value="Sábado y Domingo">Sábado y Domingo</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="bank" value="@Model.Bank">
+                                    <option @Html.Raw((Model.Bank == "0") ? "selected=\"\"" : "") value="0" selected="" disabled="">Banco</option>
+                                    <option @Html.Raw((Model.Bank == "(Pago en efectivo)") ? "selected=\"\"" : "") value="(Pago en efectivo)">(Pago en efectivo)</option>
+                                    <option @Html.Raw((Model.Bank == "(Cheque)") ? "selected=\"\"" : "") value="(Cheque)">(Cheque)</option>
+                                    <option @Html.Raw((Model.Bank == "HSBC") ? "selected=\"\"" : "") value="HSBC">HSBC</option>
+                                    <option @Html.Raw((Model.Bank == "BANORTE") ? "selected=\"\"" : "") value="BANORTE">BANORTE</option>
+                                    <option @Html.Raw((Model.Bank == "BANCOMER") ? "selected=\"\"" : "") value="BANCOMER">BANCOMER</option>
+                                    <option @Html.Raw((Model.Bank == "SANTANDER") ? "selected=\"\"" : "") value="SANTANDER">SANTANDER</option>
+                                    <option @Html.Raw((Model.Bank == "BANAMEX") ? "selected=\"\"" : "") value="BANAMEX">BANAMEX</option>
+                                    <option @Html.Raw((Model.Bank == "SCOTIABANK") ? "selected=\"\"" : "") value="SCOTIABANK">SCOTIABANK</option>
+                                    <option @Html.Raw((Model.Bank == "BANCOPPEL") ? "selected=\"\"" : "") value="BANCOPPEL">BANCOPPEL</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="accountNumber" placeholder="Número de cuenta" value="@Model.AccountNumber">
+                            </label>
+                        </section>
+                    </div>
+                    <section>
+                        <label class="textarea">
+                            <textarea rows="3" name="address" placeholder="Dirección">@Model.Address</textarea>
+                        </label>
+                    </section>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="area" placeholder="Colonia" value="@Model.Area">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="zipCode" placeholder="Código Postal" value="@Model.ZipCode">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="city" placeholder="Ciudad" value="@Model.City">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="state" value="@Model.State">
+                                    <option value="0" @Html.Raw((Model.State == "0") ? "selected=\"\"" : "") disabled="">Entidad Federativa</option>
+                                    <option @Html.Raw((Model.State == "Aguascalientes") ? "selected=\"\"" : "") value="Aguascalientes">Aguascalientes</option>
+                                    <option @Html.Raw((Model.State == "Baja California") ? "selected=\"\"" : "") value="Baja California">Baja California</option>
+                                    <option @Html.Raw((Model.State == "Baja California Sur") ? "selected=\"\"" : "") value="Baja California Sur">Baja California Sur</option>
+                                    <option @Html.Raw((Model.State == "Campeche") ? "selected=\"\"" : "") value="Campeche">Campeche</option>
+                                    <option @Html.Raw((Model.State == "Chiapas") ? "selected=\"\"" : "") value="Chiapas">Chiapas</option>
+                                    <option @Html.Raw((Model.State == "Chihuahua") ? "selected=\"\"" : "") value="Chihuahua">Chihuahua</option>
+                                    <option @Html.Raw((Model.State == "Ciudad de México") ? "selected=\"\"" : "") value="Ciudad de México">Ciudad de México</option>
+                                    <option @Html.Raw((Model.State == "Coahuila de Zaragoza") ? "selected=\"\"" : "") value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
+                                    <option @Html.Raw((Model.State == "Colima") ? "selected=\"\"" : "") value="Colima">Colima</option>
+                                    <option @Html.Raw((Model.State == "Durango") ? "selected=\"\"" : "") value="Durango">Durango</option>
+                                    <option @Html.Raw((Model.State == "Guanajuato") ? "selected=\"\"" : "") value="Guanajuato">Guanajuato</option>
+                                    <option @Html.Raw((Model.State == "Guerrero") ? "selected=\"\"" : "") value="Guerrero">Guerrero</option>
+                                    <option @Html.Raw((Model.State == "Hidalgo") ? "selected=\"\"" : "") value="Hidalgo">Hidalgo</option>
+                                    <option @Html.Raw((Model.State == "Jalisco") ? "selected=\"\"" : "") value="Jalisco">Jalisco</option>
+                                    <option @Html.Raw((Model.State == "México") ? "selected=\"\"" : "") value="México">México</option>
+                                    <option @Html.Raw((Model.State == "Michoacán de Ocampo") ? "selected=\"\"" : "") value="Michoacán de Ocampo">Michoacán de Ocampo</option>
+                                    <option @Html.Raw((Model.State == "Morelos") ? "selected=\"\"" : "") value="Morelos">Morelos</option>
+                                    <option @Html.Raw((Model.State == "Nayarit") ? "selected=\"\"" : "") value="Nayarit">Nayarit</option>
+                                    <option @Html.Raw((Model.State == "Nuevo León") ? "selected=\"\"" : "") value="Nuevo León">Nuevo León</option>
+                                    <option @Html.Raw((Model.State == "Oaxaca") ? "selected=\"\"" : "") value="Oaxaca">Oaxaca</option>
+                                    <option @Html.Raw((Model.State == "Puebla") ? "selected=\"\"" : "") value="Puebla">Puebla</option>
+                                    <option @Html.Raw((Model.State == "Querétaro de Arteaga") ? "selected=\"\"" : "") value="Querétaro de Arteaga">Querétaro de Arteaga</option>
+                                    <option @Html.Raw((Model.State == "Quintana Roo") ? "selected=\"\"" : "") value="Quintana Roo">Quintana Roo</option>
+                                    <option @Html.Raw((Model.State == "San Luis Potosí") ? "selected=\"\"" : "") value="San Luis Potosí">San Luis Potosí</option>
+                                    <option @Html.Raw((Model.State == "Sinaloa") ? "selected=\"\"" : "") value="Sinaloa">Sinaloa</option>
+                                    <option @Html.Raw((Model.State == "Sonora") ? "selected=\"\"" : "") value="Sonora">Sonora</option>
+                                    <option @Html.Raw((Model.State == "Tabasco") ? "selected=\"\"" : "") value="Tabasco">Tabasco</option>
+                                    <option @Html.Raw((Model.State == "Tamaulipas") ? "selected=\"\"" : "") value="Tamaulipas">Tamaulipas</option>
+                                    <option @Html.Raw((Model.State == "Tlaxcala") ? "selected=\"\"" : "") value="Tlaxcala">Tlaxcala</option>
+                                    <option @Html.Raw((Model.State == "Veracruz de Ignacio de la Llave") ? "selected=\"\"" : "") value="Veracruz de Ignacio de la Llave">Veracruz de Ignacio de la Llave</option>
+                                    <option @Html.Raw((Model.State == "Yucatán") ? "selected=\"\"" : "") value="Yucatán">Yucatán</option>
+                                    <option @Html.Raw((Model.State == "Zacatecas") ? "selected=\"\"" : "") value="Zacatecas">Zacatecas</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                <input type="text" id="doB" name="doB" placeholder="Fecha de Nacimiento" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.DoB == DateTime.MinValue ? "" : Model.DoB.ToString("dd/MM/yy"))"/>
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="placeOfBirth" placeholder="Lugar de Nacimiento" value="@Model.PlaceOfBirth">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="tel" name="phone" placeholder="Teléfono" value="@Model.Phone">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                <input type="text" id="ssRegistrationDate" name="ssRegistrationDate" placeholder="Fecha de alta en SS" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.SsRegistrationDate == DateTime.MinValue ? "" : Model.SsRegistrationDate.ToString("dd/MM/yy"))"/>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="maritalStatus" value="@Model.MaritalStatus">
+                                    <option @Html.Raw((Model.MaritalStatus == "0") ? "selected=\"\"" : "") value="0" selected="" disabled="">Estado Civil</option>
+                                    <option @Html.Raw((Model.MaritalStatus == "Sin Especificar") ? "selected=\"\"" : "") value="Sin Especificar">Sin Especificar</option>
+                                    <option @Html.Raw((Model.MaritalStatus == "Soltero") ? "selected=\"\"" : "") value="Soltero">Soltero</option>
+                                    <option @Html.Raw((Model.MaritalStatus == "Casado") ? "selected=\"\"" : "") value="Casado">Casado</option>
+                                    <option @Html.Raw((Model.MaritalStatus == "Viudo") ? "selected=\"\"" : "") value="Viudo">Viudo</option>
+                                    <option @Html.Raw((Model.MaritalStatus == "Divorciado") ? "selected=\"\"" : "") value="Divorciado">Divorciado</option>
+                                    <option @Html.Raw((Model.MaritalStatus == "Unión Libre") ? "selected=\"\"" : "") value="Unión Libre">Unión Libre</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="text" name="idNumber" placeholder="Identificación" value="@Model.IdNumber">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="payingEnterpriseId" value="@Model.PayingEnterpriseId">
+                                    <option value="0" @Html.Raw((Model.PayingEnterpriseId == -1) ? "selected=\"\"" : "") disabled="">Empresa encargada de nómina</option>
+                                    @foreach (var item in Model.Enterprises) {
+                                        <option @Html.Raw((Model.PayingEnterpriseId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                                    }
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-4">
+                            <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                <input type="text" id="startContractDate" name="startContractDate" placeholder="Inicio de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartContractDate == DateTime.MinValue ? "" : Model.StartContractDate.ToString("dd/MM/yy"))"/>
+                            </label>
+                        </section>
+                        <section class="col col-4">
+                            <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                <input type="text" id="endContractDate" name="endContractDate" placeholder="Fin de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.EndContractDate == null || Model.EndContractDate == DateTime.MinValue ? "" : ((DateTime) Model.EndContractDate).ToString("dd/MM/yy"))"/>
+                            </label>
+                        </section>
+                        <section class="col col-4">
+                            <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                <input type="text" id="permanentContractDate" name="permanentContractDate" placeholder="Contrato Permanente" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.PermanentContractDate == null || Model.PermanentContractDate == DateTime.MinValue ? "" : ((DateTime) Model.PermanentContractDate).ToString("dd/MM/yy"))"/>
+                            </label>
+                        </section>
+                    </div>
+
+                    </fieldset>
+                }
+            <footer>
+                @if (!Model.Processed) {
+                    <button type="button" id="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                }
+                    <button type="button" id="close" class="btn btn-default">
+                        Cerrar
+                    </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    $('#startContractDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        onSelect: function (selectedDate) {
+            $('#endContractDate').datepicker('option', 'minDate', selectedDate);
+        }
+    });
+    $('#endContractDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        onSelect: function (selectedDate) {
+            $('#startContractDate').datepicker('option', 'maxDate', selectedDate);
+        }
+    });
+    $('#startDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>'
+    });
+    $('#doB').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>'
+    });
+    $('#ssRegistrationDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>'
+    });
+    $('#permanentContractDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>'
+    });
+    $("#laX").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function () {
+        if ($('input[name="hasSocialSecurity"]').is('checked'))
+        $('input[name="hasSocialSecurity"]').val('on');
+        $.ajax({
+            url: "/Empleados/_Upsert",
+            type: "POST",
+            data: new FormData($("#newForm")[0]),
+            processData: false,
+            contentType: false
+        }).done(function(partialViewResult) {
+            $("#newModalBody").html(partialViewResult);
+        });
+    });
+</script>
+
+

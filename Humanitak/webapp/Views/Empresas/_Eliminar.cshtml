@@ -12,12 +12,9 @@
         </div>
         <div id="partialContent" class="modal-body no-padding">
             <form action="@Url.Action("_Eliminar", "Empresas")" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
-                @if (Model.Processed)
-                {
+                @if (Model.Processed) {
                     <header style="background-color:@(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header><!--#fff0f0 -->
-                }
-                else
-                {
+                } else {
                     <fieldset>
                         <div class="row">
                             <section class="col col-12">
@@ -27,8 +24,7 @@
                     </fieldset>
                 }
                 <footer>
-                    @if (!Model.Processed)
-                    {
+                    @if (!Model.Processed) {
                         <button type="button" id="submit" class="btn btn-primary">
                             Aceptar
                         </button>

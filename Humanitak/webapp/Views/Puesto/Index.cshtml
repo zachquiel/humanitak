@@ -1,4 +1,6 @@
-﻿			<!-- MAIN CONTENT -->
+﻿@using SmartAdminMvc.ViewModels
+@model EnterpriseInfoViewModel
+			<!-- MAIN CONTENT -->
 <div id="content">
 
     <div class="row">
@@ -58,31 +60,23 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body no-padding">
-                            @Html.ActionLink("Nueva Empresa", "Nueva")
+                            <a data-toggle="modal" onclick="showModal('#newModal', '#newModalBody', 0, @Model.Id)" style="cursor: pointer">Nuevo Puesto</a>
                             <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%">
                                 <thead>
-                                    <tr>
-                                        <th data-hide="phone">ID</th>
-                                        <th data-class="expand">Puesto</th>
-                                        <th data-hide="phone,tablet">Eliminar</th>
-                                    </tr>
+                                <tr>
+                                    <th data-hide="phone">ID</th>
+                                    <th data-class="expand">Puesto</th>
+                                    <th data-hide="phone,tablet">Eliminar</th>
+                                </tr>
                                 </thead>
                                 <tbody>
+                                @foreach (var item in Model.Positions) {
                                     <tr>
-                                        <td style="vertical-align:middle">1</td>
-                                        <td align="center">Desarrollador</td>
-                                        <td style="vertical-align:middle"><h3><i class="fa fa-trash-o fa-fw editor_remove"></i></h3></td>
+                                        <td style="vertical-align: middle">@item.Id</td>
+                                        <td style="vertical-align: middle" align="center">@item.Name</td>
+                                        <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="showModal('#deleteModal', '#deleteModalBody', '@item.Id', '@item.EnterpriseId')"><i class="fa fa-trash-o fa-fw editor_remove"></i></a></h3></td>
                                     </tr>
-                                    <tr>
-                                        <td style="vertical-align:middle">2</td>
-                                        <td align="center">Recepcionista</td>
-                                        <td style="vertical-align:middle"><h3><i class="fa fa-trash-o fa-fw editor_remove"></i></h3></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:middle">3</td>
-                                        <td align="center">Lider de Proyecto</td>
-                                        <td style="vertical-align:middle"><h3><i class="fa fa-trash-o fa-fw editor_remove"></i></h3></td>
-                                    </tr>
+                                }
                                 </tbody>
                             </table>
 
@@ -105,14 +99,27 @@
 
     </section>
     <!-- end widget grid -->
-    <div id="myModal">
-        <div id="mydiv2"></div>
+    <div class="modal fade" id="newModal" data-url='@Url.Action("_Upsert", "Puesto")' tabindex="-1" role="dialog">
+        <div id="newModalBody"></div>
+    </div>
+    <div class="modal fade" id="editModal" data-url='@Url.Action("_Upsert", "Puesto")' tabindex="-1" role="dialog">
+        <div id="editModalBody"></div>
+    </div>
+    <div class="modal fade" id="deleteModal" data-url='@Url.Action("_Delete", "Puesto")' tabindex="-1" role="dialog">
+        <div id="deleteModalBody"></div>
     </div>
 </div>
 <!-- END MAIN CONTENT -->
 @section pagespecific {
     <script type="text/javascript">
+        function showModal(modalContainerId, modalBodyId, positionId, enterpriseId) {
+            var url = $(modalContainerId).data('url');
+            $.get(url, { positionId: positionId, enterpriseId: enterpriseId }, function (data) {
+                $(modalBodyId).html(data);
+                $(modalContainerId).modal('show');
+            });
 
+        }
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
     var editor;
     $(document).ready(function () {
@@ -149,9 +156,9 @@
         function newTask() {
 
             var myModal = $('#myModal');
-            $.get('/Empresas/Nueva', function (data) {
+            $.get('/Puesto/_Upsert', function (data) {
                 $('#mydiv2').html(data);
-                $('#myModal .modal-header .modal-title').html('Nueva Empresa');
+                $('#myModal .modal-header .modal-title').html('Nuevo Puesto');
                 $('#myModal').appendTo("body").modal('show');
             });
 

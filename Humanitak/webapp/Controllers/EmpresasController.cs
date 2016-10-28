@@ -31,8 +31,9 @@ namespace SmartAdminMvc.Controllers {
 
         // GET: Catalogo
         public ActionResult Empresa(int id) {
-            ViewData.Add("id", id);
-            return View();
+            using (var db = new DataContext()) {
+                return View(db.Enterprises.First(e => e.Id == id).ToEnterpriseReference());
+            }
         }
 
         // GET: Nueva
@@ -213,7 +214,7 @@ namespace SmartAdminMvc.Controllers {
                     db.Enterprises.AddOrUpdate(ent);
                     db.SaveChanges();
                     viewModel.Success = true;
-                    viewModel.ProcessedMessage = "La empresa fue insertada con éxito";
+                    viewModel.ProcessedMessage = "La empresa fue modificada con éxito";
                 } catch (Exception e) {
                     viewModel.Success = false;
                     viewModel.ProcessedMessage = e.Message;

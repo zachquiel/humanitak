@@ -1,0 +1,130 @@
+﻿@using SmartAdminMvc.ViewModels
+@model SpecialPerceptionInsertViewModel
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            @if (string.IsNullOrEmpty(Model.KeyName))
+            {
+                <h4 class="modal-title">Agregar Percepción Especial </h4>
+            }
+            else
+            {
+                <h4 class="modal-title">Editar Percepción </h4>
+            }
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_AddSpecial", "Percepciones")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed)
+                {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
+                }
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <input type="hidden" name="id" id="id" value="@Model.Id" />
+                }
+                <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.EnterpriseId" />
+                <fieldset>
+                    <div class="row">
+                        @if (Model.ShowDepartments && Model.Departments.Count > 0) {
+                            <section class="col col-6">
+                                <label class="select">
+                                    <select name="departmentId" value="@Model.DepartmentId">
+                                        <option value="0" selected="" disabled="">Departamento...</option>
+                                        @foreach (var item in Model.Departments) {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                        }
+                        @if (Model.ShowGroups && Model.Groups.Count > 0) {
+                            <section class="col col-6">
+                                <label class="select">
+                                    <select name="groupId" value="@Model.GroupId">
+                                        <option value="0" selected="" disabled="">Grupo...</option>
+                                        @foreach (var item in Model.Groups) {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                        }
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="perceptionId" value="@Model.PerceptionId">
+                                    <option value="0" selected="" disabled="">Percepción...</option>
+                                    @foreach (var item in Model.Perceptions) {
+                                        <option value="@item.Id">@item.Description</option>
+                                    }
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <section>
+                        <label class="input">
+                            <input type="number" name="amount" placeholder="Cantidad" value="">
+                        </label>
+                    </section>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="number" name="repeat" id="repeat" placeholder="Repeticiones" value="">
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="checkbox">
+                                <input type="checkbox" validate="" name="permanent" id="permanent"
+                                       value="@Model.Permanent">
+                                <i></i>Permanente
+                            </label>
+                        </section>
+                    </div>
+                </fieldset>
+                <footer>
+                    <button type="button" id="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                    <button type="button" id="close" class="btn btn-default">
+                        Cerrar
+                    </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    $('#permanent').change(function () {
+        if ($(this).is(":checked")) {
+            $('#repeat').prop("disabled", true);
+        } else {
+
+            $('#repeat').prop("disabled", false);
+        }
+    });
+    $("#laX").on("click", function() {
+        $("#newSpecialModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function() {
+        $("#newSpecialModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function() {
+        $.ajax({
+            url: "/Percepciones/_AddSpecial",
+            type: "POST",
+            data: new FormData($("#newForm")[0]),
+            processData: false,
+            contentType: false
+        }).done(function(partialViewResult) {
+            $("#newSpecialModalBody").html(partialViewResult);//TODO: Check
+        });
+    });
+</script>

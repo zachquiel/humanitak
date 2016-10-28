@@ -1,0 +1,79 @@
+﻿@using SmartAdminMvc.ViewModels
+@model PerceptionViewModel
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            @if (string.IsNullOrEmpty(Model.KeyName)) {
+                <h4 class="modal-title">Nueva Percepción </h4>
+            }
+            else {
+                <h4 class="modal-title">Editar Percepción </h4>
+            }
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_Upsert", "Percepciones")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed) {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
+                }
+                @if (!string.IsNullOrEmpty(Model.Description)) {
+                    <input type="hidden" name="id" id="id" value="@Model.Id" />
+                }
+                <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.EnterpriseId" />
+                <fieldset>
+                    <section>
+                        <label class="input">
+                            <input type="text" name="keyName" placeholder="Clave" value="@Model.KeyName">
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-prepend fa fa-building"></i>
+                            <input type="text" name="description" placeholder="Nombre" value="@Model.Description">
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <input type="text" name="formula" placeholder="Formula" value="@Model.Formula">
+                        </label>
+                    </section>
+                </fieldset>
+                <footer>
+                    <button type="button" id="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                    <button type="button" id="close" class="btn btn-default">
+                        Cerrar
+                    </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    $("#laX").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function() {
+        $.ajax({
+            url: "/Percepciones/_Upsert",
+            type: "POST",
+            data: new FormData($("#newForm")[0]),
+            processData: false,
+            contentType: false,
+        }).done(function(partialViewResult) {
+            $("#newModalBody").html(partialViewResult);
+        });
+    });
+</script>

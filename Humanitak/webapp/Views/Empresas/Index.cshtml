@@ -85,7 +85,7 @@
                                     <tr>
                                         <td style="vertical-align: middle">@item.Id</td>
                                         <td align="center"><img width="60vw" src="@logoImg"/></td>
-                                        <td style="vertical-align: middle">@item.Name</td><!--@Html.ActionLink("Empresa A", "Empresa", new {@id = 1})-->
+                                        <td style="vertical-align: middle">@Html.ActionLink(@item.Name, "Empresa", new { @id = @item.Id })</td>
                                         <td style="vertical-align: middle">@item.City</td>
                                         <td style="vertical-align: middle">@item.LastPayday.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                         <td style="vertical-align: middle">Días @item.Payday1End</td>
@@ -156,7 +156,7 @@
                                         <tr>
                                             <td style="vertical-align: middle">@item.Id</td>
                                             <td align="center"><img width="60vw" src="@logoImg"/></td>
-                                            <td style="vertical-align: middle">@item.Name</td><!--@Html.ActionLink("Empresa A", "Empresa", new {@id = 1})-->
+                                            <td style="vertical-align: middle">@Html.ActionLink(@item.Name, "Empresa", new { @id = @item.Id })</td>
                                             <td style="vertical-align: middle">@item.City</td>
                                             <td style="vertical-align: middle">@item.LastPayday.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                             <td style="vertical-align: middle">Días @item.Payday1End</td>

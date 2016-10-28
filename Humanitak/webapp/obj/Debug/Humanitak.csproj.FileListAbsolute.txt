@@ -80,3 +80,12 @@ D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.pdb
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas3.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas4.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csprojResolveAssemblyReference.cache
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos1.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos2.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos3.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos4.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos5.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos6.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos7.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empleados.resources
