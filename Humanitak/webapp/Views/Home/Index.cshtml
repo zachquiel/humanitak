@@ -18,8 +18,8 @@
             <li class="@Html.RouteIf("Dispersiones", "active")">
                 <a href="@Url.Action("Index", "Dispersiones", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-heart txt-color-black"></i> <span class="menu-item-parent">Dispersiones de fondos</span></a>
             </li>
-            <li class="@Html.RouteIf("Prestamos", "active")">
-                <a href="@Url.Action("Index", "Prestamos", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-usd txt-color-black"></i> <span class="menu-item-parent">Préstamos</span></a>
+            <li class="@Html.RouteIf("Prestamo", "active")">
+                <a href="@Url.Action("Index", "Prestamo", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-usd txt-color-black"></i> <span class="menu-item-parent">Préstamos</span></a>
             </li>
             <li class="@Html.RouteIf("NominaEmpleado", "active")">
                 <a href="@Url.Action("Index", "NominaEmpleado", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-credit-card txt-color-black"></i> <span class="menu-item-parent">Nómina de empleado</span></a>
