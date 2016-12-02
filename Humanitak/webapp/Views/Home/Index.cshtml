@@ -9,6 +9,9 @@
     <br /><br /><br />
     <h3 style="line-height: 2em">
         <ul>
+            <li class="@Html.RouteIf("Clientes", "active")">
+                <a href="@Url.Action("Index", "Clientes", new {@id = ViewData["id"]})" title="Clientes" style="color: black !important"><i class="fa fa-lg fa-fw fa-male txt-color-black"></i> <span class="menu-item-parent">Clientes</span></a>
+            </li>
             <li class="@Html.RouteIf("Empresas", "active")">
                 <a href="@Url.Action("Index", "Empresas", new {@id = ViewData["id"]})" title="Empresas" style="color: black !important"><i class="fa fa-lg fa-fw fa-building txt-color-black"></i> <span class="menu-item-parent">Empresas</span></a>
             </li>

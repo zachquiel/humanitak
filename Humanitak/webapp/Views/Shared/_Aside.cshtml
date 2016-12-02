@@ -25,6 +25,9 @@
             <li class="@Html.RouteIf("Home", "active")">
                 <a href="@Url.Action("Index", "Home")" title="Home"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
             </li>
+            <li class="top-menu-invisible @Html.RouteIf("Clientes", "active")">
+                <a href="@Url.Action("Index", "Clientes")" title="Clientes"><i class="fa fa-lg fa-fw fa-male txt-color-black"></i> <span class="menu-item-parent">Clientes</span></a>
+            </li>
             <li class="top-menu-invisible @Html.RouteIf("Empresas", "active")">
                 <a href="@Url.Action("Index", "Empresas")" title="Empresas"><i class="fa fa-lg fa-fw fa-building-o"></i> <span class="menu-item-parent">Empresas</span></a>
             </li>

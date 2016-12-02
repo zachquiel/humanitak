@@ -1,0 +1,68 @@
+﻿@using SmartAdminMvc.ViewModels
+@model ClientViewModel
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">Desligar Empresa de Cliente</h4>
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_RemoveEnterprise", "Clientes")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed)
+                {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
+                }
+                @if (!string.IsNullOrEmpty(Model.Name))
+                {
+                    <input type="hidden" name="id" id="id" value="@Model.Id" />
+                }
+
+                <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.Enterprises.First(e=> e.Id == @Model.EnterpriseId).Id" />
+                <fieldset>
+                    <fieldset>
+                        <div class="row">
+                            <section class="col col-12">
+                                Está usted seguro que desea desligar la empresa @Model.Enterprises.First(e=> e.Id == @Model.EnterpriseId).Name ?
+                            </section>
+                        </div>
+                    </fieldset>
+                </fieldset>
+                <footer>
+                    <button type="button" id="submit" class="btn btn-primary">
+                        Aceptar
+                    </button>
+                    <button type="button" id="close" class="btn btn-default">
+                        Cerrar
+                    </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    $("#laX").on("click", function() {
+        $("#deleteModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function() {
+        $("#deleteModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function() {
+        $.ajax({
+            url: "/Clientes/_RemoveEnterprise",
+            type: "POST",
+            data: new FormData($("#newForm")[0]),
+            processData: false,
+            contentType: false,
+        }).done(function(partialViewResult) {
+            $("#deleteModalBody").html(partialViewResult);
+        });
+    });
+</script>

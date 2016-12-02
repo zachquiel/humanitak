@@ -13,81 +13,97 @@ using SmartAdminMvc.ViewModels;
 
 namespace SmartAdminMvc.Controllers {
     [Authorize]
-    public class EmpresasController : Controller {
-        // GET: Nominas
-        public ActionResult Nomina() {
-            return View();
-        }
-
+    public class ClientesController : Controller {
         // GET: Catalogo
         public ActionResult Index() {
-            var list = new List<EnterpriseViewModel>();
+            var list = new List<ClientViewModel>();
             using (var db = new DataContext()) {
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var enterprise in db.Enterprises) list.Add(enterprise.ToEnterpriseViewModel());
+                foreach (var client in db.Clients) list.Add(client.ToClientViewModel());
             }
             return View(list);
         }
 
         // GET: Catalogo
-        public ActionResult Empresa(int id) {
+        public ActionResult Cliente(int id) {
             using (var db = new DataContext()) {
-                return View(db.Enterprises.First(e => e.Id == id).ToEnterpriseReference());
+                return View(db.Clients.First(e => e.Id == id).ToClientFullViewModel());
             }
         }
 
-        // GET: Nueva
-        public ActionResult Nueva() {
-            return View();
+        public PartialViewResult _AddEnterprise(int id) {
+             using (var db = new DataContext()) {
+                var ents = db.Enterprises.ToList();
+                return PartialView(db.Clients.First(e => e.Id == id).ToClientReferenceViewModel(ents));
+            }
         }
 
-        // GET: Nueva
-        public ActionResult Empleados() {
-            return View();
+        public PartialViewResult _RemoveEnterprise(int id, int enterpriseId) {
+             using (var db = new DataContext()) {
+                var vm = db.Clients.First(e => e.Id == id).ToClientFullViewModel();
+                vm.EnterpriseId = enterpriseId;
+                return PartialView(vm);
+            }
         }
 
-        // GET: Nueva
-        public ActionResult Departamentos() {
-            return View();
+        [HttpPost]
+        [Authorize]
+        public PartialViewResult _AddEnterprise(ClientReferenceViewModel viewModel) {
+            using (var db = new DataContext()) {
+                viewModel.Processed = true;
+                var ent = db.Enterprises.FirstOrDefault(e => e.Id == viewModel.EnterpriseId);
+                var cli = db.Clients.FirstOrDefault(c => c.Id == viewModel.Id);
+                if (cli != null && cli.Enterprises == null) cli.Enterprises = new List<Enterprise>();
+                if (cli == null) return PartialView(viewModel);
+                cli.Enterprises.Add(ent);
+                try {
+                    db.Clients.AddOrUpdate(cli);
+                    db.SaveChanges();
+                    viewModel.Success = true;
+                    viewModel.ProcessedMessage = "La empresa se ligó con éxito";
+                } catch (Exception e) {
+                    viewModel.Success = false;
+                    viewModel.ProcessedMessage = e.Message;
+                }
+                return PartialView(viewModel);
+            }
         }
 
-        // GET: Nueva
-        public ActionResult Puestos() {
-            return View();
+        [HttpPost]
+        [Authorize]
+        public PartialViewResult _RemoveEnterprise(ClientViewModel viewModel) {
+            using (var db = new DataContext()) {
+                viewModel.Processed = true;
+                var cli = db.Clients.FirstOrDefault(c => c.Id == viewModel.Id);
+                if (cli != null) {
+                    var ent = cli.Enterprises.FirstOrDefault(e => e.Id == viewModel.EnterpriseId);
+                    cli.Enterprises.Remove(ent);
+                }
+                try {
+                    db.Clients.AddOrUpdate(cli);
+                    db.SaveChanges();
+                    viewModel.Success = true;
+                    viewModel.ProcessedMessage = "La empresa se desligó con éxito";
+                } catch (Exception e) {
+                    viewModel.Success = false;
+                    viewModel.ProcessedMessage = e.Message;
+                }
+                return PartialView(viewModel);
+            }
         }
 
-        // GET: Nueva
-        public ActionResult Percepciones() {
-            return View();
-        }
-
-        // GET: Nueva
-        public ActionResult Configuracion() {
-            return View();
-        }
-
-        // GET: Nueva
-        public ActionResult Acumulados() {
-            return View();
-        }
-
-        // GET: Nueva
-        public ActionResult Dispersion(int id) {
-            ViewData.Add("id", id);
-            return View();
-        }
 
         public ActionResult GetResult() {
             var message = "Welcome";
             return new JsonResult {Data = message, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
-        public PartialViewResult _Nueva(int id) {
+        public PartialViewResult _Upsert(int id) {
             if (id == 0) {
                 using (var db = new DataContext()) {
-                    return PartialView(new EnterpriseInsertViewModel {
-                        Enterprises =
-                            db.Enterprises.Where(e => e.ParentEnterprise == null).Select(e => new EnterpriseReference {
+                    return PartialView(new ClientInsertViewModel {
+                        Clients =
+                            db.Clients.Select(e => new ClientReference {
                                 Id = e.Id,
                                 Name = e.Name
                             }).ToList(),
@@ -95,34 +111,33 @@ namespace SmartAdminMvc.Controllers {
                         Payday1Start = -1,
                         Payday2End = -1,
                         Payday2Start = -1,
-                        State = "0",
-                        ParentEnterprise = -1
+                        State = "0"
                     });
                 }
             }
             using (var db = new DataContext()) {
-                var ents = db.Enterprises.Where(e => e.ParentEnterprise == null).Select(e => new EnterpriseReference {
+                var ents = db.Clients.Select(e => new ClientReference {
                     Id = e.Id,
                     Name = e.Name
                 }).ToList();
-                var vm = db.Enterprises.First(e => e.Id == id).ToEnterpriseInsertViewModel(ents);
+                var vm = db.Clients.First(e => e.Id == id).ToClientInsertViewModel(ents);
                 return PartialView(vm);
             }
         }
 
         [HttpPost]
         [Authorize]
-        public PartialViewResult _Nueva([Bind(Exclude = "logoImage, headerImage")] EnterpriseInsertViewModel viewModel,
+        public PartialViewResult _Upsert([Bind(Exclude = "logoImage, headerImage")] ClientInsertViewModel viewModel,
             HttpPostedFileBase logoImage, HttpPostedFileBase headerImage) {
-            if (!ModelState.IsValid || viewModel == null) return _Nueva(0);
+            if (!ModelState.IsValid || viewModel == null) return _Upsert(0);
 
             byte[] logoImageData = null;
             byte[] headerImageData = null;
-            if (Request.Files.Count <= 0 && viewModel.Id == 0) return _Nueva(0);
+            if (Request.Files.Count <= 0 && viewModel.Id == 0) return _Upsert(0);
             var logoImage2 = Request.Files["logoImage"];
-            if (logoImage2 == null && viewModel.Id == 0) return _Nueva(0);
+            if (logoImage2 == null && viewModel.Id == 0) return _Upsert(0);
             var headerImage2 = Request.Files["headerImage"];
-            if (headerImage2 == null && viewModel.Id == 0) return _Nueva(0);
+            if (headerImage2 == null && viewModel.Id == 0) return _Upsert(0);
             if (viewModel.Id == 0) {
                 //new
                 viewModel.Processed = true;
@@ -131,12 +146,9 @@ namespace SmartAdminMvc.Controllers {
                 using (var binaryReader = new BinaryReader(headerImage2.InputStream))
                     headerImageData = binaryReader.ReadBytes(headerImage2.ContentLength);
                 using (var db = new DataContext()) {
-                    Enterprise parent = null;
-                    if (viewModel.ParentEnterprise != 0)
-                        parent = db.Enterprises.First(e => e.Id == viewModel.ParentEnterprise);
-                    var ent = new Enterprise {
+                    var ent = new Client {
                         City = viewModel.City,
-                        //Commission = viewModel.Commission,
+                        Commission = viewModel.Commission,
                         Header = new EnterpriseImage {
                             Image = headerImageData
                         },
@@ -154,20 +166,19 @@ namespace SmartAdminMvc.Controllers {
                         Vat = viewModel.Vat,
                         UsesPunchClock =
                             viewModel.UsesPunchClock != null && viewModel.UsesPunchClock.ToLowerInvariant() == "on",
-                        LastPayday = new DateTime(1970, 1, 1),
-                        ParentEnterprise = parent ?? parent
+                        LastPayday = new DateTime(1970, 1, 1)
                     };
                     try {
-                        db.Enterprises.AddOrUpdate(ent);
+                        db.Clients.AddOrUpdate(ent);
                         db.SaveChanges();
                         viewModel.Success = true;
-                        viewModel.ProcessedMessage = "La empresa fue insertada con éxito";
+                        viewModel.ProcessedMessage = "El cliente fue insertado con éxito";
                     } catch (Exception e) {
                         viewModel.Success = false;
                         viewModel.ProcessedMessage = e.Message;
                     }
-                    viewModel.Enterprises =
-                        db.Enterprises.Where(e => e.ParentEnterprise == null).Select(e => new EnterpriseReference {
+                    viewModel.Clients =
+                        db.Clients.Select(e => new ClientReference {
                             Id = e.Id,
                             Name = e.Name
                         }).ToList();
@@ -185,11 +196,9 @@ namespace SmartAdminMvc.Controllers {
             }
             using (var db = new DataContext()) {
                 Enterprise parent = null;
-                if (viewModel.ParentEnterprise != 0)
-                    parent = db.Enterprises.First(e => e.Id == viewModel.ParentEnterprise);
-                var ent = db.Enterprises.First(e => e.Id == viewModel.Id);
+                var ent = db.Clients.First(e => e.Id == viewModel.Id);
                 ent.City = viewModel.City;
-                //ent.Commission = viewModel.Commission;
+                ent.Commission = viewModel.Commission;
                 if (headerImageData != null) {
                     ent.Header.Image = headerImageData;
                     db.EnterpriseImages.AddOrUpdate(ent.Header);
@@ -209,18 +218,17 @@ namespace SmartAdminMvc.Controllers {
                 ent.Vat = viewModel.Vat;
                 ent.UsesPunchClock = viewModel.UsesPunchClock != null &&
                                      viewModel.UsesPunchClock.ToLowerInvariant() == "on";
-                ent.ParentEnterprise = parent ?? parent;
                 try {
-                    db.Enterprises.AddOrUpdate(ent);
+                    db.Clients.AddOrUpdate(ent);
                     db.SaveChanges();
                     viewModel.Success = true;
-                    viewModel.ProcessedMessage = "La empresa fue modificada con éxito";
+                    viewModel.ProcessedMessage = "El cliente fue modificado con éxito";
                 } catch (Exception e) {
                     viewModel.Success = false;
                     viewModel.ProcessedMessage = e.Message;
                 }
-                viewModel.Enterprises =
-                    db.Enterprises.Where(e => e.ParentEnterprise == null).Select(e => new EnterpriseReference {
+                viewModel.Clients =
+                    db.Clients.Select(e => new ClientReference {
                         Id = e.Id,
                         Name = e.Name
                     }).ToList();
@@ -228,9 +236,9 @@ namespace SmartAdminMvc.Controllers {
             }
         }
 
-        public PartialViewResult _Eliminar(int id) {
+        public PartialViewResult _Delete(int id) {
             using (var db = new DataContext()) {
-                return PartialView(db.Enterprises.Where(e => e.Id == id).Select(e => new EnterpriseReference {
+                return PartialView(db.Clients.Where(e => e.Id == id).Select(e => new ClientReference {
                     Id = e.Id,
                     Name = e.Name
                 }).First());
@@ -238,16 +246,16 @@ namespace SmartAdminMvc.Controllers {
         }
 
         [HttpPost]
-        public PartialViewResult _Eliminar(EnterpriseReference viewModel) {
+        public PartialViewResult _Delete(ClientReference viewModel) {
             if (viewModel == null) return PartialView(viewModel);
             viewModel.Processed = true;
             using (var db = new DataContext()) {
-                var ent = db.Enterprises.First(e => e.Id == viewModel.Id);
+                var ent = db.Clients.First(e => e.Id == viewModel.Id);
                 try {
-                    db.Enterprises.Remove(ent);
+                    db.Clients.Remove(ent);
                     db.SaveChanges();
                     viewModel.Success = true;
-                    viewModel.ProcessedMessage = "La empresa fue eliminada con éxito";
+                    viewModel.ProcessedMessage = "El cliente fue eliminado con éxito";
                 } catch (Exception e) {
                     viewModel.Success = false;
                     viewModel.ProcessedMessage = e.Message;

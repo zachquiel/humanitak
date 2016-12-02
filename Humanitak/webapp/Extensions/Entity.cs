@@ -186,6 +186,13 @@ namespace SmartAdminMvc.Extensions {
             };
         }
 
+        public static ClientReference ToClientReference(this Client client) {
+            return new ClientReference {
+                Id = client.Id,
+                Name = client.Name
+            };
+        }
+
         public static EnterpriseViewModel ToEnterpriseViewModel(this Enterprise enterprise) {
             return new EnterpriseViewModel {
                 Id = enterprise.Id,
@@ -197,7 +204,7 @@ namespace SmartAdminMvc.Extensions {
                 LogoImage = enterprise.Logo.Image,
                 HeaderImage = enterprise.Header.Image,
                 UsesPunchClock = enterprise.UsesPunchClock ? "1" : "0",
-                Commission = enterprise.Commission,
+                //Commission = enterprise.Commission,
                 Vat = enterprise.Vat,
                 IsActive = enterprise.IsActive ? "1" : "0",
                 ParentEnterprise = enterprise.ParentEnterprise?.Id ?? 0,
@@ -206,6 +213,65 @@ namespace SmartAdminMvc.Extensions {
                 LastPayday = enterprise.LastPayday,
                 State = enterprise.State
             };
+        }
+
+        public static ClientViewModel ToClientViewModel(this Client client) {
+            return new ClientViewModel {
+                Id = client.Id,
+                Name = client.Name,
+                Payday1Start = client.Payday1Start,
+                Payday1End = client.Payday1End,
+                Payday2Start = client.Payday2Start,
+                Payday2End = client.Payday2End,
+                LogoImage = client.Logo.Image,
+                HeaderImage = client.Header.Image,
+                UsesPunchClock = client.UsesPunchClock ? "1" : "0",
+                Commission = client.Commission,
+                Vat = client.Vat,
+                IsActive = client.IsActive ? "1" : "0",
+                Operations = client.Operations,
+                City = client.City,
+                LastPayday = client.LastPayday,
+                State = client.State
+            };
+        }
+
+        public static ClientReferenceViewModel ToClientReferenceViewModel(this Client client, List<Enterprise> enterprises) {
+            var ret = new ClientReferenceViewModel {
+                Id = client.Id,
+                Name = client.Name,
+                Enterprises = new List<EnterpriseViewModel>()
+            };
+            foreach (var enterprise in enterprises.Where(enterprise => client.Enterprises.All(e => e.Id != enterprise.Id))) {
+                ret.Enterprises.Add(enterprise.ToEnterpriseViewModel());
+            }
+            return ret;
+        }
+
+        public static ClientViewModel ToClientFullViewModel(this Client client) {
+            var ret = new ClientViewModel {
+                Id = client.Id,
+                Name = client.Name,
+                Payday1Start = client.Payday1Start,
+                Payday1End = client.Payday1End,
+                Payday2Start = client.Payday2Start,
+                Payday2End = client.Payday2End,
+                LogoImage = client.Logo.Image,
+                HeaderImage = client.Header.Image,
+                UsesPunchClock = client.UsesPunchClock ? "1" : "0",
+                Commission = client.Commission,
+                Vat = client.Vat,
+                IsActive = client.IsActive ? "1" : "0",
+                Operations = client.Operations,
+                City = client.City,
+                LastPayday = client.LastPayday,
+                State = client.State,
+                Enterprises = new List<EnterpriseViewModel>()
+            };
+            foreach (var enterprise in client.Enterprises) {
+                ret.Enterprises.Add(enterprise.ToEnterpriseViewModel());
+            }
+            return ret;
         }
 
         public static EnterpriseInsertViewModel ToEnterpriseInsertViewModel(this Enterprise enterprise,
@@ -220,7 +286,7 @@ namespace SmartAdminMvc.Extensions {
                 LogoImage = enterprise.Logo.Image,
                 HeaderImage = enterprise.Header.Image,
                 UsesPunchClock = enterprise.UsesPunchClock ? "1" : "0",
-                Commission = enterprise.Commission,
+                //Commission = enterprise.Commission,
                 Vat = enterprise.Vat,
                 IsActive = enterprise.IsActive ? "1" : "0",
                 ParentEnterprise = enterprise.ParentEnterprise?.Id ?? 0,
@@ -229,6 +295,29 @@ namespace SmartAdminMvc.Extensions {
                 LastPayday = enterprise.LastPayday,
                 State = enterprise.State,
                 Enterprises = references
+            };
+        }
+
+        public static ClientInsertViewModel ToClientInsertViewModel(this Client client,
+            List<ClientReference> references) {
+            return new ClientInsertViewModel {
+                Id = client.Id,
+                Name = client.Name,
+                Payday1Start = client.Payday1Start,
+                Payday1End = client.Payday1End,
+                Payday2Start = client.Payday2Start,
+                Payday2End = client.Payday2End,
+                LogoImage = client.Logo.Image,
+                HeaderImage = client.Header.Image,
+                UsesPunchClock = client.UsesPunchClock ? "1" : "0",
+                Commission = client.Commission,
+                Vat = client.Vat,
+                IsActive = client.IsActive ? "1" : "0",
+                Operations = client.Operations,
+                City = client.City,
+                LastPayday = client.LastPayday,
+                State = client.State,
+                Clients = references
             };
         }
 

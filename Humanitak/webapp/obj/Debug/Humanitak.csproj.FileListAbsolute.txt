@@ -89,3 +89,4 @@ D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInterno
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos6.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos7.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empleados.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.clientes.resources
