@@ -45,7 +45,9 @@ namespace SmartAdminMvc.Controllers {
                     PositionId = -1,
                     GroupId = -1,
                     PayingEnterpriseId = -1,
-                    State = "0"
+                    State = "0",
+                    WorkState = "0",
+                    Regime = "0"
                 });
                 var vm = db.Employees.First(e => e.Id == employeeId).ToEmployeeViewModel(enterpriseId);
                 vm.Enterprises = mps;
@@ -104,7 +106,10 @@ namespace SmartAdminMvc.Controllers {
                         PayingEnterprise = paying,
                         StartContractDate = viewModel.StartContractDate,
                         EndContractDate = viewModel.EndContractDate,
-                        PermanentContractDate = viewModel.PermanentContractDate
+                        PermanentContractDate = viewModel.PermanentContractDate,
+                        WorkState = viewModel.WorkState,
+                        PatronalRegistryNo = viewModel.PatronalRegistryNo,
+                        Regime = viewModel.Regime,
                     };
                     try {
                         db.Employees.AddOrUpdate(emp);
@@ -160,6 +165,9 @@ namespace SmartAdminMvc.Controllers {
                 emp.StartContractDate = viewModel.StartContractDate;
                 emp.EndContractDate = viewModel.EndContractDate;
                 emp.PermanentContractDate = viewModel.PermanentContractDate;
+                emp.WorkState = viewModel.WorkState;
+                emp.PatronalRegistryNo = viewModel.PatronalRegistryNo;
+                emp.Regime = viewModel.Regime;
                 try {
                     db.Employees.AddOrUpdate(emp);
                     db.SaveChanges();

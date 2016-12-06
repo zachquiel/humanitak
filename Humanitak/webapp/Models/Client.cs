@@ -15,13 +15,14 @@ namespace SmartAdminMvc.Models {
         public virtual EnterpriseImage Logo { get; set; }
         public virtual EnterpriseImage Header { get; set; }
         public bool UsesPunchClock { get; set; }
-        public int Commission { get; set; }
+        public double Commission { get; set; }
         public double Vat { get; set; }
         public string State { get; set; }
         public bool IsActive { get; set; }
         public string Operations { get; set; }
         public string City { get; set; }
         public DateTime LastPayday { get; set; }
+        public virtual FiscalInformation FiscalInformation { get; set; }
         public virtual List<Enterprise> Enterprises { get; set; }
         public virtual List<Position> Positions { get; set; }
         public virtual List<Department> Departments { get; set; }

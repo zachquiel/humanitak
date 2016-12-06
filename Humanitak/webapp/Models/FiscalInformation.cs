@@ -1,8 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 
-namespace SmartAdminMvc.ViewModels {
-    public class ClientInsertViewModel : ClientViewModel {
-        public List<ClientReference> Clients { get; set; }
+namespace SmartAdminMvc.Models
+{
+    public class FiscalInformation
+    {
+        [Key]
+        public long Id { get; set; }
+
         public string StreetAddress { get; set; }
         public string OuterNumeral { get; set; }
         public string InnerNumeral { get; set; }
@@ -10,6 +18,5 @@ namespace SmartAdminMvc.ViewModels {
         public string ZipCode { get; set; }
         public string Town { get; set; }
         public string Rfc { get; set; }
-        public long FiscalId { get; set; }
     }
 }

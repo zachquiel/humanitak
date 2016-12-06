@@ -43,5 +43,8 @@ namespace SmartAdminMvc.ViewModels {
         public List<EnterpriseReference> Enterprises { get; set; }
         public List<DepartmentReferenceViewModel> Departments { get; set; }
         public List<PositionViewModel> Positions { get; set; }
+        public string WorkState { get; set; }
+        public string PatronalRegistryNo { get; set; }
+        public string Regime { get; set; }
     }
 }

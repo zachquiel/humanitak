@@ -16,7 +16,7 @@ namespace SmartAdminMvc.ViewModels {
         public byte[] HeaderImage { get; set; }
 
         public string UsesPunchClock { get; set; }
-        public int Commission { get; set; }
+        public double Commission { get; set; }
         public double Vat { get; set; }
         public string State { get; set; }
         public string IsActive { get; set; }

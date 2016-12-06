@@ -38,5 +38,8 @@ namespace SmartAdminMvc.Models {
         public DateTime StartContractDate { get; set; }
         public DateTime? EndContractDate { get; set; }
         public DateTime? PermanentContractDate { get; set; }
+        public string WorkState { get; set; }
+        public string PatronalRegistryNo { get; set; }
+        public string Regime { get; set; }
     }
 }

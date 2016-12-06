@@ -312,6 +312,65 @@
                             </label>
                         </section>
                     </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="workState" value="@Model.WorkState">
+                                    <option value="0" @Html.Raw((Model.WorkState == "0") ? "selected=\"\"" : "") disabled="">Ubicación del lugar de trabajo</option>
+                                    <option @Html.Raw((Model.WorkState == "Aguascalientes") ? "selected=\"\"" : "") value="Aguascalientes">Aguascalientes</option>
+                                    <option @Html.Raw((Model.WorkState == "Baja California") ? "selected=\"\"" : "") value="Baja California">Baja California</option>
+                                    <option @Html.Raw((Model.WorkState == "Baja California Sur") ? "selected=\"\"" : "") value="Baja California Sur">Baja California Sur</option>
+                                    <option @Html.Raw((Model.WorkState == "Campeche") ? "selected=\"\"" : "") value="Campeche">Campeche</option>
+                                    <option @Html.Raw((Model.WorkState == "Chiapas") ? "selected=\"\"" : "") value="Chiapas">Chiapas</option>
+                                    <option @Html.Raw((Model.WorkState == "Chihuahua") ? "selected=\"\"" : "") value="Chihuahua">Chihuahua</option>
+                                    <option @Html.Raw((Model.WorkState == "Ciudad de México") ? "selected=\"\"" : "") value="Ciudad de México">Ciudad de México</option>
+                                    <option @Html.Raw((Model.WorkState == "Coahuila de Zaragoza") ? "selected=\"\"" : "") value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
+                                    <option @Html.Raw((Model.WorkState == "Colima") ? "selected=\"\"" : "") value="Colima">Colima</option>
+                                    <option @Html.Raw((Model.WorkState == "Durango") ? "selected=\"\"" : "") value="Durango">Durango</option>
+                                    <option @Html.Raw((Model.WorkState == "Guanajuato") ? "selected=\"\"" : "") value="Guanajuato">Guanajuato</option>
+                                    <option @Html.Raw((Model.WorkState == "Guerrero") ? "selected=\"\"" : "") value="Guerrero">Guerrero</option>
+                                    <option @Html.Raw((Model.WorkState == "Hidalgo") ? "selected=\"\"" : "") value="Hidalgo">Hidalgo</option>
+                                    <option @Html.Raw((Model.WorkState == "Jalisco") ? "selected=\"\"" : "") value="Jalisco">Jalisco</option>
+                                    <option @Html.Raw((Model.WorkState == "México") ? "selected=\"\"" : "") value="México">México</option>
+                                    <option @Html.Raw((Model.WorkState == "Michoacán de Ocampo") ? "selected=\"\"" : "") value="Michoacán de Ocampo">Michoacán de Ocampo</option>
+                                    <option @Html.Raw((Model.WorkState == "Morelos") ? "selected=\"\"" : "") value="Morelos">Morelos</option>
+                                    <option @Html.Raw((Model.WorkState == "Nayarit") ? "selected=\"\"" : "") value="Nayarit">Nayarit</option>
+                                    <option @Html.Raw((Model.WorkState == "Nuevo León") ? "selected=\"\"" : "") value="Nuevo León">Nuevo León</option>
+                                    <option @Html.Raw((Model.WorkState == "Oaxaca") ? "selected=\"\"" : "") value="Oaxaca">Oaxaca</option>
+                                    <option @Html.Raw((Model.WorkState == "Puebla") ? "selected=\"\"" : "") value="Puebla">Puebla</option>
+                                    <option @Html.Raw((Model.WorkState == "Querétaro de Arteaga") ? "selected=\"\"" : "") value="Querétaro de Arteaga">Querétaro de Arteaga</option>
+                                    <option @Html.Raw((Model.WorkState == "Quintana Roo") ? "selected=\"\"" : "") value="Quintana Roo">Quintana Roo</option>
+                                    <option @Html.Raw((Model.WorkState == "San Luis Potosí") ? "selected=\"\"" : "") value="San Luis Potosí">San Luis Potosí</option>
+                                    <option @Html.Raw((Model.WorkState == "Sinaloa") ? "selected=\"\"" : "") value="Sinaloa">Sinaloa</option>
+                                    <option @Html.Raw((Model.WorkState == "Sonora") ? "selected=\"\"" : "") value="Sonora">Sonora</option>
+                                    <option @Html.Raw((Model.WorkState == "Tabasco") ? "selected=\"\"" : "") value="Tabasco">Tabasco</option>
+                                    <option @Html.Raw((Model.WorkState == "Tamaulipas") ? "selected=\"\"" : "") value="Tamaulipas">Tamaulipas</option>
+                                    <option @Html.Raw((Model.WorkState == "Tlaxcala") ? "selected=\"\"" : "") value="Tlaxcala">Tlaxcala</option>
+                                    <option @Html.Raw((Model.WorkState == "Veracruz de Ignacio de la Llave") ? "selected=\"\"" : "") value="Veracruz de Ignacio de la Llave">Veracruz de Ignacio de la Llave</option>
+                                    <option @Html.Raw((Model.WorkState == "Yucatán") ? "selected=\"\"" : "") value="Yucatán">Yucatán</option>
+                                    <option @Html.Raw((Model.WorkState == "Zacatecas") ? "selected=\"\"" : "") value="Zacatecas">Zacatecas</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                        <section class="col col-6">
+                            <label class="input">
+                                <i class="icon-prepend fa fa-percent">#</i>
+                                <input type="text" name="patronalRegistryNo" placeholder="Registro Patronal" value="@Model.PatronalRegistryNo">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="regime" value="@Model.Regime">
+                                    <option value="0" @Html.Raw((Model.Regime == "0") ? "selected=\"\"" : "") disabled="">Régimen</option>
+                                    <option @Html.Raw((Model.Regime == "Sueldos y Salarios") ? "selected=\"\"" : "") value="Sueldos y Salarios">Sueldos y Salarios</option>
+                                    <option @Html.Raw((Model.Regime == "Asimilados a Salarios") ? "selected=\"\"" : "") value="Asimilados a Salarios">Asimilados a Salarios</option>
+                                    <option @Html.Raw((Model.Regime == "Viáticos") ? "selected=\"\"" : "") value="Viáticos">Viáticos</option>
+                                </select> <i></i>
+                            </label>
+                        </section>
+                    </div>
 
                     </fieldset>
                 }

@@ -146,6 +146,16 @@ namespace SmartAdminMvc.Controllers {
                 using (var binaryReader = new BinaryReader(headerImage2.InputStream))
                     headerImageData = binaryReader.ReadBytes(headerImage2.ContentLength);
                 using (var db = new DataContext()) {
+                    var fis = new FiscalInformation {
+                        Area = viewModel.Area,
+                        InnerNumeral = viewModel.InnerNumeral,
+                        OuterNumeral = viewModel.OuterNumeral,
+                        Rfc = viewModel.Rfc,
+                        StreetAddress = viewModel.StreetAddress,
+                        Town = viewModel.Town,
+                        ZipCode = viewModel.ZipCode,
+                    };
+
                     var ent = new Client {
                         City = viewModel.City,
                         Commission = viewModel.Commission,
@@ -169,6 +179,9 @@ namespace SmartAdminMvc.Controllers {
                         LastPayday = new DateTime(1970, 1, 1)
                     };
                     try {
+                        db.FiscalInformations.AddOrUpdate(fis);
+                        db.SaveChanges();
+                        ent.FiscalInformation = fis;
                         db.Clients.AddOrUpdate(ent);
                         db.SaveChanges();
                         viewModel.Success = true;
@@ -195,7 +208,7 @@ namespace SmartAdminMvc.Controllers {
                     headerImageData = binaryReader.ReadBytes(headerImage2.ContentLength);
             }
             using (var db = new DataContext()) {
-                Enterprise parent = null;
+                var fis = db.FiscalInformations.First(f => f.Id == viewModel.FiscalId);
                 var ent = db.Clients.First(e => e.Id == viewModel.Id);
                 ent.City = viewModel.City;
                 ent.Commission = viewModel.Commission;
@@ -208,6 +221,14 @@ namespace SmartAdminMvc.Controllers {
                     ent.Logo.Image = logoImageData;
                     db.EnterpriseImages.AddOrUpdate(ent.Logo);
                 }
+
+                fis.Area = viewModel.Area;
+                fis.InnerNumeral = viewModel.InnerNumeral;
+                fis.OuterNumeral = viewModel.OuterNumeral;
+                fis.Rfc = viewModel.Rfc;
+                fis.StreetAddress = viewModel.StreetAddress;
+                fis.Town = viewModel.Town;
+                fis.ZipCode = viewModel.ZipCode;
                 ent.Name = viewModel.Name;
                 ent.Operations = viewModel.Operations;
                 ent.Payday1Start = viewModel.Payday1Start;
@@ -219,6 +240,7 @@ namespace SmartAdminMvc.Controllers {
                 ent.UsesPunchClock = viewModel.UsesPunchClock != null &&
                                      viewModel.UsesPunchClock.ToLowerInvariant() == "on";
                 try {
+                    db.FiscalInformations.AddOrUpdate(fis);
                     db.Clients.AddOrUpdate(ent);
                     db.SaveChanges();
                     viewModel.Success = true;

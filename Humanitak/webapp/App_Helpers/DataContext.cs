@@ -16,5 +16,6 @@ namespace SmartAdminMvc.App_Helpers {
         public DbSet<SpecialPerception> SpecialPerceptions { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<FiscalInformation> FiscalInformations { get; set; }
     }
 }

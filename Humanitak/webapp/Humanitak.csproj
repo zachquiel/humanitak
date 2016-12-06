@@ -1167,10 +1167,19 @@
     <Compile Include="Migrations\201612021851560_clientes.Designer.cs">
       <DependentUpon>201612021851560_clientes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612060634461_datosFiscales.cs" />
+    <Compile Include="Migrations\201612060634461_datosFiscales.Designer.cs">
+      <DependentUpon>201612060634461_datosFiscales.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612060730069_datosEmpleado.cs" />
+    <Compile Include="Migrations\201612060730069_datosEmpleado.Designer.cs">
+      <DependentUpon>201612060730069_datosEmpleado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\FiscalInformation.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Perception.cs" />
     <Compile Include="Models\Position.cs" />
@@ -1267,6 +1276,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612021851560_clientes.resx">
       <DependentUpon>201612021851560_clientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612060634461_datosFiscales.resx">
+      <DependentUpon>201612060634461_datosFiscales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612060730069_datosEmpleado.resx">
+      <DependentUpon>201612060730069_datosEmpleado.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

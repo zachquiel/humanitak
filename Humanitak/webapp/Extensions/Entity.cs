@@ -73,6 +73,9 @@ namespace SmartAdminMvc.Extensions {
                 StartContractDate = employee.StartContractDate,
                 EndContractDate = employee.EndContractDate,
                 PermanentContractDate = employee.PermanentContractDate,
+                WorkState = employee.WorkState,
+                PatronalRegistryNo = employee.PatronalRegistryNo,
+                Regime = employee.Regime,
             };
         }
 
@@ -317,7 +320,15 @@ namespace SmartAdminMvc.Extensions {
                 City = client.City,
                 LastPayday = client.LastPayday,
                 State = client.State,
-                Clients = references
+                Clients = references,
+                FiscalId = client.FiscalInformation.Id,
+                Area = client.FiscalInformation.Area,
+                InnerNumeral = client.FiscalInformation.InnerNumeral,
+                OuterNumeral = client.FiscalInformation.OuterNumeral,
+                Rfc = client.FiscalInformation.Rfc,
+                StreetAddress = client.FiscalInformation.StreetAddress,
+                Town = client.FiscalInformation.Town,
+                ZipCode = client.FiscalInformation.ZipCode,
             };
         }
 
