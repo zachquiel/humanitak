@@ -16,8 +16,9 @@ namespace SmartAdminMvc.Controllers {
         private static readonly BaseUserStore UserStore = new BaseUserStore();
         // GET: Nominas
         public ActionResult Index(int id) {
-            using (var db = new DataContext())
-                return View(db.Enterprises.First(e => e.Id == id).ToPaydayListViewModel());
+            using (var db = new DataContext()) {
+                return !db.Enterprises.Any() ? View() : View(db.Enterprises.First(e => e.Id == id).ToPaydayListViewModel());
+            }
         }
 
         public PartialViewResult _Nueva(int id) {
