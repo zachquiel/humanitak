@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
@@ -6,13 +7,15 @@ using SmartAdminMvc.ViewModels;
 namespace SmartAdminMvc.Extensions {
     public static partial class Extensions {
         public static EnterpriseInfoViewModel ToEnterpriseInfoViewModel(this Enterprise enterprise) {
+            var employeeCount = enterprise.Employees.Count;
             return new EnterpriseInfoViewModel {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
                 Departments = enterprise.Departments.Select(d => d.ToDepartmentViewModel(enterprise.Id)).ToList(),
                 Perceptions = enterprise.Perceptions.Select(p => p.ToPerceptionViewModel(enterprise.Id)).ToList(),
                 Positions = enterprise.Positions.Select(p => p.ToPositionViewModel(enterprise.Id)).ToList(),
-                Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList()
+                Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList(),
+                PayDays = enterprise.PayDays.Select(e => e.ToPayDayViewModel(employeeCount)).ToList()
             };
         }
 
@@ -28,7 +31,7 @@ namespace SmartAdminMvc.Extensions {
             return new EmployeeReferenceViewModel {
                 Id = employee.Id,
                 Name = employee.Name + " " + employee.LastName,
-                EnterpriseId = enterpriseId,
+                EnterpriseId = enterpriseId
             };
         }
 
@@ -75,7 +78,7 @@ namespace SmartAdminMvc.Extensions {
                 PermanentContractDate = employee.PermanentContractDate,
                 WorkState = employee.WorkState,
                 PatronalRegistryNo = employee.PatronalRegistryNo,
-                Regime = employee.Regime,
+                Regime = employee.Regime
             };
         }
 
@@ -84,7 +87,8 @@ namespace SmartAdminMvc.Extensions {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
                 Departments = enterprise.Departments.Select(d => d.ToDepartmentViewModel(enterprise.Id)).ToList(),
-                SpecialPerceptions = enterprise.SpecialPerceptions.Select(p => p.ToSpecialPerceptionViewModel(enterprise.Id)).ToList()
+                SpecialPerceptions =
+                    enterprise.SpecialPerceptions.Select(p => p.ToSpecialPerceptionViewModel(enterprise.Id)).ToList()
             };
         }
 
@@ -106,7 +110,8 @@ namespace SmartAdminMvc.Extensions {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
                 Perceptions = enterprise.Perceptions.Select(p => p.ToPerceptionViewModel(enterprise.Id)).ToList(),
-                SpecialPerceptions = enterprise.SpecialPerceptions.Select(p => p.ToSpecialPerceptionViewModel(enterprise.Id)).ToList()
+                SpecialPerceptions =
+                    enterprise.SpecialPerceptions.Select(p => p.ToSpecialPerceptionViewModel(enterprise.Id)).ToList()
             };
         }
 
@@ -124,22 +129,26 @@ namespace SmartAdminMvc.Extensions {
             };
         }
 
-        public static SpecialPerceptionInsertViewModel ToSpecialPerceptionInsertViewModel(this SpecialPerception specialPerception, List<GroupReferenceViewModel> groups, List<PerceptionReferenceViewModel> perceptions, long enterpriseId) {
-            var vm = (SpecialPerceptionInsertViewModel)specialPerception.ToSpecialPerceptionViewModel(enterpriseId);
+        public static SpecialPerceptionInsertViewModel ToSpecialPerceptionInsertViewModel(
+            this SpecialPerception specialPerception, List<GroupReferenceViewModel> groups,
+            List<PerceptionReferenceViewModel> perceptions, long enterpriseId) {
+            var vm = (SpecialPerceptionInsertViewModel) specialPerception.ToSpecialPerceptionViewModel(enterpriseId);
             vm.Groups = groups;
             vm.Perceptions = perceptions;
             return vm;
         }
 
-        public static SpecialPerceptionInsertViewModel ToSpecialPerceptionInsertViewModel(this SpecialPerception specialPerception, List<DepartmentReferenceViewModel> departments, List<PerceptionReferenceViewModel> perceptions, long enterpriseId) {
-            var vm = (SpecialPerceptionInsertViewModel)specialPerception.ToSpecialPerceptionViewModel(enterpriseId);
+        public static SpecialPerceptionInsertViewModel ToSpecialPerceptionInsertViewModel(
+            this SpecialPerception specialPerception, List<DepartmentReferenceViewModel> departments,
+            List<PerceptionReferenceViewModel> perceptions, long enterpriseId) {
+            var vm = (SpecialPerceptionInsertViewModel) specialPerception.ToSpecialPerceptionViewModel(enterpriseId);
             vm.Perceptions = perceptions;
             vm.Departments = departments;
             return vm;
         }
 
-        public static SpecialPerceptionViewModel ToSpecialPerceptionViewModel(this SpecialPerception specialPerception, long enterpriseId) {
-            
+        public static SpecialPerceptionViewModel ToSpecialPerceptionViewModel(this SpecialPerception specialPerception,
+            long enterpriseId) {
             return new SpecialPerceptionViewModel {
                 Id = specialPerception.Id,
                 KeyName = specialPerception.Perception.KeyName,
@@ -152,7 +161,7 @@ namespace SmartAdminMvc.Extensions {
                 GroupId = specialPerception.Group?.Id ?? 0,
                 GroupName = specialPerception.Group?.Name ?? "",
                 DepartmentId = specialPerception.Department?.Id ?? 0,
-                DepartmentName = specialPerception.Department?.Name ?? "",
+                DepartmentName = specialPerception.Department?.Name ?? ""
             };
         }
 
@@ -239,15 +248,16 @@ namespace SmartAdminMvc.Extensions {
             };
         }
 
-        public static ClientReferenceViewModel ToClientReferenceViewModel(this Client client, List<Enterprise> enterprises) {
+        public static ClientReferenceViewModel ToClientReferenceViewModel(this Client client,
+            List<Enterprise> enterprises) {
             var ret = new ClientReferenceViewModel {
                 Id = client.Id,
                 Name = client.Name,
                 Enterprises = new List<EnterpriseViewModel>()
             };
-            foreach (var enterprise in enterprises.Where(enterprise => client.Enterprises.All(e => e.Id != enterprise.Id))) {
+            foreach (
+                var enterprise in enterprises.Where(enterprise => client.Enterprises.All(e => e.Id != enterprise.Id)))
                 ret.Enterprises.Add(enterprise.ToEnterpriseViewModel());
-            }
             return ret;
         }
 
@@ -271,9 +281,7 @@ namespace SmartAdminMvc.Extensions {
                 State = client.State,
                 Enterprises = new List<EnterpriseViewModel>()
             };
-            foreach (var enterprise in client.Enterprises) {
-                ret.Enterprises.Add(enterprise.ToEnterpriseViewModel());
-            }
+            foreach (var enterprise in client.Enterprises) ret.Enterprises.Add(enterprise.ToEnterpriseViewModel());
             return ret;
         }
 
@@ -328,7 +336,7 @@ namespace SmartAdminMvc.Extensions {
                 Rfc = client.FiscalInformation.Rfc,
                 StreetAddress = client.FiscalInformation.StreetAddress,
                 Town = client.FiscalInformation.Town,
-                ZipCode = client.FiscalInformation.ZipCode,
+                ZipCode = client.FiscalInformation.ZipCode
             };
         }
 
@@ -357,6 +365,72 @@ namespace SmartAdminMvc.Extensions {
                 Email = u.Email,
                 CanIssuePayments = u.CanIssuePayments ? "1" : "0"
             };
+        }
+
+        public static EnterpriseInfoViewModel ToPaydayListViewModel(this Enterprise enterprise) {
+            var employeeCount = enterprise.Employees.Count;
+            return new EnterpriseInfoViewModel {
+                Id = enterprise.Id,
+                Name = enterprise.Name,
+                PayDays = enterprise.PayDays.Select(e => e.ToPayDayViewModel(employeeCount)).ToList()
+            };
+        }
+
+        public static PayDayReference ToPayDayReference(this PayDay p) {
+            return new PayDayReference {
+                Id = p.Id,
+                Date = p.PayDate.ToString("dd MMM yyyy"),
+                Processed = false,
+                ProcessedMessage = "",
+                Success = false
+            };
+        }
+
+        public static PayDayViewModel ToPayDayViewModel(this PayDay p, int employees) {
+            return new PayDayViewModel {
+                Id = p.Id,
+                Date = p.PayDate.ToString("dd MMM yyyy"),
+                Processed = false,
+                ProcessedMessage = "",
+                Success = false,
+                Authorized = p.Authorizer != null ? "Aprobada" : "En espera",
+                Authorizer = p.Authorizer != null ? p.Authorizer.UserName : "",
+                Employees = employees,
+                StartDate = p.PayStartDate.ToString("dd MMM yyyy"),
+                AuthorizationDate = p.Authorizer != null ? p.AuthotizationDate.ToString("dd MMM yyyy") : "",
+                EnterpriseId = p.Enterprise.Id
+            };
+        }
+
+        public static PayDayDetailViewModel ToPayDayDetailViewModel(this EmployeePayDay p) {
+            return new PayDayDetailViewModel {
+                Name = p.Employee.Name + " " + p.Employee.LastName,
+                DailySalary = Math.Round(p.DailySalary, 2).ToString("C"),
+                NaturalDays = p.NaturalDays,
+                Income = Math.Round(p.Perceptions, 2).ToString("C"),
+                Perceptions = Math.Round(0d, 2).ToString("C"),
+                Deductions = Math.Round(p.Deductions, 2).ToString("C"),
+                FinalIncome = Math.Round((p.Perceptions - p.Deductions), 2).ToString("C"),
+                Department = p.Employee.Department.Name
+            };
+        }
+
+        public static List<PayDayDetailViewModel> ToPayDayDepartmentViewModel(this IQueryable<EmployeePayDay> p) {
+            var list = new List<PayDayDetailViewModel>();
+            var paydays = p.GroupBy(l => l.Employee.Department.Name);
+            foreach (var payday in paydays) {
+                list.Add(new PayDayDetailViewModel {
+                    Name = payday.Key,
+                    DailySalary = Math.Round(payday.Sum(d => d.DailySalary), 2).ToString("C"),
+                    NaturalDays = payday.First().NaturalDays,
+                    Income = Math.Round(payday.Sum(d => d.Perceptions), 2).ToString("C"),
+                    Perceptions = Math.Round(0d, 2).ToString("C"),
+                    Deductions = Math.Round(payday.Sum(d => d.Deductions), 2).ToString("C"),
+                    FinalIncome = Math.Round(payday.Sum(d => d.Perceptions - d.Deductions), 2).ToString("C"),
+                    Department = payday.Key
+                });
+            }
+            return list;
         }
     }
 }

@@ -32,6 +32,11 @@ namespace SmartAdminMvc
                 "~/scripts/plugin/fullcalendar/jquery.fullcalendar.min.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/scripts/full-calendar-lang").Include(
+                "~/scripts/plugin/moment/locale/es.js",
+                "~/scripts/plugin/fullcalendar/lang-all.js"
+                ));
+
             bundles.Add(new ScriptBundle("~/scripts/charts").Include(
                 "~/scripts/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js",
                 "~/scripts/plugin/sparkline/jquery.sparkline.min.js",

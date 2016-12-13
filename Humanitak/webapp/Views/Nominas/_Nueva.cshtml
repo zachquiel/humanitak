@@ -1,0 +1,96 @@
+﻿@using SmartAdminMvc.ViewModels
+@model PayDayViewModel
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">Nueva Nómina </h4>
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_Nueva", "Nominas")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed)
+                {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
+                }
+                <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.EnterpriseId" />
+                <fieldset>
+                    <div class="row">
+                        <section class="col col-3">
+                            Fecha Inicial:
+                        </section>
+                        <section class="col col-3">
+                            <label class="input">
+                                <i class="icon-prepend fa fa-calendar"></i>
+                                <input type="text" id="startDate" name="startDate" placeholder="Seleccione" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartDate)" />
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-3">
+                            Fecha Final:
+                        </section>
+                        <section class="col col-3">
+                            <label class="input">
+                                <i class="icon-prepend fa fa-calendar"></i>
+
+                                <input type="text" id="date" name="date" placeholder="Seleccione" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.Date)" />
+                            </label>
+                        </section>
+                    </div>
+                </fieldset>
+                <footer>
+                    <button type="button" id="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                    <button type="button" id="close" class="btn btn-default">
+                        Cerrar
+                    </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    
+    $('#startDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        onSelect: function (selectedDate) {
+            $('#date').datepicker('option', 'minDate', selectedDate);
+        }
+    });
+    $('#date').datepicker({
+        dateFormat: 'dd/mm/yy',
+        prevText: '<i class="fa fa-chevron-left"></i>',
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        onSelect: function (selectedDate) {
+            $('#startDate').datepicker('option', 'maxDate', selectedDate);
+        }
+    });
+    $("#laX").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function() {
+        $.ajax({
+            url: "/Nominas/_Nueva",
+            type: "POST",
+            data: new FormData($("#newForm")[0]),
+            processData: false,
+            contentType: false,
+        }).done(function(partialViewResult) {
+            $("#newModalBody").html(partialViewResult);
+        });
+    });
+</script>

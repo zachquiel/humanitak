@@ -1,4 +1,6 @@
-﻿			<!-- MAIN CONTENT -->
+﻿@using SmartAdminMvc.ViewModels
+@model EnterpriseInfoViewModel
+			<!-- MAIN CONTENT -->
 <div id="content">
 
     <div class="row">
@@ -58,7 +60,7 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body no-padding">
-                            @Html.ActionLink("Nueva Nómina", "Nueva")
+                            <a data-toggle="modal" onclick="showModal('#newModal', '#newModalBody', @Model.Id)" style="cursor: pointer">Nueva Nómina</a>
                             <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%">
                                 <thead>
                                     <tr>
@@ -66,7 +68,7 @@
                                         <th data-hide="phone">Fecha Final</th>
                                         <th data-class="expand">Acción</th>
                                         <th data-hide="phone">Estado</th>
-                                        <th data-hide="phone">Aniversario</th>
+                                        <!--<th data-hide="phone">Aniversario</th>-->
                                         <th data-hide="phone">Detalle</th>
                                         <th data-hide="phone">Descarga</th>
                                         <th data-hide="phone">Número de Facturas por Nómina</th>
@@ -75,6 +77,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach (var item in Model.PayDays) {
+                                        <tr>
+                                            <td style="vertical-align: middle">@item.StartDate</td>
+                                            <td style="vertical-align: middle">@item.Date</td>
+                                            <td style="vertical-align: middle">
+                                                @Html.ActionLink("Detalle", "Detalle", new {@id = item.Id}) <br/>
+                                                @Html.ActionLink("Detalle con percepciones y deducciones", "DetalleFull", new {@id = item.Id })<br/>
+                                                @Html.ActionLink("Total por departamentos", "Totales", new {@id = item.Id })<br/>
+                                                @Html.ActionLink("Resumen", "Resumen", new {@id = item.Id })<br/>
+                                                <!--@Html.ActionLink("Días Pagados", "Dias", new {@id = item.Id })<br/>-->
+                                            </td>
+                                            <td style="vertical-align: middle">@item.Authorized</td>
+                                            <td style="vertical-align: middle">
+                                                <h3>
+                                                    <i class="fa fa-print fa-fw editor_edit"></i>
+                                                </h3>
+                                            </td>
+                                            <td style="vertical-align: middle">
+                                                <h3>
+                                                    <i class="fa fa-file-excel-o fa-fw editor_edit"></i>
+                                                </h3>
+                                            </td>
+                                            <td style="vertical-align: middle">@item.Employees</td>
+                                            <td style="vertical-align: middle">@item.Authorizer</td>
+                                            <td style="vertical-align: middle">@item.AuthorizationDate</td>
+                                        </tr>
+                                    }
                                     <tr>
                                         <td style="vertical-align: middle">Ago 31 2015</td>
                                         <td style="vertical-align: middle">Ago 31 2015</td>
@@ -86,111 +115,6 @@
                                             @Html.ActionLink("Días Pagados", "Dias", new { @id = 1 })<br />
                                         </td>
                                         <td style="vertical-align: middle">Aprobada</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-print fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-file-excel-o fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">15</td>
-                                        <td style="vertical-align: middle">Admin</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            @Html.ActionLink("Detalle", "Detalle", new { @id = 1 }) <br />
-                                            @Html.ActionLink("Detalle con percepciones y deducciones", "DetalleFull", new { @id = 1 })<br />
-                                            @Html.ActionLink("Total por departamentos", "Totales", new { @id = 1 })<br />
-                                            @Html.ActionLink("Resumen", "Resumen", new { @id = 1 })<br />
-                                            @Html.ActionLink("Días Pagados", "Dias", new { @id = 1 })<br />
-                                        </td>
-                                        <td style="vertical-align: middle">Aprobada</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-print fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-file-excel-o fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">15</td>
-                                        <td style="vertical-align: middle">Admin</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            @Html.ActionLink("Detalle", "Detalle", new { @id = 1 }) <br />
-                                            @Html.ActionLink("Detalle con percepciones y deducciones", "DetalleFull", new { @id = 1 })<br />
-                                            @Html.ActionLink("Total por departamentos", "Totales", new { @id = 1 })<br />
-                                            @Html.ActionLink("Resumen", "Resumen", new { @id = 1 })<br />
-                                            @Html.ActionLink("Días Pagados", "Dias", new { @id = 1 })<br />
-                                        </td>
-                                        <td style="vertical-align: middle">Aprobada</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-print fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-file-excel-o fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">15</td>
-                                        <td style="vertical-align: middle">Admin</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            @Html.ActionLink("Detalle", "Detalle", new { @id = 1 }) <br />
-                                            @Html.ActionLink("Detalle con percepciones y deducciones", "DetalleFull", new { @id = 1 })<br />
-                                            @Html.ActionLink("Total por departamentos", "Totales", new { @id = 1 })<br />
-                                            @Html.ActionLink("Resumen", "Resumen", new { @id = 1 })<br />
-                                            @Html.ActionLink("Días Pagados", "Dias", new { @id = 1 })<br />
-                                        </td>
-                                        <td style="vertical-align: middle">Aprobada</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-print fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">
-                                            <h3>
-                                                <i class="fa fa-file-excel-o fa-fw editor_edit"></i>
-                                            </h3>
-                                        </td>
-                                        <td style="vertical-align: middle">15</td>
-                                        <td style="vertical-align: middle">Admin</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
-                                        <td style="vertical-align: middle">
-                                            @Html.ActionLink("Detalle", "Detalle", new { @id = 1 }) <br />
-                                            @Html.ActionLink("Detalle con percepciones y deducciones", "DetalleFull", new { @id = 1 })<br />
-                                            @Html.ActionLink("Total por departamentos", "Totales", new { @id = 1 })<br />
-                                            @Html.ActionLink("Resumen", "Resumen", new { @id = 1 })<br />
-                                            @Html.ActionLink("Días Pagados", "Dias", new { @id = 1 })<br />
-                                        </td>
-                                        <td style="vertical-align: middle">Aprobada</td>
-                                        <td style="vertical-align: middle">Ago 31 2015</td>
                                         <td style="vertical-align: middle">
                                             <h3>
                                                 <i class="fa fa-print fa-fw editor_edit"></i>
@@ -227,14 +151,25 @@
 
     </section>
     <!-- end widget grid -->
-    <div id="myModal">
-        <div id="mydiv2"></div>
+    <div class="modal fade" id="newModal" data-url='@Url.Action("_Nueva", "Nominas")' tabindex="-1" role="dialog">
+        <div id="newModalBody"></div>
+    </div>
+    <div class="modal fade" id="deleteModal" data-url='@Url.Action("_Autorizar", "Nominas")' tabindex="-1" role="dialog">
+        <div id="deleteModalBody"></div>
     </div>
 </div>
 <!-- END MAIN CONTENT -->
 @section pagespecific {
     <script type="text/javascript">
 
+     function showModal(modalContainerId, modalBodyId, id) {
+         var url = $(modalContainerId).data('url');
+         $.get(url, { id: id }, function (data) {
+             $(modalBodyId).html(data);
+             $(modalContainerId).modal('show');
+         });
+
+     }
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
     var editor;
     $(document).ready(function () {

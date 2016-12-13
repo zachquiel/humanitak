@@ -29,5 +29,6 @@ namespace SmartAdminMvc.Models {
         public virtual List<Employee> Employees { get; set; }
         public virtual List<Group> Groups { get; set; }
         public virtual List<Client> Clients { get; set; }
+        public virtual List<PayDay> PayDays { get; set; }
     }
 }

@@ -17,5 +17,7 @@ namespace SmartAdminMvc.App_Helpers {
         public DbSet<Group> Groups { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<FiscalInformation> FiscalInformations { get; set; }
+        public DbSet<PayDay> PayDays { get; set; }
+        public DbSet<EmployeePayDay> EmployeePayDays { get; set; }
     }
 }

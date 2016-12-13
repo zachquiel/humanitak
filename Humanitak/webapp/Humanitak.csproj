@@ -1042,6 +1042,7 @@
     <Content Include="Views\Clientes\Cliente.cshtml" />
     <Content Include="Views\Clientes\_AddEnterprise.cshtml" />
     <Content Include="Views\Clientes\_RemoveEnterprise.cshtml" />
+    <Content Include="Views\Nominas\_Nueva.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1175,12 +1176,26 @@
     <Compile Include="Migrations\201612060730069_datosEmpleado.Designer.cs">
       <DependentUpon>201612060730069_datosEmpleado.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612121947510_nomina.cs" />
+    <Compile Include="Migrations\201612121947510_nomina.Designer.cs">
+      <DependentUpon>201612121947510_nomina.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612131849246_nomina1.cs" />
+    <Compile Include="Migrations\201612131849246_nomina1.Designer.cs">
+      <DependentUpon>201612131849246_nomina1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612131935150_nomina2.cs" />
+    <Compile Include="Migrations\201612131935150_nomina2.Designer.cs">
+      <DependentUpon>201612131935150_nomina2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\EmployeePayDay.cs" />
     <Compile Include="Models\FiscalInformation.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\PayDay.cs" />
     <Compile Include="Models\Perception.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\SpecialPerception.cs" />
@@ -1207,6 +1222,9 @@
     <Compile Include="ViewModels\EnterpriseViewModel.cs" />
     <Compile Include="ViewModels\GroupReferenceViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\PayDayDetailViewModel.cs" />
+    <Compile Include="ViewModels\PayDayReference.cs" />
+    <Compile Include="ViewModels\PayDayViewModel.cs" />
     <Compile Include="ViewModels\PerceptionReferenceViewModel.cs" />
     <Compile Include="ViewModels\PerceptionViewModel.cs" />
     <Compile Include="ViewModels\PositionViewModel.cs" />
@@ -1282,6 +1300,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612060730069_datosEmpleado.resx">
       <DependentUpon>201612060730069_datosEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612121947510_nomina.resx">
+      <DependentUpon>201612121947510_nomina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612131849246_nomina1.resx">
+      <DependentUpon>201612131849246_nomina1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612131935150_nomina2.resx">
+      <DependentUpon>201612131935150_nomina2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

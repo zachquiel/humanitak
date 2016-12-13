@@ -7,5 +7,6 @@ namespace SmartAdminMvc.ViewModels {
         public List<PerceptionViewModel> Perceptions { get; set; }
         public List<SpecialPerceptionViewModel> SpecialPerceptions { get; set; }
         public List<PositionViewModel> Positions { get; set; }
+        public List<PayDayViewModel> PayDays { get; set; }
     }
 }

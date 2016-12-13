@@ -1,4 +1,6 @@
-﻿			<!-- MAIN CONTENT -->
+﻿@using SmartAdminMvc.ViewModels
+@model IEnumerable<PayDayDetailViewModel>
+			<!-- MAIN CONTENT -->
 <div id="content">
 
     <div class="row">
@@ -74,7 +76,8 @@
                                         <th data-class="expand">Prima Dom.</th>
                                         <th data-class="expand">Prima Vac.</th>
                                         <th data-class="expand">Percepciones</th>
-                                        <th data-class="expand">Deducciones</th>
+                                        <th data-class="expand">ISR</th>
+                                        <th data-class="expand">IMSS</th>
                                         <th data-class="expand">Gran Total</th>
                                     </tr>
                                 </thead>
@@ -95,60 +98,30 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    <tr>
-                                        <td style="vertical-align: middle">Juan Escutia</td>
-                                        <td style="vertical-align: middle">$1,000.00</td>
-                                        <td style="vertical-align: middle">31</td>
-                                        <td style="vertical-align: middle">$31,000.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$31,000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: middle">Juan Escutia</td>
-                                        <td style="vertical-align: middle">$1,000.00</td>
-                                        <td style="vertical-align: middle">31</td>
-                                        <td style="vertical-align: middle">$31,000.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$31,000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: middle">Juan Escutia</td>
-                                        <td style="vertical-align: middle">$1,000.00</td>
-                                        <td style="vertical-align: middle">31</td>
-                                        <td style="vertical-align: middle">$31,000.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$0.00</td>
-                                        <td style="vertical-align: middle">$31,000.00</td>
-                                    </tr>
+                                    @foreach (var item in Model) {
+                                        <tr>
+                                            <td style="vertical-align: middle">@item.Name</td>
+                                            <td style="vertical-align: middle">@item.DailySalary</td>
+                                            <td style="vertical-align: middle">@item.NaturalDays</td>
+                                            <td style="vertical-align: middle">@item.Income</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">@item.Perceptions</td>
+                                            <td style="vertical-align: middle">@item.Deductions</td>
+                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">@item.FinalIncome</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
 
@@ -293,13 +266,13 @@
                             i : 0;
                     };
 
-                    for (var i = 1; i <= 14; i++) {
+                    for (var i = 1; i <= 15; i++) {
                         var total = api.column(i).data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                         $(api.column(i).footer()).html(
-                            '$' + total + ' '
+                            '$' + (Math.round(total * 100) / 100).toLocaleString() + ' '
                         );
                     }
 
