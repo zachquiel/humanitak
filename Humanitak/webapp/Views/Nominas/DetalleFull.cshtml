@@ -1,5 +1,5 @@
 ﻿@using SmartAdminMvc.ViewModels
-@model IEnumerable<PayDayDetailViewModel>
+@model IEnumerable<EmployeePayDayFullInfo>
 			<!-- MAIN CONTENT -->
 <div id="content">
 
@@ -108,17 +108,17 @@
                                             <td style="vertical-align: middle">@item.DailySalary</td>
                                             <td style="vertical-align: middle">@item.NaturalDays</td>
                                             <td style="vertical-align: middle">@item.Income</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
-                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">@item.Vacations</td>
+                                            <td style="vertical-align: middle">@item.BreakDays</td>
+                                            <td style="vertical-align: middle">@item.Holidays</td>
+                                            <td style="vertical-align: middle">@item.DoublePay</td>
+                                            <td style="vertical-align: middle">@item.TriplePay</td>
+                                            <td style="vertical-align: middle">@item.Overtime</td>
+                                            <td style="vertical-align: middle">@item.SundayPrime</td>
+                                            <td style="vertical-align: middle">@item.VacationPrime</td>
                                             <td style="vertical-align: middle">@item.Perceptions</td>
-                                            <td style="vertical-align: middle">@item.Deductions</td>
-                                            <td style="vertical-align: middle">$0.00</td>
+                                            <td style="vertical-align: middle">@item.IsrDeduction</td>
+                                            <td style="vertical-align: middle">@item.ImssDeduction</td>
                                             <td style="vertical-align: middle">@item.FinalIncome</td>
                                         </tr>
                                     }

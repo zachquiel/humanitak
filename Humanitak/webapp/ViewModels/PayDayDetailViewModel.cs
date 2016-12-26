@@ -19,5 +19,19 @@ namespace SmartAdminMvc.ViewModels {
         public string Status { get; set; }
         public string CommissionPct { get; set; }
         public string VatPct { get; set; }
+
+    }
+
+    public class EmployeePayDayFullInfo : PayDayDetailViewModel {
+        public string Vacations { get; set; }
+        public string BreakDays { get; set; }
+        public string Holidays { get; set; }
+        public string DoublePay { get; set; }
+        public string TriplePay { get; set; }
+        public string Overtime { get; set; }
+        public string SundayPrime { get; set; }
+        public string VacationPrime { get; set; }
+        public string IsrDeduction { get; set; }
+        public string ImssDeduction { get; set; }
     }
 }

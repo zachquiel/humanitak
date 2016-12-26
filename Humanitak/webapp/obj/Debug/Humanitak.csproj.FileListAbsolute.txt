@@ -74,12 +74,8 @@ D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.UserChanges1.re
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas1.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas2.resources
-D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csproj.GenerateResource.Cache
-D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.dll
-D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.pdb
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas3.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.Empresas4.resources
-D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csprojResolveAssemblyReference.cache
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos1.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpresasInternos2.resources
@@ -95,3 +91,9 @@ D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.datosEmpleado.r
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.nomina.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.nomina1.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.nomina2.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.incidencias.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csproj.GenerateResource.Cache
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.dll
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.pdb
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpleadosN.resources
+D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csprojResolveAssemblyReference.cache

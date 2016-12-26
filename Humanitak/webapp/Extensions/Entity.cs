@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
@@ -24,6 +25,33 @@ namespace SmartAdminMvc.Extensions {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
                 Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList()
+            };
+        }
+
+        public static EnterpriseIncidenceInfoViewModel ToIncidenceInfoViewModel(this Enterprise enterprise, List<Incidence> incidences) {
+            return new EnterpriseIncidenceInfoViewModel {
+                Id = enterprise.Id,
+                Name = enterprise.Name,
+                Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList(),
+                Incidences = incidences.Select(i => i.ToIncidenceViewModel(enterprise.Id)).ToList(),
+
+            };
+        }
+
+        public static IncidenceViewModel ToIncidenceViewModel(this Incidence incidence, long enterpriseId) {
+            return new IncidenceViewModel {
+                Id = incidence.Id,
+                Date = incidence.Date,
+                Employee = incidence.Employee.ToEmployeeReferenceViewModel(enterpriseId),
+                Enterprise = incidence.Enterprise.ToEnterpriseReference(),
+                ExtraHours = incidence.ExtraHours.ToString(),
+                Type = incidence.Type,
+                EnterpriseId = enterpriseId,
+                EmployeeName = incidence.Employee.Name + " " + incidence.Employee.LastName,
+                StringDate = incidence.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                TypeIndex = incidence.Type == "Falta" ? 1 : incidence.Type == "Vacaciones" ? 2 : 
+                incidence.Type == "Descanso Trabajando" ? 3 : incidence.Type == "Dia Festivo" ? 4 : incidence.Type == "Dia Doble" ?
+                5 : incidence.Type == "Dia Triple" ? 6 : 7
             };
         }
 
@@ -78,6 +106,7 @@ namespace SmartAdminMvc.Extensions {
                 PermanentContractDate = employee.PermanentContractDate,
                 WorkState = employee.WorkState,
                 PatronalRegistryNo = employee.PatronalRegistryNo,
+                CalculateSalary = "0",
                 Regime = employee.Regime
             };
         }
@@ -415,6 +444,33 @@ namespace SmartAdminMvc.Extensions {
             };
         }
 
+        public static EmployeePayDayFullInfo ToPayDayFullDetailViewModel(this EmployeePayDay p) {
+            var maxImss = 1301.025;
+            var minImss = 50.91;
+            var imssDeduction = Math.Min(Math.Max((0.02375 * p.Perceptions), minImss), maxImss);
+            var isrDeduction = p.Deductions - imssDeduction;
+            return new EmployeePayDayFullInfo {
+                Name = p.Employee.Name + " " + p.Employee.LastName,
+                DailySalary = Math.Round(p.DailySalary, 2).ToString("C"),
+                NaturalDays = p.NaturalDays,
+                Income = Math.Round(p.Perceptions, 2).ToString("C"),
+                Perceptions = Math.Round(0d, 2).ToString("C"),
+                Deductions = Math.Round(p.Deductions, 2).ToString("C"),
+                FinalIncome = Math.Round((p.Perceptions - p.Deductions), 2).ToString("C"),
+                Department = p.Employee.Department.Name,
+                Vacations = Math.Round(p.Vacations, 2).ToString("C"),
+                BreakDays= Math.Round(p.BreakDays, 2).ToString("C"),
+                Holidays= Math.Round(p.Holidays, 2).ToString("C"),
+                DoublePay= Math.Round(p.DoublePay, 2).ToString("C"),
+                TriplePay= Math.Round(p.TriplePay, 2).ToString("C"),
+                Overtime= Math.Round(p.Overtime, 2).ToString("C"),
+                SundayPrime= Math.Round(0d, 2).ToString("C"),
+                VacationPrime= Math.Round(p.VacationPrime, 2).ToString("C"),
+                ImssDeduction = Math.Round(imssDeduction, 2).ToString("C"),
+                IsrDeduction = Math.Round(isrDeduction, 2).ToString("C"),
+            };
+        }
+
         public static List<PayDayDetailViewModel> ToPayDayDepartmentViewModel(this IQueryable<EmployeePayDay> p) {
             var list = new List<PayDayDetailViewModel>();
             var paydays = p.GroupBy(l => l.Employee.Department.Name);
@@ -427,7 +483,8 @@ namespace SmartAdminMvc.Extensions {
                     Perceptions = Math.Round(0d, 2).ToString("C"),
                     Deductions = Math.Round(payday.Sum(d => d.Deductions), 2).ToString("C"),
                     FinalIncome = Math.Round(payday.Sum(d => d.Perceptions - d.Deductions), 2).ToString("C"),
-                    Department = payday.Key
+                    Department = payday.Key,
+                    
                 });
             }
             return list;

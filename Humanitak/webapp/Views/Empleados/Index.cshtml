@@ -97,7 +97,7 @@
                                         <td style="vertical-align: middle">@item.DoB.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                         <td style="vertical-align: middle">@(item.HasSocialSecurity == "0" ? "No" : "Sí")</td>
                                         <td style="vertical-align: middle">@item.AccountNumber</td>
-                                        <td style="vertical-align: middle">@item.DailySalary</td>
+                                        <td style="vertical-align: middle">@item.DailySalary.ToString("C")</td>
                                         <td style="vertical-align: middle">@item.DepartmentName</td>
                                         <td style="vertical-align: middle">@item.PositionName</td>
                                         <td style="vertical-align: middle">@item.GroupName</td>

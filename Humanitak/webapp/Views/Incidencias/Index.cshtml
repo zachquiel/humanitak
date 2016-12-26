@@ -1,4 +1,6 @@
-﻿			<!-- MAIN CONTENT -->
+﻿@using SmartAdminMvc.ViewModels
+@model EnterpriseIncidenceInfoViewModel
+			<!-- MAIN CONTENT -->
 <div id="content">
 
     <div class="row">
@@ -14,13 +16,12 @@
     <section id="widget-grid" class="">
 
         <!-- row -->
+        <!-- end row -->
         <div class="row">
 
-            <!-- NEW WIDGET START -->
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                <!-- Widget ID (each widget will need unique ID) EXCEL-->
-                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0"
+            <div class="col-sm-12 col-md-12 col-lg-3">
+                <!-- new widget -->
+                <div class="jarviswidget jarviswidget-color-blueDark"
                      data-widget-colorbutton="true"
                      data-widget-editbutton="true"
                      data-widget-togglebutton="true"
@@ -29,86 +30,8 @@
                      data-widget-custombutton="true"
                      data-widget-collapsed="false"
                      data-widget-sortable="true">
-                    <!-- widget options:
-                    usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-
-                    data-widget-colorbutton="false"
-                    data-widget-editbutton="false"
-                    data-widget-togglebutton="false"
-                    data-widget-deletebutton="false"
-                    data-widget-fullscreenbutton="false"
-                    data-widget-custombutton="false"
-                    data-widget-collapsed="true"
-                    data-widget-sortable="false"
-
-                    -->
                     <header>
-                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Control de días laborados</h2>
-
-                    </header>
-
-                    <!-- widget div-->
-                    <div>
-
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                        </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
-                        <div class="widget-body no-padding">
-                            <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th data-hide="phone">ID Empleado</th>
-                                        <th data-class="expand">Nombre Empleado</th>
-                                        <th data-class="expand">Ausencias</th>
-                                        <th data-hide="phone">Días Laborales</th>
-                                        <th data-hide="phone,tablet">% Ausentismo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="vertical-align:middle">1</td>
-                                        <td style="vertical-align:middle">Juan Escutia</td>
-                                        <td style="vertical-align:middle">0</td>
-                                        <td style="vertical-align:middle">200</td>
-                                        <td style="vertical-align:middle">0 %</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:middle">2</td>
-                                        <td style="vertical-align:middle">Juan de la Barrera</td>
-                                        <td style="vertical-align:middle">4</td>
-                                        <td style="vertical-align:middle">200</td>
-                                        <td style="vertical-align:middle">2 %</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-                        <!-- end widget content -->
-
-                    </div>
-                    <!-- end widget div -->
-
-                </div>
-                <!-- end widget -->
-
-            </article>
-            <!-- WIDGET END -->
-
-        </div>
-
-        <!-- end row -->
-        <!-- end row -->
-        <div class="row">
-
-            <div class="col-sm-12 col-md-12 col-lg-3">
-                <!-- new widget -->
-                <div class="jarviswidget jarviswidget-color-blueDark">
-                    <header>
-                        <h2> Add Events </h2>
+                        <h2> Agregar Incidencia</h2>
                     </header>
 
                     <!-- widget div-->
@@ -119,75 +42,31 @@
 
                             <form id="add-event-form">
                                 <fieldset>
-
                                     <div class="form-group">
-                                        <label>Select Event Icon</label>
-                                        <div class="btn-group btn-group-sm btn-group-justified" data-toggle="buttons">
-                                            <label class="btn btn-default active">
-                                                <input type="radio" name="iconselect" id="icon-1" value="fa-info" checked>
-                                                <i class="fa fa-info text-muted"></i>
-                                            </label>
-                                            <label class="btn btn-default">
-                                                <input type="radio" name="iconselect" id="icon-2" value="fa-warning">
-                                                <i class="fa fa-warning text-muted"></i>
-                                            </label>
-                                            <label class="btn btn-default">
-                                                <input type="radio" name="iconselect" id="icon-3" value="fa-check">
-                                                <i class="fa fa-check text-muted"></i>
-                                            </label>
-                                            <label class="btn btn-default">
-                                                <input type="radio" name="iconselect" id="icon-4" value="fa-user">
-                                                <i class="fa fa-user text-muted"></i>
-                                            </label>
-                                            <label class="btn btn-default">
-                                                <input type="radio" name="iconselect" id="icon-5" value="fa-lock">
-                                                <i class="fa fa-lock text-muted"></i>
-                                            </label>
-                                            <label class="btn btn-default">
-                                                <input type="radio" name="iconselect" id="icon-6" value="fa-clock-o">
-                                                <i class="fa fa-clock-o text-muted"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Event Title</label>
-                                        <input class="form-control" id="title" name="title" maxlength="40" type="text" placeholder="Event Title">
+                                        <label>Seleccione el empleado</label>
+                                        <select id="employee" name="employee" value="" class="form-control">
+                                            <option value="0" selected="" disabled="">Empleado</option>
+                                            @foreach (var item in Model.Employees) {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select> <i></i>
                                     </div>
                                     <div class="form-group">
-                                        <label>Event Description</label>
-                                        <textarea class="form-control" placeholder="Please be brief" rows="3" maxlength="40" id="description"></textarea>
-                                        <p class="note">Maxlength is set to 40 characters</p>
+                                        <label>Seleccione tipo de evento</label>
+                                        <select id="event" name="event" value="" class="form-control" onchange="checkEnable()">
+                                            <option value="0" selected="" disabled="">Evento</option>
+                                            <option value="Falta">Falta</option>
+                                            <option value="Vacaciones">Vacaciones</option>
+                                            <option value="Descanso Trabajando">Descanso Trabajando</option>
+                                            <option value="Dia Festivo">Dia Festivo</option>
+                                            <option value="Dia Doble">Dia Doble</option>
+                                            <option value="Dia Triple">Dia Triple</option>
+                                            <option value="Horas Extra">Horas Extra</option>
+                                        </select> <i></i>
                                     </div>
-
                                     <div class="form-group">
-                                        <label>Select Event Color</label>
-                                        <div class="btn-group btn-group-justified btn-select-tick" data-toggle="buttons">
-                                            <label class="btn bg-color-darken active">
-                                                <input type="radio" name="priority" id="option1" value="bg-color-darken txt-color-white" checked>
-                                                <i class="fa fa-check txt-color-white"></i>
-                                            </label>
-                                            <label class="btn bg-color-blue">
-                                                <input type="radio" name="priority" id="option2" value="bg-color-blue txt-color-white">
-                                                <i class="fa fa-check txt-color-white"></i>
-                                            </label>
-                                            <label class="btn bg-color-orange">
-                                                <input type="radio" name="priority" id="option3" value="bg-color-orange txt-color-white">
-                                                <i class="fa fa-check txt-color-white"></i>
-                                            </label>
-                                            <label class="btn bg-color-greenLight">
-                                                <input type="radio" name="priority" id="option4" value="bg-color-greenLight txt-color-white">
-                                                <i class="fa fa-check txt-color-white"></i>
-                                            </label>
-                                            <label class="btn bg-color-blueLight">
-                                                <input type="radio" name="priority" id="option5" value="bg-color-blueLight txt-color-white">
-                                                <i class="fa fa-check txt-color-white"></i>
-                                            </label>
-                                            <label class="btn bg-color-red">
-                                                <input type="radio" name="priority" id="option6" value="bg-color-red txt-color-white">
-                                                <i class="fa fa-check txt-color-white"></i>
-                                            </label>
-                                        </div>
+                                        <label>Horas Extras:</label>
+                                        <input class="form-control" disabled="" id="horas" name="horas" maxlength="40" type="text" placeholder="# de horas">
                                     </div>
 
                                 </fieldset>
@@ -195,7 +74,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button class="btn btn-default" type="button" id="add-event">
-                                                Add Event
+                                                Crear evento
                                             </button>
                                         </div>
                                     </div>
@@ -214,26 +93,17 @@
                     <form>
                         <fieldset>
                             <legend>
-                                Draggable Events
+                                Arrastre a la fecha adecuada
                             </legend>
                             <ul id='external-events' class="list-unstyled">
-                                <li>
-                                    <span class="bg-color-darken txt-color-white" data-description="Currently busy" data-icon="fa-time">Office Meeting</span>
-                                </li>
-                                <li>
-                                    <span class="bg-color-blue txt-color-white" data-description="No Description" data-icon="fa-pie">Lunch Break</span>
-                                </li>
-                                <li>
-                                    <span class="bg-color-red txt-color-white" data-description="Urgent Tasks" data-icon="fa-alert">URGENT</span>
-                                </li>
                             </ul>
-                            <div class="checkbox">
+                            <!--<div class="checkbox">
                                 <label>
                                     <input type="checkbox" id="drop-remove" class="checkbox style-0" checked="checked">
                                     <span>remove after drop</span>
                                 </label>
 
-                            </div>
+                            </div>-->
                         </fieldset>
                     </form>
 
@@ -267,7 +137,7 @@
                 -->
                     <header>
                         <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
-                        <h2> My Events </h2>
+                        <h2> Incidencias </h2>
                     </header>
 
                     <!-- widget div-->
@@ -304,226 +174,267 @@
 <!-- END MAIN CONTENT -->
 @section pagespecific {
     <script type="text/javascript">
+        function checkEnable() {
+            var val = document.getElementById('event').options.item(document.getElementById('event').options.selectedIndex).value;
+            if (val == "Horas Extra")
+                document.getElementById('horas').disabled = false;
+            else
+                document.getElementById('horas').disabled = true;
+        }
 
-    // DO NOT REMOVE : GLOBAL FUNCTIONS!
-    var editor;
-    $(document).ready(function () {
+        // DO NOT REMOVE : GLOBAL FUNCTIONS!
+        var editor;
 
-        "use strict";
+        $(document).ready(function() {
 
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
+            "use strict";
 
-        var hdr = {
-            left: 'title',
-            center: 'month,agendaWeek,agendaDay',
-            right: 'prev,today,next'
-        };
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
 
-        var initDrag = function (e) {
-            // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-            // it doesn't need to have a start or end
-
-            var eventObject = {
-                title: $.trim(e.children().text()), // use the element's text as the event title
-                description: $.trim(e.children('span').attr('data-description')),
-                icon: $.trim(e.children('span').attr('data-icon')),
-                className: $.trim(e.children('span').attr('class')) // use the element's children as the event class,
+            var hdr = {
+                left: 'title',
+                center: 'month,agendaWeek,agendaDay',
+                right: 'prev,today,next'
             };
-            // store the Event Object in the DOM element so we can get to it later
-            e.data('eventObject', eventObject);
+            var options = [
+                "", "red", "greenLight", "orange", "darken", "blue", "blueLight", "yellow"
+            ];
+            var icons = [
+                "", "fa-warning", "fa-user", "fa-briefcase", "fa-calendar-o", "2x", "3x", "fa-clock-o"
+            ];
+            var initDrag = function(e) {
+                // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                // it doesn't need to have a start or end
 
-            // make the event draggable using jQuery UI
-            e.draggable({
-                zIndex: 999,
-                revert: true, // will cause the event to go back to its
-                revertDuration: 0 //  original position after the drag
+                var eventObject = {
+                    title: $.trim(e.children().text()), // use the element's text as the event title
+                    description: $.trim(e.children('span').attr('data-description')),
+                    icon: $.trim(e.children('span').attr('data-icon')),
+                    className: $.trim(e.children('span').attr('class')) // use the element's children as the event class,
+                };
+                // store the Event Object in the DOM element so we can get to it later
+                e.data('eventObject', eventObject);
+
+                // make the event draggable using jQuery UI
+                e.draggable({
+                    zIndex: 999,
+                    revert: true, // will cause the event to go back to its
+                    revertDuration: 0 //  original position after the drag
+                });
+            };
+
+            var addEvent = function(title, priority, description, icon, id) {
+                title = title.length === 0 ? "Untitled Event" : title;
+                description = description.length === 0 ? "No Description" : description;
+                icon = icon.length === 0 ? " " : icon;
+                priority = priority.length === 0 ? "label label-default" : priority;
+
+                var html = $('<li><span class="' + priority + '" data-description="' + description + '" data-icon="' +
+                    icon + '">' + title + '</span></li>').prependTo('ul#external-events').hide().fadeIn();
+
+                $("#event-container").effect("highlight", 800);
+
+                initDrag(html);
+            };
+
+            /* initialize the external events
+         -----------------------------------------------------------------*/
+
+            $('#external-events > li').each(function() {
+                initDrag($(this));
             });
-        };
 
-        var addEvent = function (title, priority, description, icon) {
-            title = title.length === 0 ? "Untitled Event" : title;
-            description = description.length === 0 ? "No Description" : description;
-            icon = icon.length === 0 ? " " : icon;
-            priority = priority.length === 0 ? "label label-default" : priority;
+            $('#add-event').click(function() {
+                var num = document.getElementById('event').options.selectedIndex;
+                var val = document.getElementById('event').options.item(num).value;
+                var emp = document.getElementById('employee').options.item(document.getElementById('employee').options.selectedIndex).innerHTML;
+                /*
+                 value="bg-color-darken txt-color-white"
+                 value="bg-color-blue txt-color-white"
+                 value="bg-color-orange txt-color-white"
+                 value="bg-color-greenLight txt-color-white"
+                 value="bg-color-blueLight txt-color-white"
+                 value="bg-color-red txt-color-white"
+                 value="bg-color-yellow txt-color-white"
+                */
+                if (val == "Horas Extra")
+                    val = document.getElementById('horas').value + " " + val;
+                var title = val,
+                    priority = "bg-color-" + options[num] + " txt-color-white",
+                    description = emp,
+                    icon = icons[num];
 
-            var html = $('<li><span class="' + priority + '" data-description="' + description + '" data-icon="' +
-                icon + '">' + title + '</span></li>').prependTo('ul#external-events').hide().fadeIn();
+                addEvent(title, priority, description, icon);
+            });
+            /* initialize the calendar
 
-            $("#event-container").effect("highlight", 800);
+            -----------------------------------------------------------------*/
+            var theEvents = [
+                @foreach (var item in Model.Incidences) {
+                    @:{
+                    @:id:@item.Id,
+                    @:title: '@item.Type' == 'Horas Extra' ? '@item.ExtraHours' + ' ' + '@item.Type' : '@item.Type',
+                    @:start: new Date(@item.Date.Year, (@item.Date.Month-1), (@item.Date.Day)),
+                    @:description: '@item.EmployeeName',
+                    @:priority: "bg-color-" + options[@item.TypeIndex] + " txt-color-white",
+                    @:icon: icons[@item.TypeIndex],
+                    @:allDay : true,
+                    @:className: ["event", "bg-color-"+ options[@item.TypeIndex]]
+                    @:},
+                }
+            ];
 
-            initDrag(html);
-        };
+            var allEvents = [];
+            $('#calendar').fullCalendar({
+                header: hdr,
+                buttonText: {
+                    prev: '<i class="fa fa-chevron-left"></i>',
+                    next: '<i class="fa fa-chevron-right"></i>'
+                },
+                lang: 'es',
 
-        /* initialize the external events
-         -----------------------------------------------------------------*/
+                editable: true,
+                droppable: true, // this allows things to be dropped onto the calendar !!!
 
-        $('#external-events > li').each(function () {
-            initDrag($(this));
-        });
+                drop: function(date, allDay) { // this function is called when something is dropped
 
-        $('#add-event').click(function () {
-            var title = $('#title').val(),
-                priority = $('input:radio[name=priority]:checked').val(),
-                description = $('#description').val(),
-                icon = $('input:radio[name=iconselect]:checked').val();
+                    // retrieve the dropped element's stored Event Object
+                    var originalEventObject = $(this).data('eventObject');
 
-            addEvent(title, priority, description, icon);
-        });
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject);
 
-        /* initialize the calendar
-         -----------------------------------------------------------------*/
+                    // assign it the date that was reported
+                    copiedEventObject.start = date;
+                    copiedEventObject.allDay = allDay;
+                    // render the event on the calendar
+                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
 
-        $('#calendar').fullCalendar({
-            header: hdr,
-            buttonText: {
-                prev: '<i class="fa fa-chevron-left"></i>',
-                next: '<i class="fa fa-chevron-right"></i>'
-            },
-            lang: 'es',
-
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar !!!
-
-            drop: function (date, allDay) { // this function is called when something is dropped
-
-                // retrieve the dropped element's stored Event Object
-                var originalEventObject = $(this).data('eventObject');
-
-                // we need to copy it, so that multiple events don't have a reference to the same object
-                var copiedEventObject = $.extend({}, originalEventObject);
-
-                // assign it the date that was reported
-                copiedEventObject.start = date;
-                copiedEventObject.allDay = allDay;
-
-                // render the event on the calendar
-                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-                // is the "remove after drop" checkbox checked?
-                if ($('#drop-remove').is(':checked')) {
-                    // if so, remove the element from the "Draggable Events" list
                     $(this).remove();
+
+                },
+
+                select: function(start, end, allDay) {
+                    var title = prompt('Event Title:');
+                    if (title) {
+                        calendar.fullCalendar('renderEvent', {
+                                title: title,
+                                start: start,
+                                end: end,
+                                allDay: allDay
+                            }, true // make the event "stick"
+                        );
+                    }
+                    calendar.fullCalendar('unselect');
+                },
+
+                events: theEvents,
+
+                eventRender: function(event, element, icon) {
+                    allEvents.push(event);
+                    element.prepend("<span class='closeon' style='cursor:pointer;'><i class='air air-top-right fa fa-times-circle' style='right: 4px; top: 4px;'></i></span>");
+                    if (!event.description == "") {
+                        element.find('.fc-event-title').append("<br/><span class='ultra-light'>" + event.description +
+                            "</span>");
+                    }
+                    if (!event.icon == "") {
+                        if (event.icon.substring(0, 2) != "fa") {
+                            element.find('.fc-event-title').prepend("<br>");
+                            element.find('.fc-event-title').append("<i class='air air-top-left fc-event-title'>" + event.icon +
+                                "</i><br>");
+                        } else {
+                            element.find('.fc-event-title').prepend("<br>");
+                            element.find('.fc-event-title').append("<i class='air air-top-left fa " + event.icon +
+                                " '></i><br>");
+                        }
+                        ///AQUI ES DONDE LLAMAMOS AL UPSERT
+                        //insercion a db:
+                        var theData = new FormData();
+                        var eventDate = new Date(event.start);
+                        var pad = "00";
+                        var day = eventDate.getDate() + "";
+                        day = pad.substring(0, pad.length - day.length) + day;
+                        var monthIndex = eventDate.getMonth() + "";
+                        monthIndex = pad.substring(0, pad.length - monthIndex.length) + monthIndex;
+                        var year = eventDate.getFullYear();
+                        var strDate = day + '/' + monthIndex + '/' + year;
+                        theData.append("EnterpriseId", @Model.Id);
+                        theData.append("EmployeeName", event.description);
+                        theData.append("StringDate", strDate);
+                        theData.append("Type", event.title);
+                        theData.append("ExtraHours", event.title);
+                        theData.append("Id", event.id);
+                        $.ajax({
+                            url: "/Incidencias/InsertEvent",
+                            type: "POST",
+                            data: theData,
+                            processData: false,
+                            contentType: false,
+                            async: false
+                        }).done(function(newId) {
+                            if (event.id == 0)
+                                event.id = newId;
+                            //alert(localEvent.id);
+                            //$("#newModalBody").html(partialViewResult);
+                        });
+                    }
+                    element.find(".closeon").click(function() {
+                        $('#calendar').fullCalendar('removeEvents', event._id);
+                        ///AQUI ES DONDE LLAMAMOS AL DELETE
+                    });
+                },
+                eventAfterAllRender: function(view) {
+                    for (var index = 0; index < allEvents.length; ++index) {
+                        var continueAllowed = false;
+
+
+                        //alert('waited');
+                    }
+                    allEvents = [];
+                },
+
+                windowResize: function(event, ui) {
+                    $('#calendar').fullCalendar('render');
                 }
+            });
 
-            },
-
-            select: function (start, end, allDay) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    calendar.fullCalendar('renderEvent', {
-                        title: title,
-                        start: start,
-                        end: end,
-                        allDay: allDay
-                    }, true // make the event "stick"
-                    );
-                }
-                calendar.fullCalendar('unselect');
-            },
-
-            events: [{
-                title: 'All Day Event',
-                start: new Date(y, m, 1),
-                description: 'long description',
-                className: ["event", "bg-color-greenLight"],
-                icon: 'fa-check'
-            }, {
-                title: 'Long Event',
-                start: new Date(y, m, d - 5),
-                end: new Date(y, m, d - 2),
-                className: ["event", "bg-color-red"],
-                icon: 'fa-lock'
-            }, {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d - 3, 16, 0),
-                allDay: false,
-                className: ["event", "bg-color-blue"],
-                icon: 'fa-clock-o'
-            }, {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d + 4, 16, 0),
-                allDay: false,
-                className: ["event", "bg-color-blue"],
-                icon: 'fa-clock-o'
-            }, {
-                title: 'Meeting',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false,
-                className: ["event", "bg-color-darken"]
-            }, {
-                title: 'Lunch',
-                start: new Date(y, m, d, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false,
-                className: ["event", "bg-color-darken"]
-            }, {
-                title: 'Birthday Party',
-                start: new Date(y, m, d + 1, 19, 0),
-                end: new Date(y, m, d + 1, 22, 30),
-                allDay: false,
-                className: ["event", "bg-color-darken"]
-            }, {
-                title: 'Smartadmin Open Day',
-                start: new Date(y, m, 28),
-                end: new Date(y, m, 29),
-                className: ["event", "bg-color-darken"]
-            }],
-
-            eventRender: function (event, element, icon) {
-                if (!event.description == "") {
-                    element.find('.fc-event-title').append("<br/><span class='ultra-light'>" + event.description +
-                        "</span>");
-                }
-                if (!event.icon == "") {
-                    element.find('.fc-event-title').append("<i class='air air-top-right fa " + event.icon +
-                        " '></i>");
-                }
-            },
-
-            windowResize: function (event, ui) {
-                $('#calendar').fullCalendar('render');
-            }
-        });
-
-        /* hide default buttons */
-        $('.fc-header-right, .fc-header-center').hide();
+            /* hide default buttons */
+            $('.fc-header-right, .fc-header-center').hide();
 
 
-        $('#calendar-buttons #btn-prev').click(function () {
-            $('.fc-button-prev').click();
-            return false;
-        });
+            $('#calendar-buttons #btn-prev').click(function() {
+                $('.fc-button-prev').click();
+                return false;
+            });
 
-        $('#calendar-buttons #btn-next').click(function () {
-            $('.fc-button-next').click();
-            return false;
-        });
+            $('#calendar-buttons #btn-next').click(function() {
+                $('.fc-button-next').click();
+                return false;
+            });
 
-        $('#calendar-buttons #btn-today').click(function () {
-            $('.fc-button-today').click();
-            return false;
-        });
+            $('#calendar-buttons #btn-today').click(function() {
+                $('.fc-button-today').click();
+                return false;
+            });
 
-        $('#mt').click(function () {
-            $('#calendar').fullCalendar('changeView', 'month');
-        });
+            $('#mt').click(function() {
+                $('#calendar').fullCalendar('changeView', 'month');
+            });
 
-        $('#ag').click(function () {
-            $('#calendar').fullCalendar('changeView', 'agendaWeek');
-        });
+            $('#ag').click(function() {
+                $('#calendar').fullCalendar('changeView', 'agendaWeek');
+            });
 
-        $('#td').click(function () {
-            $('#calendar').fullCalendar('changeView', 'agendaDay');
-        });
+            $('#td').click(function() {
+                $('#calendar').fullCalendar('changeView', 'agendaDay');
+            });
 
-        $('#calendar').fullCalendar('option', 'lang', 'es');
-        /* // DOM Position key index //
+            $('#calendar').fullCalendar('option', 'lang', 'es');
+            /* // DOM Position key index //
 
         l - Length changing (dropdown)
         f - Filtering input (search)
@@ -539,127 +450,127 @@
         Also see: http://legacy.datatables.net/usage/features
         */
 
-        /* BASIC ;*/
-        var responsiveHelper_dt_basic = undefined;
-        var responsiveHelper_datatable_fixed_column = undefined;
-        var responsiveHelper_datatable_col_reorder = undefined;
-        var responsiveHelper_datatable_tabletools = undefined;
+            /* BASIC ;*/
+            var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
 
-        var breakpointDefinition = {
-            tablet: 1024,
-            phone: 480
-        };
+            var breakpointDefinition = {
+                tablet: 1024,
+                phone: 480
+            };
 
 
-        function newTask() {
+            function newTask() {
 
-            var myModal = $('#myModal');
-            $.get('/Empresas/Nueva', function (data) {
-                $('#mydiv2').html(data);
-                $('#myModal .modal-header .modal-title').html('Nueva Empresa');
-                $('#myModal').appendTo("body").modal('show');
+                var myModal = $('#myModal');
+                $.get('/Empresas/Nueva', function(data) {
+                    $('#mydiv2').html(data);
+                    $('#myModal .modal-header .modal-title').html('Nueva Empresa');
+                    $('#myModal').appendTo("body").modal('show');
+                });
+
+            }
+
+            // Edit record
+            $('#datatable_tabletools').on('click', 'a.editor_edit', function(e) {
+                e.preventDefault();
+
+
             });
 
-        }
-
-        // Edit record
-        $('#datatable_tabletools').on('click', 'a.editor_edit', function (e) {
-            e.preventDefault();
+            // Delete a record
+            $('#datatable_tabletools').on('click', 'a.editor_remove', function(e) {
+                e.preventDefault();
 
 
-        });
+            });
 
-        // Delete a record
-        $('#datatable_tabletools').on('click', 'a.editor_remove', function (e) {
-            e.preventDefault();
-
-
-        });
-
-        $('#dt_basic').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                "t" +
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth": true,
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_dt_basic) {
-                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_dt_basic.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_dt_basic.respond();
-            }
-        });
-
-        /* END BASIC */
-
-        /* COLUMN FILTER  */
-        var otable = $('#datatable_fixed_column').DataTable({
-            //"bFilter": false,
-            //"bInfo": false,
-            //"bLengthChange": false
-            //"bAutoWidth": false,
-            //"bPaginate": false,
-            //"bStateSave": true // saves sort state using localStorage
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6 hidden-xs'f><'col-sm-6 col-xs-12 hidden-xs'<'toolbar'>>r>" +
+            $('#dt_basic').dataTable({
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                     "t" +
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth": true,
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_datatable_fixed_column) {
-                    responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
+                "autoWidth": true,
+                "preDrawCallback": function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback": function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
                 }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_fixed_column.respond();
-            }
+            });
 
-        });
+            /* END BASIC */
 
-        // custom toolbar
-        $("div.toolbar").html('<div class="text-right"><img src="/Content/img/logo.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
+            /* COLUMN FILTER  */
+            var otable = $('#datatable_fixed_column').DataTable({
+                //"bFilter": false,
+                //"bInfo": false,
+                //"bLengthChange": false
+                //"bAutoWidth": false,
+                //"bPaginate": false,
+                //"bStateSave": true // saves sort state using localStorage
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6 hidden-xs'f><'col-sm-6 col-xs-12 hidden-xs'<'toolbar'>>r>" +
+                    "t" +
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "autoWidth": true,
+                "preDrawCallback": function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_datatable_fixed_column) {
+                        responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function(nRow) {
+                    responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
+                },
+                "drawCallback": function(oSettings) {
+                    responsiveHelper_datatable_fixed_column.respond();
+                }
 
-        // Apply the filter
-        $("#datatable_fixed_column thead th input[type=text]").on('keyup change', function () {
+            });
 
-            otable
-                .column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
+            // custom toolbar
+            $("div.toolbar").html('<div class="text-right"><img src="/Content/img/logo.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
 
-        });
-        /* END COLUMN FILTER */
+            // Apply the filter
+            $("#datatable_fixed_column thead th input[type=text]").on('keyup change', function() {
 
-        /* COLUMN SHOW - HIDE */
-        $('#datatable_col_reorder').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+                otable
+                    .column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+
+            });
+            /* END COLUMN FILTER */
+
+            /* COLUMN SHOW - HIDE */
+            $('#datatable_col_reorder').dataTable({
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
                     "t" +
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-            "autoWidth": true,
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_datatable_col_reorder) {
-                    responsiveHelper_datatable_col_reorder = new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
+                "autoWidth": true,
+                "preDrawCallback": function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_datatable_col_reorder) {
+                        responsiveHelper_datatable_col_reorder = new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function(nRow) {
+                    responsiveHelper_datatable_col_reorder.createExpandIcon(nRow);
+                },
+                "drawCallback": function(oSettings) {
+                    responsiveHelper_datatable_col_reorder.respond();
                 }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_col_reorder.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_col_reorder.respond();
-            }
-        });
+            });
 
-        /* END COLUMN SHOW - HIDE */
-        /*var editor = new $.fn.dataTable.Editor({
+            /* END COLUMN SHOW - HIDE */
+            /*var editor = new $.fn.dataTable.Editor({
             table: "#datatable_tabletools",
             fields: [{
                 label: "Razón Social:",
@@ -673,20 +584,20 @@
             }
             ]
         });*/
-        /*$('#datatable_tabletools').on('click', 'tbody td:not(:first-child)', function (e) {
+            /*$('#datatable_tabletools').on('click', 'tbody td:not(:first-child)', function (e) {
             editor.inline(this);
         });*/
-        /* TABLETOOLS */
-        $('#datatable_tabletools').dataTable({
+            /* TABLETOOLS */
+            $('#datatable_tabletools').dataTable({
 
-            // Tabletools options:
-            //   https://datatables.net/extensions/tabletools/button_options
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
+                // Tabletools options:
+                //   https://datatables.net/extensions/tabletools/button_options
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
                     "t" +
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-            "oTableTools": {
-                "aButtons": [
-                /*{
+                "oTableTools": {
+                    "aButtons": [
+                        /*{
                     "sExtends": "create",
                     "sButtonText": "Insertar",
                     "editor": editor
@@ -695,39 +606,40 @@
                     "sExtends": "copy",
                     "sButtonText": "Copiar"
                 },*/
-                "csv",
-                "xls",
-                   {
-                       "sExtends": "pdf",
-                       "sTitle": "Empresas",
-                       "sPdfMessage": "Empresas",
-                       "sPdfSize": "letter"
-                   },
-                   {
-                       "sExtends": "print",
-                       "sButtonText": "Imprimir"
-                   }
-                ],
-                "sSwfPath": "/Scripts/plugin/datatables/swf/copy_csv_xls_pdf.swf"
-            },
-            "autoWidth": true,
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_datatable_tabletools) {
-                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#datatable_tabletools'), breakpointDefinition);
+                        "csv",
+                        "xls",
+                        {
+                            "sExtends": "pdf",
+                            "sTitle": "Empresas",
+                            "sPdfMessage": "Empresas",
+                            "sPdfSize": "letter"
+                        },
+                        {
+                            "sExtends": "print",
+                            "sButtonText": "Imprimir"
+                        }
+                    ],
+                    "sSwfPath": "/Scripts/plugin/datatables/swf/copy_csv_xls_pdf.swf"
+                },
+                "autoWidth": true,
+                "preDrawCallback": function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_datatable_tabletools) {
+                        responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#datatable_tabletools'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function(nRow) {
+                    responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
+                },
+                "drawCallback": function(oSettings) {
+                    responsiveHelper_datatable_tabletools.respond();
                 }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_tabletools.respond();
-            }
-        });
+            });
 
-        /* END TABLETOOLS */
+            /* END TABLETOOLS */
 
-    })
+        })
 
     </script>
+
 }

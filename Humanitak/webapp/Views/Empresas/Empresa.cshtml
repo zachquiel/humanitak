@@ -32,5 +32,8 @@
         <li class="@Html.RouteIf("Empresas", "active")">
             <a href="@Url.Action("Dispersion", "Empresas", new { @id = @Model.Id})" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-bank txt-color-black"></i> <span class="menu-item-parent">Dispersión de Fondos</span></a>
         </li>
+        <li class="@Html.RouteIf("Empresas", "active")">
+            <a href="@Url.Action("Index", "Incidencias", new { @id = @Model.Id})" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-exclamation-triangle txt-color-black"></i> <span class="menu-item-parent">Módulo de incidencias</span></a>
+        </li>
     </ul>
 </h3>

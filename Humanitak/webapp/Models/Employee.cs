@@ -35,6 +35,7 @@ namespace SmartAdminMvc.Models {
         public string IdNumber { get; set; }
         public string MaritalStatus { get; set; }
         public virtual Enterprise PayingEnterprise { get; set; }
+        public virtual Enterprise SecondaryEnterprise { get; set; }
         public DateTime StartContractDate { get; set; }
         public DateTime? EndContractDate { get; set; }
         public DateTime? PermanentContractDate { get; set; }

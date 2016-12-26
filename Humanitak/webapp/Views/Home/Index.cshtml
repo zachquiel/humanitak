@@ -33,10 +33,10 @@
             <li class="@Html.RouteIf("Cuenta", "active")">
                 <a href="@Url.Action("Index", "Cuenta", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-user txt-color-black"></i> <span class="menu-item-parent">Mi Cuenta</span></a>
             </li>
-            <li class="@Html.RouteIf("Incidencias", "active")">
+            <!--<li class="@Html.RouteIf("Incidencias", "active")">
                 <a href="@Url.Action("Index", "Incidencias", new {@id = ViewData["id"]})" title="Nomina" style="color: black !important"><i class="fa fa-lg fa-fw fa-exclamation-triangle txt-color-black"></i> <span class="menu-item-parent">Modulo de incidencias</span></a>
             </li>
-            <!--<li class="@Html.RouteIf("Administracion", "active")">
+            <li class="@Html.RouteIf("Administracion", "active")">
                 <a href="@Url.Action("Index", "Administracion", new { @id = ViewData["id"] })" title="Nomina" style="color: black!important"><i class="fa fa-lg fa-fw fa-cogs txt-color-black"></i> <span class="menu-item-parent">Modulo administrativo</span></a>
             </li>-->
         </ul>

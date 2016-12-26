@@ -1188,6 +1188,14 @@
     <Compile Include="Migrations\201612131935150_nomina2.Designer.cs">
       <DependentUpon>201612131935150_nomina2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612201812420_incidencias.cs" />
+    <Compile Include="Migrations\201612201812420_incidencias.Designer.cs">
+      <DependentUpon>201612201812420_incidencias.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612261945229_EmpleadosN.cs" />
+    <Compile Include="Migrations\201612261945229_EmpleadosN.Designer.cs">
+      <DependentUpon>201612261945229_EmpleadosN.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Department.cs" />
@@ -1195,6 +1203,7 @@
     <Compile Include="Models\EmployeePayDay.cs" />
     <Compile Include="Models\FiscalInformation.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Incidence.cs" />
     <Compile Include="Models\PayDay.cs" />
     <Compile Include="Models\Perception.cs" />
     <Compile Include="Models\Position.cs" />
@@ -1216,12 +1225,14 @@
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\EmployeeReferenceViewModel.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\EnterpriseIncidenceInfoViewModel.cs" />
     <Compile Include="ViewModels\EnterpriseInfoViewModel.cs" />
     <Compile Include="ViewModels\EnterpriseInsertViewModel.cs" />
     <Compile Include="ViewModels\EnterpriseReference.cs" />
     <Compile Include="ViewModels\EnterpriseViewModel.cs" />
     <Compile Include="ViewModels\GroupReferenceViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\IncidenceViewModel.cs" />
     <Compile Include="ViewModels\PayDayDetailViewModel.cs" />
     <Compile Include="ViewModels\PayDayReference.cs" />
     <Compile Include="ViewModels\PayDayViewModel.cs" />
@@ -1309,6 +1320,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612131935150_nomina2.resx">
       <DependentUpon>201612131935150_nomina2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612201812420_incidencias.resx">
+      <DependentUpon>201612201812420_incidencias.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612261945229_EmpleadosN.resx">
+      <DependentUpon>201612261945229_EmpleadosN.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

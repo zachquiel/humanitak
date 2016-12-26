@@ -36,6 +36,8 @@ namespace SmartAdminMvc.ViewModels {
         public string MaritalStatus { get; set; }
         public long PayingEnterpriseId { get; set; }
         public string PayingEnterpriseName { get; set; }
+        public long SecondaryEnterpriseId { get; set; }
+        public string SecondaryEnterpriseName { get; set; }
         public DateTime StartContractDate { get; set; }
         public DateTime? EndContractDate { get; set; }
         public DateTime? PermanentContractDate { get; set; }
@@ -46,5 +48,6 @@ namespace SmartAdminMvc.ViewModels {
         public string WorkState { get; set; }
         public string PatronalRegistryNo { get; set; }
         public string Regime { get; set; }
+        public string CalculateSalary { get; set; }
     }
 }
