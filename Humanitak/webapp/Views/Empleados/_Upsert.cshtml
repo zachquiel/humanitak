@@ -43,7 +43,7 @@
                         <section class="col col-6">
                             <label class="checkbox">
                                 <input type="checkbox" validate="" name="hasSocialSecurity" id="hasSocialSecurity"
-                                       value="@(Model.HasSocialSecurity == "1" ? "On" : "")" @Html.Raw((Model.HasSocialSecurity == "1") ? "checked" : "")>
+                                       value="@(Model.HasSocialSecurity == "1" ? "On" : "Off")" @Html.Raw((Model.HasSocialSecurity == "1") ? "checked" : "")>
                                 <i></i>¿Tiene Seguro Social?
                             </label>
                         </section>
@@ -88,6 +88,15 @@
                                 <input type="number" name="dailySalary" placeholder="Salario" value="@(Model.DailySalary == 0 ? "" : Model.DailySalary.ToString())">
                             </label>
                         </section>
+                        <section class="col col-6">
+                            <label class="checkbox">
+                                <input type="checkbox" validate="" name="calculateSalary" id="calculateSalary"
+                                       value="@(Model.CalculateSalary == "1" ? "On" : "Off")" @Html.Raw((Model.CalculateSalary == "1") ? "checked" : "")>
+                                <i></i>Calcular Salario
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
                         <section class="col col-6">
                             <label class="select">
                                 <select name="departmentId" value="@Model.DepartmentId">
@@ -291,6 +300,16 @@
                                 </select> <i></i>
                             </label>
                         </section>
+                        <section class="col col-6">
+                            <label class="select">
+                                <select name="payingEnterpriseId" value="@Model.SecondaryEnterpriseId">
+                                    <option value="0" @Html.Raw((Model.SecondaryEnterpriseId == -1) ? "selected=\"\"" : "") disabled="">Empresa encargada de complemento</option>
+                                    @foreach (var item in Model.Enterprises) {
+                                        <option @Html.Raw((Model.SecondaryEnterpriseId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                                    }
+                                </select> <i></i>
+                            </label>
+                        </section>
                     </div>
                     <div class="row">
                         <section class="col col-4">
@@ -438,7 +457,13 @@
 
     $("#submit").on("click", function () {
         if ($('input[name="hasSocialSecurity"]').is('checked'))
-        $('input[name="hasSocialSecurity"]').val('on');
+            $('input[name="hasSocialSecurity"]').val('on');
+        else
+            $('input[name="hasSocialSecurity"]').val('off');
+        if ($('input[name="calculateSalary"]').is('checked'))
+            $('input[name="calculateSalary"]').val('on');
+        else
+            $('input[name="calculateSalary"]').val('off');
         $.ajax({
             url: "/Empleados/_Upsert",
             type: "POST",
