@@ -19,7 +19,7 @@ namespace SmartAdminMvc.Controllers {
             var list = new List<ClientViewModel>();
             using (var db = new DataContext()) {
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var client in db.Clients) list.Add(client.ToClientViewModel());
+                foreach (var client in db.Clients.ToList()) list.Add(client.ToClientViewModel());
             }
             return View(list);
         }

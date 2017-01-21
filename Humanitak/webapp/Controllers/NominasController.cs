@@ -54,7 +54,7 @@ namespace SmartAdminMvc.Controllers {
                     AuthotizationDate = new DateTime(1970, 1, 1)
                 };
                 var payedEmployees = new List<EmployeePayDay>();
-                foreach (var employee in ent.Employees) {
+                foreach (var employee in ent.Employees.ToList()) {
                     var payment = employee.DailySalary*15.2083d;
                     var inc = db.Incidences.Where(i => i.Employee.Id == employee.Id && i.Date >= payStart && i.Date <= payDate);
                     var overTime = inc.Any(i => i.Type == "Horas Extra")
@@ -270,7 +270,7 @@ namespace SmartAdminMvc.Controllers {
         public ActionResult Detalle(int id) {
             var list = new List<PayDayDetailViewModel>();
             using (var db = new DataContext()) {
-                foreach (var day in db.EmployeePayDays.Where(d => d.PayDay.Id == id))
+                foreach (var day in db.EmployeePayDays.Where(d => d.PayDay.Id == id).ToList())
                     list.Add(day.ToPayDayDetailViewModel());
             }
             return View(list);
@@ -280,7 +280,7 @@ namespace SmartAdminMvc.Controllers {
         public ActionResult DetalleFull(int id) {
             var list = new List<EmployeePayDayFullInfo>();
             using (var db = new DataContext()) {
-                foreach (var day in db.EmployeePayDays.Where(d => d.PayDay.Id == id))
+                foreach (var day in db.EmployeePayDays.Where(d => d.PayDay.Id == id).ToList())
                     list.Add(day.ToPayDayFullDetailViewModel());
             }
             return View(list);

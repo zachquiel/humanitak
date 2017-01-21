@@ -24,7 +24,7 @@ namespace SmartAdminMvc.Controllers {
             var list = new List<EnterpriseViewModel>();
             using (var db = new DataContext()) {
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var enterprise in db.Enterprises) list.Add(enterprise.ToEnterpriseViewModel());
+                foreach (var enterprise in db.Enterprises.ToList()) list.Add(enterprise.ToEnterpriseViewModel());
             }
             return View(list);
         }
