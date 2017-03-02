@@ -10,6 +10,7 @@ using System.Web.Security;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
 
@@ -60,8 +61,10 @@ namespace SmartAdminMvc.Controllers
             // Verify if a user exists with the provided identity information
             var user = await _manager.FindByEmailAsync(viewViewModel.Email);
 
+            var valid = user.PasswordHash == viewViewModel.Password.Md5Hash();
+
             // If a user was found
-            if (user != null)
+            if (user != null && valid)
             {
                 // Then create an identity for it and sign it in
                 await SignInAsync(user, viewViewModel.RememberMe);
@@ -198,7 +201,6 @@ namespace SmartAdminMvc.Controllers
         {
             // Clear any lingering authencation data
             FormsAuthentication.SignOut();
-
             // Create a claims based identity for the current user
             var identity = await _manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
             user.LastAccess = DateTime.Now;

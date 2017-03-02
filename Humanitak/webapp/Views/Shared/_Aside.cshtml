@@ -46,6 +46,9 @@
             <li class="@Html.RouteIf("Curriculum", "active")">
                 <a href="@Url.Action("Index", "Curriculum", new {@id = ViewData["id"]})" title="Nomina"><i class="fa fa-lg fa-fw fa-paperclip txt-color-black"></i> <span class="menu-item-parent">Curriculums</span></a>
             </li>
+            <li class="@Html.RouteIf("Calc", "active")">
+                <a href="@Url.Action("Index", "Calc", new { @id = ViewData["id"] })" title="Nomina"><i class="fa fa-lg fa-fw fa-money txt-color-black"></i> <span class="menu-item-parent">Calculadora de Nómina</span></a>
+            </li>
             <li class="@Html.RouteIf("Cuenta", "active")">
                 <a href="@Url.Action("Index", "Cuenta", new { @id = ViewData["id"] })" title="Nomina"><i class="fa fa-lg fa-fw fa-user txt-color-black"></i> <span class="menu-item-parent">Mi Cuenta</span></a>
             </li>

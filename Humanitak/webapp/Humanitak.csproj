@@ -1043,6 +1043,8 @@
     <Content Include="Views\Clientes\_AddEnterprise.cshtml" />
     <Content Include="Views\Clientes\_RemoveEnterprise.cshtml" />
     <Content Include="Views\Nominas\_Nueva.cshtml" />
+    <Content Include="Views\Calc\Index.cshtml" />
+    <Content Include="Views\Calc\_CalcData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1071,6 +1073,7 @@
     <Compile Include="Areas\Landing\LandingAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AcumuladosController.cs" />
+    <Compile Include="Controllers\CalcController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CuentaController.cs" />
@@ -1092,6 +1095,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DeductionHelper.cs" />
     <Compile Include="Migrations\201610120029420_InitialCreate.cs" />
     <Compile Include="Migrations\201610120029420_InitialCreate.Designer.cs">
       <DependentUpon>201610120029420_InitialCreate.cs</DependentUpon>
@@ -1207,6 +1211,7 @@
     <Compile Include="Models\PayDay.cs" />
     <Compile Include="Models\Perception.cs" />
     <Compile Include="Models\Position.cs" />
+    <Compile Include="ViewModels\SalaryComponentsViewModel.cs" />
     <Compile Include="Models\SpecialPerception.cs" />
     <Compile Include="ViewModels\AccountForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\AccountLoginViewModel.cs" />

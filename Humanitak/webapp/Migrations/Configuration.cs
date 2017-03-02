@@ -9,7 +9,7 @@ namespace SmartAdminMvc.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "SmartAdminMvc.App_Helpers.DataContext";
         }
 
