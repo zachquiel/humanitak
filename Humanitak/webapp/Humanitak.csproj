@@ -527,6 +527,9 @@
     <Content Include="Content\fonts\fontawesome4.2\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\fontawesome4.2\FontAwesome.otf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Excel\prueba_cliente.xlsx" />
+    <Content Include="Excel\prueba_empleado.xlsx" />
+    <Content Include="Excel\prueba_empresa.xlsx" />
     <None Include="Properties\PublishProfiles\SmartAdmin - Release.pubxml" />
     <None Include="Properties\PublishProfiles\SmartAdmin - Debug.pubxml" />
     <Content Include="Scripts\app.config.js" />
