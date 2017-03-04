@@ -1,0 +1,62 @@
+﻿@using SmartAdminMvc.ViewModels
+@model ClientReference
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">Carga de clientes via Excel </h4>
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_Bulk", "Clientes")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed) {
+                    <header style="background-color:@(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header><!--#fff0f0 -->
+                }
+                <fieldset>
+                    <section>
+                        <label class="label">Seleccione un archivo</label>
+                        <div class="input input-file">
+                            <span class="button"><input type="file" id="file" name="file" onchange="this.parentNode.nextSibling.value = this.value">Examinar</span><input type="text" placeholder="Seleccione un archivo" readonly="">
+                        </div>
+                    </section>
+                </fieldset>
+                <footer>
+                @if (!Model.Processed) {
+                    <button type="button" id="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                }
+                <button type="button" id="close" class="btn btn-default">
+                    Cerrar
+                </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    $("#laX").on("click", function () {
+        $("#bulkModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function () {
+        $("#bulkModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function () {
+        $.ajax({
+            url: "/Clientes/_Bulk",
+            type: "POST",
+            data: new FormData($("#newForm")[0]),
+            processData: false,
+            contentType: false,
+        }).done(function (partialViewResult) {
+            $("#bulkModalBody").html(partialViewResult);
+        });
+    });
+</script>
+

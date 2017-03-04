@@ -161,27 +161,32 @@
             function newTask() {
 
                 var myModal = $('#myModal');
-                $.get('/Empresas/Nueva', function(data) {
-                    $('#mydiv2').html(data);
-                    $('#myModal .modal-header .modal-title').html('Nueva Empresa');
-                    $('#myModal').appendTo("body").modal('show');
-                });
+                $.get('/Empresas/Nueva',
+                    function(data) {
+                        $('#mydiv2').html(data);
+                        $('#myModal .modal-header .modal-title').html('Nueva Empresa');
+                        $('#myModal').appendTo("body").modal('show');
+                    });
 
             }
 
             // Edit record
-            $('#datatable_tabletools').on('click', 'a.editor_edit', function(e) {
-                e.preventDefault();
+            $('#datatable_tabletools').on('click',
+                'a.editor_edit',
+                function(e) {
+                    e.preventDefault();
 
 
-            });
+                });
 
             // Delete a record
-            $('#datatable_tabletools').on('click', 'a.editor_remove', function(e) {
-                e.preventDefault();
+            $('#datatable_tabletools').on('click',
+                'a.editor_remove',
+                function(e) {
+                    e.preventDefault();
 
 
-            });
+                });
 
             /* END BASIC */
             /* END COLUMN FILTER */
@@ -219,7 +224,8 @@
                 "preDrawCallback": function() {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_datatable_tabletools) {
-                        responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#datatable_tabletools'), breakpointDefinition);
+                        responsiveHelper_datatable_tabletools = new
+                            ResponsiveDatatablesHelper($('#datatable_tabletools'), breakpointDefinition);
                     }
                 },
                 "rowCallback": function(nRow) {
@@ -233,23 +239,26 @@
 
                     // Remove the formatting to get integer data for summation
                     var intVal = function(i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i : 0;
+                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
                     };
 
                     for (var i = 1; i <= 14; i++) {
                         var total = api.column(i).data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
+                            .reduce(function(a, b) {
+                                    return intVal(a) + intVal(b);
+                                },
+                                0);
+
+                        if (i === 2) {
+                            $(api.column(i).footer()).html(
+                            (Math.round(total * 100) / 100).toLocaleString() + ' '
+                        );
+                        } else
                         $(api.column(i).footer()).html(
                             '$' + (Math.round(total * 100) / 100).toLocaleString() + ' '
                         );
                     }
 
-                    
 
                     // Total over all pages
                     /*total = api

@@ -2,6 +2,7 @@
     public class SalaryComponentsViewModel {
         public double WantedSalary { get; set; }
         public int TotalDays { get; set; }
+        public string HasImss { get; set; }
 
         public double FixedIsrDeduction { get; set; }
         public double PctIsrDeduction { get; set; }

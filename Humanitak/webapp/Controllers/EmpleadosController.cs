@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using LinqToExcel;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
+using SmartAdminMvc.Helpers;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
 
@@ -66,7 +72,9 @@ namespace SmartAdminMvc.Controllers {
         public PartialViewResult _Upsert(EmployeeViewModel viewModel) {
             if (!ModelState.IsValid || viewModel == null) return _Upsert(0, 0);
             viewModel.Processed = true;
-            var dailySalary = viewModel.CalculateSalary != null ? CalculateSalary(viewModel.DailySalary) : viewModel.DailySalary;
+            var hasImss = !string.IsNullOrEmpty(viewModel.Ssn);
+            var dailySalary = viewModel.CalculateSalary != null ? DeductionHelper.CalculateSalary(viewModel.DailySalary, viewModel.PaymentFrequency, hasImss) : viewModel.DailySalary;
+
             if (viewModel.Id == 0) {
                 //new
                 using (var db = new DataContext()) {
@@ -113,6 +121,7 @@ namespace SmartAdminMvc.Controllers {
                         WorkState = viewModel.WorkState,
                         PatronalRegistryNo = viewModel.PatronalRegistryNo,
                         Regime = viewModel.Regime,
+                        PaymentFrequency = viewModel.PaymentFrequency
                     };
                     try {
                         db.Employees.AddOrUpdate(emp);
@@ -171,6 +180,7 @@ namespace SmartAdminMvc.Controllers {
                 emp.WorkState = viewModel.WorkState;
                 emp.PatronalRegistryNo = viewModel.PatronalRegistryNo;
                 emp.Regime = viewModel.Regime;
+                emp.PaymentFrequency = viewModel.PaymentFrequency;
                 try {
                     db.Employees.AddOrUpdate(emp);
                     db.SaveChanges();
@@ -215,68 +225,139 @@ namespace SmartAdminMvc.Controllers {
             }
         }
 
-        public double CalculateSalary(double input) {
-            
-            var isr = CalculateIsr(input);
-            var newInput = input;
-            while (Math.Abs(isr-input) > 0) {
-                newInput = (input - isr) + newInput;
-                isr = CalculateIsr(newInput);
-
-            }
-
-            var imss = 0d;
-            if (newInput >= 56081.025)
-                imss = 1301.025;
-            if (newInput <= 3652.71)
-                imss = 50.91;
-            if (imss <= 0) {
-                imss = ((newInput * 100) / 97.625) - newInput;
-            }
-            return (newInput + imss) / 15.2083;
+        public PartialViewResult _Bulk(int enterpriseId) {
+            var viewModel = new EmployeeReferenceViewModel {
+                Id = 0,
+                Name = "",
+                Processed = false,
+                ProcessedMessage = "No hay datos para mostrar",
+                Success = false,
+                EnterpriseId = enterpriseId
+            };
+            return PartialView(viewModel);
         }
 
-        public double CalculateIsr(double input) {
-            var chargeTable = new[] {
-                new[] {0.01, 244.8, 0, 1.92},
-                new[] {244.81, 2077.50, 4.65, 6.4},
-                new[] {2077.51, 3651.00, 121.95, 10.88},
-                new[] {3651.01, 4244.10, 293.25, 16},
-                new[] {4244.11, 5081.40, 388.05, 17.92},
-                new[] {5081.41, 10248.45, 538.2, 21.36},
-                new[] {10248.46, 16153.05, 1641.75, 23.52},
-                new[] {16153.06, 30838.80, 3030.60, 30},
-                new[] {30838.81, 41118.45, 7436.25, 32},
-                new[] {41118.46, 123355.20, 10725.75, 34},
-                new[] {123355.21, double.MaxValue, 38686.35, 35}
+        [HttpPost]
+        public PartialViewResult _Bulk(HttpPostedFileBase file, int enterpriseId) {
+            var viewModel = new EmployeeReferenceViewModel {
+                Id = 0,
+                Name = "",
+                Processed = true,
+                ProcessedMessage = "No hay datos para mostrar",
+                Success = false
             };
-            var subsidyTable = new[] {
-                new[] {0.01, 581.9, 133.9},
-                new[] {581.91, 872.8, 133.8},
-                new[] {872.81, 1142.40, 133.8},
-                new[] {1142.41, 1163.80, 129.2},
-                new[] {1163.81, 1462.50, 125.8},
-                new[] {1462.51, 1551.70, 116.5},
-                new[] {1551.71, 1755.10, 106.9},
-                new[] {1755.11, 2047.60, 96.9},
-                new[] {2047.61, 2340.10, 83.4},
-                new[] {2340.11, 2428.40, 71.6},
-                new[] {2428.41, double.MaxValue, 0}
-            };
-            var tableVal = chargeTable.First(c => c[0] <= input && c[1] >= input);
-            var subsidyVal = subsidyTable.First(c => c[0] <= input && c[1] >= input);
-            var minLim = tableVal[0];
-            var baseVal = input - minLim;
-            var ratio = tableVal[3];
-            var result = baseVal * (ratio / 100);
-            var fixedVal = tableVal[2];
-            var isr = result + fixedVal;
-            var subsidy = subsidyVal[2];
-            var total = isr - subsidy;
-            var grandTotal = input - total;
-
-            Console.WriteLine("input: " + input + "\t isr:" + grandTotal);
-            return grandTotal;
+            if (file == null || file.ContentLength <= 0) return PartialView(viewModel);
+            var fileName = Path.GetFileName(file.FileName);
+            var path = Path.Combine(Server.MapPath("~/Excel/"), fileName);
+            file.SaveAs(path);
+            var inserted = 0;
+            using (var book = new ExcelQueryFactory(path)) {
+                var sheet = book.Worksheet(0);
+                var total = sheet.Count();
+                using (var db = new DataContext()) {
+                    viewModel.Processed = true;
+                    foreach (var row in sheet) {
+                        try {
+                            var hasImss = !string.IsNullOrEmpty(row[2].Value.ToString());
+                            var dailySalary = !string.IsNullOrEmpty(row[7].Value.ToString()) && row[7].Value.ToString().ToLower() == "si" ? 
+                                DeductionHelper.CalculateSalary(double.Parse(row[6].Value.ToString()), int.Parse(row[35].Value.ToString()), hasImss) :
+                                double.Parse(row[6].Value.ToString());
+                            var parent = db.Enterprises.First(e => e.Id == enterpriseId);
+                            Department department;
+                            Position position;
+                            Group group;
+                            var payingName = row[24].Value.ToString();
+                            if(!db.Enterprises.Any(e => e.Name == payingName)) continue;
+                            var paying = db.Enterprises.First(e => e.Name == payingName);
+                            var secondaryName = row[25].Value.ToString();
+                            var secondary = db.Enterprises.FirstOrDefault(e => e.Name == secondaryName);
+                            var departmentName = row[22].Value.ToString();
+                            if (!parent.Departments.Any(e => e.Name == departmentName)) {
+                                department = new Department {
+                                    Name = departmentName,
+                                    Criteria = "Horarios Completos",
+                                    DoubleTimeHours = 0,
+                                    Overtime = false,
+                                    OvertimeThreshold = 0
+                                };
+                                db.Departments.AddOrUpdate(department);
+                                parent.Departments.Add(department);
+                                db.SaveChanges();
+                            } else
+                                department = parent.Departments.FirstOrDefault(e => e.Name == departmentName);
+                            var positionName = row[23].Value.ToString();
+                            if (!parent.Positions.Any(e => e.Name != positionName)) {
+                                position = new Position {
+                                    Name = positionName
+                                };
+                                db.Positions.AddOrUpdate(position);
+                                parent.Positions.Add(position);
+                                db.SaveChanges();
+                            } else
+                                position = parent.Positions.FirstOrDefault(e => e.Name == positionName);
+                            var groupName = row[26].Value.ToString();
+                            if (!string.IsNullOrEmpty(groupName) && !parent.Groups.Any(e => e.Name == groupName)) {
+                                group = new Group {
+                                    Name = groupName
+                                };
+                                db.Groups.AddOrUpdate(group);
+                                parent.Groups.Add(group);
+                                db.SaveChanges();
+                            } else
+                                group = parent.Groups.FirstOrDefault(e => e.Name == groupName);
+                            var emp = new Employee {
+                                Name = row[0].Value.ToString(),
+                                LastName = row[1].Value.ToString(),
+                                Ssn = row[2].Value.ToString(),
+                                Curp = row[3].Value.ToString(),
+                                Rfc = row[4].Value.ToString(),
+                                Email = row[27].Value.ToString(),
+                                Gender = row[5].Value.ToString(),
+                                Department = department,
+                                Position = position,
+                                Group = group,
+                                DailySalary = dailySalary,
+                                StartDate = DateTime.ParseExact(row[8].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                                Bank = row[9].Value.ToString(),
+                                AccountNumber = row[10].Value.ToString(),
+                                OffDays = row[11].Value.ToString(),
+                                IsActive = true,
+                                Address = row[12].Value.ToString(),
+                                Area = row[13].Value.ToString(),
+                                ZipCode = row[14].Value.ToString(),
+                                City = row[15].Value.ToString(),
+                                State = row[16].Value.ToString(),
+                                Phone = row[17].Value.ToString(),
+                                HasSocialSecurity = hasImss,
+                                DoB = DateTime.ParseExact(row[18].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                                SsRegistrationDate = DateTime.ParseExact(row[28].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                                PlaceOfBirth = row[19].Value.ToString(),
+                                IdNumber = row[20].Value.ToString(),
+                                MaritalStatus = row[21].Value.ToString(),
+                                PayingEnterprise = paying,
+                                SecondaryEnterprise = secondary,
+                                StartContractDate = DateTime.ParseExact(row[29].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                                EndContractDate = string.IsNullOrEmpty(row[30].Value.ToString()) ? (DateTime?)null : DateTime.ParseExact(row[30].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                                PermanentContractDate = string.IsNullOrEmpty(row[31].Value.ToString()) ? (DateTime?)null : DateTime.ParseExact(row[31].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                                WorkState = row[32].Value.ToString(),
+                                PatronalRegistryNo = row[33].Value.ToString(),
+                                Regime = row[34].Value.ToString(),
+                                PaymentFrequency = int.Parse(row[35].Value.ToString())
+                            };
+                        
+                            db.Employees.AddOrUpdate(emp);
+                            db.SaveChanges();
+                            inserted++;
+                        }
+                        catch (Exception e) {
+                            viewModel.ProcessedMessage = e.Message;
+                        }
+                    }
+                    viewModel.ProcessedMessage = $"{inserted} Empleados fueron insertados con éxito";
+                    viewModel.Success = total == inserted;
+                }
+            }
+            return PartialView(viewModel);
         }
     }
 }

@@ -49,5 +49,6 @@ namespace SmartAdminMvc.ViewModels {
         public string PatronalRegistryNo { get; set; }
         public string Regime { get; set; }
         public string CalculateSalary { get; set; }
+        public int PaymentFrequency { get; set; }
     }
 }

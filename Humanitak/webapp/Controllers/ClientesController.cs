@@ -10,6 +10,7 @@ using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
+using LinqToExcel;
 
 namespace SmartAdminMvc.Controllers {
     [Authorize]
@@ -284,6 +285,80 @@ namespace SmartAdminMvc.Controllers {
                 }
                 return PartialView(viewModel);
             }
+        }
+
+        public PartialViewResult _Bulk() {
+            var viewModel = new ClientReference {
+                Id = 0,
+                Name = "",
+                Processed = false,
+                ProcessedMessage = "No hay datos para mostrar",
+                Success = false
+            };
+            return PartialView(viewModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult _Bulk(HttpPostedFileBase file) {
+            var viewModel = new ClientReference {
+                Id = 0,
+                Name = "",
+                Processed = true,
+                ProcessedMessage = "No hay datos para mostrar",
+                Success = false
+            };
+            if (file == null || file.ContentLength <= 0) return PartialView(viewModel);
+            var fileName = Path.GetFileName(file.FileName);
+            var path = Path.Combine(Server.MapPath("~/Excel/"), fileName);
+            file.SaveAs(path);
+            var inserted = 0;
+            using (var book = new ExcelQueryFactory(path)) {
+                var sheet = book.Worksheet(0);
+                var total = sheet.Count();
+                using (var db = new DataContext()) {
+                    viewModel.Processed = true;
+                    foreach (var row in sheet) {
+                        var fis = new FiscalInformation {
+                            Area = row[13].Value.ToString(),
+                            InnerNumeral = row[11].Value.ToString(),
+                            OuterNumeral = row[12].Value.ToString(),
+                            Rfc = row[15].Value.ToString(),
+                            StreetAddress = row[10].Value.ToString(),
+                            Town = row[9].Value.ToString(),
+                            ZipCode = row[14].Value.ToString(),
+                        };
+                        var pay2End = 0;
+                        int.TryParse(row[4].Value.ToString(), out pay2End);
+                        var ent = new Client {
+                            City = row[9].Value.ToString(),
+                            Commission = double.Parse(row[6].Value.ToString()),
+                            IsActive = true,
+                            Name = row[0].Value.ToString(),
+                            Operations = null,
+                            Payday1Start = int.Parse(row[1].Value.ToString()),
+                            Payday1End = int.Parse(row[2].Value.ToString()),
+                            Payday2Start = int.Parse(row[3].Value.ToString()),
+                            Payday2End = pay2End,
+                            State = row[8].Value.ToString(),
+                            Vat = double.Parse(row[7].Value.ToString()),
+                            UsesPunchClock = !(string.IsNullOrEmpty(row[7].Value.ToString()) || row[7].Value.ToString().ToLower() == "no" || row[5].Value.ToString().ToLower() == "0"),
+                            LastPayday = new DateTime(1970, 1, 1)
+                        };
+                        try {
+                            db.FiscalInformations.AddOrUpdate(fis);
+                            db.SaveChanges();
+                            ent.FiscalInformation = fis;
+                            db.Clients.AddOrUpdate(ent);
+                            db.SaveChanges();
+                            inserted++;
+                        }
+                        catch (Exception e) {}
+                    }
+                    viewModel.ProcessedMessage = $"{inserted} Clientes fueron insertados con éxito";
+                    viewModel.Success = total == inserted;
+                }
+            }
+            return PartialView(viewModel);
         }
 
         private void AddErrors(DbEntityValidationException exc) {

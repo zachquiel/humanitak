@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartAdminMvc.Models {
     public class EmployeePayDay {
@@ -19,5 +20,6 @@ namespace SmartAdminMvc.Models {
         public double VacationPrime { get; set; }
         public double Perceptions { get; set; }
         public double Deductions { get; set; }
+        public DateTime PayDate { get; set; }
     }
 }

@@ -42,5 +42,6 @@ namespace SmartAdminMvc.Models {
         public string WorkState { get; set; }
         public string PatronalRegistryNo { get; set; }
         public string Regime { get; set; }
+        public int PaymentFrequency { get; set; }
     }
 }

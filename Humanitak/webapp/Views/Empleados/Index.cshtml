@@ -62,7 +62,8 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body no-padding">
-                            <a data-toggle="modal" onclick="showModal('#newModal', '#newModalBody', 0, @Model.Id)" style="cursor: pointer">Nuevo Empleado</a>
+                            <a data-toggle="modal" onclick="showModal('#newModal', '#newModalBody', 0, @Model.Id)" style="cursor: pointer">Nuevo Empleado</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a data-toggle="modal" onclick="showModal('#bulkModal', '#bulkModalBody', 0, @Model.Id)" style="cursor: pointer">Importar de Excel</a>
                             <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%">
                                 <thead>
                                     <tr>
@@ -138,6 +139,9 @@
     </div>
     <div class="modal fade" id="deleteModal" data-url='@Url.Action("_Delete", "Empleados")' tabindex="-1" role="dialog">
         <div id="deleteModalBody"></div>
+    </div>
+    <div class="modal fade" id="bulkModal" data-url='@Url.Action("_Bulk", "Empleados")' tabindex="-1" role="dialog">
+        <div id="bulkModalBody"></div>
     </div>
 </div>
 <!-- END MAIN CONTENT -->

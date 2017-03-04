@@ -107,7 +107,8 @@ namespace SmartAdminMvc.Extensions {
                 WorkState = employee.WorkState,
                 PatronalRegistryNo = employee.PatronalRegistryNo,
                 CalculateSalary = "0",
-                Regime = employee.Regime
+                Regime = employee.Regime,
+                PaymentFrequency = employee.PaymentFrequency,
             };
         }
 
@@ -242,13 +243,13 @@ namespace SmartAdminMvc.Extensions {
                 Payday1End = enterprise.Payday1End,
                 Payday2Start = enterprise.Payday2Start,
                 Payday2End = enterprise.Payday2End,
-                LogoImage = enterprise.Logo.Image,
-                HeaderImage = enterprise.Header.Image,
+                LogoImage = enterprise.Logo?.Image,
+                HeaderImage = enterprise.Header?.Image,
                 UsesPunchClock = enterprise.UsesPunchClock ? "1" : "0",
                 //Commission = enterprise.Commission,
                 Vat = enterprise.Vat,
                 IsActive = enterprise.IsActive ? "1" : "0",
-                ParentEnterprise = enterprise.ParentEnterprise?.Id ?? 0,
+                //ParentEnterprise = enterprise.ParentEnterprise?.Id ?? 0,
                 Operations = enterprise.Operations,
                 City = enterprise.City,
                 LastPayday = enterprise.LastPayday,
@@ -264,8 +265,8 @@ namespace SmartAdminMvc.Extensions {
                 Payday1End = client.Payday1End,
                 Payday2Start = client.Payday2Start,
                 Payday2End = client.Payday2End,
-                LogoImage = client.Logo.Image,
-                HeaderImage = client.Header.Image,
+                LogoImage = client.Logo?.Image,
+                HeaderImage = client.Header?.Image,
                 UsesPunchClock = client.UsesPunchClock ? "1" : "0",
                 Commission = client.Commission,
                 Vat = client.Vat,
@@ -298,8 +299,8 @@ namespace SmartAdminMvc.Extensions {
                 Payday1End = client.Payday1End,
                 Payday2Start = client.Payday2Start,
                 Payday2End = client.Payday2End,
-                LogoImage = client.Logo.Image,
-                HeaderImage = client.Header.Image,
+                LogoImage = client.Logo?.Image,
+                HeaderImage = client.Header?.Image,
                 UsesPunchClock = client.UsesPunchClock ? "1" : "0",
                 Commission = client.Commission,
                 Vat = client.Vat,
@@ -323,8 +324,8 @@ namespace SmartAdminMvc.Extensions {
                 Payday1End = enterprise.Payday1End,
                 Payday2Start = enterprise.Payday2Start,
                 Payday2End = enterprise.Payday2End,
-                LogoImage = enterprise.Logo.Image,
-                HeaderImage = enterprise.Header.Image,
+                LogoImage = enterprise.Logo?.Image,
+                HeaderImage = enterprise.Header?.Image,
                 UsesPunchClock = enterprise.UsesPunchClock ? "1" : "0",
                 //Commission = enterprise.Commission,
                 Vat = enterprise.Vat,
@@ -347,8 +348,8 @@ namespace SmartAdminMvc.Extensions {
                 Payday1End = client.Payday1End,
                 Payday2Start = client.Payday2Start,
                 Payday2End = client.Payday2End,
-                LogoImage = client.Logo.Image,
-                HeaderImage = client.Header.Image,
+                LogoImage = client.Logo?.Image,
+                HeaderImage = client.Header?.Image,
                 UsesPunchClock = client.UsesPunchClock ? "1" : "0",
                 Commission = client.Commission,
                 Vat = client.Vat,
@@ -447,7 +448,7 @@ namespace SmartAdminMvc.Extensions {
         public static EmployeePayDayFullInfo ToPayDayFullDetailViewModel(this EmployeePayDay p) {
             var maxImss = 1301.025;
             var minImss = 50.91;
-            var imssDeduction = Math.Min(Math.Max((0.02375 * p.Perceptions), minImss), maxImss);
+            var imssDeduction = p.Employee.HasSocialSecurity ? Math.Min(Math.Max((0.02375 * p.Perceptions), minImss), maxImss) : 0;
             var isrDeduction = p.Deductions - imssDeduction;
             return new EmployeePayDayFullInfo {
                 Name = p.Employee.Name + " " + p.Employee.LastName,

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
+using SmartAdminMvc.Helpers;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
 
@@ -53,43 +54,101 @@ namespace SmartAdminMvc.Controllers {
                     PayStartDate = payStart,
                     AuthotizationDate = new DateTime(1970, 1, 1)
                 };
+                payStart = payStart.AddDays(-1);
                 var payedEmployees = new List<EmployeePayDay>();
                 foreach (var employee in ent.Employees.ToList()) {
-                    var payment = employee.DailySalary*15.2083d;
-                    var inc = db.Incidences.Where(i => i.Employee.Id == employee.Id && i.Date >= payStart && i.Date <= payDate);
-                    var overTime = inc.Any(i => i.Type == "Horas Extra")
-                        ? ((employee.DailySalary/8)*2)*inc.Where(i => i.Type == "Horas Extra").Sum(i => i.ExtraHours)
-                        : 0;
-                    var vacation = inc.Count(i => i.Type == "Vacaciones");
-                    var vacationPrime = vacation*(employee.DailySalary*0.25);
-                    var doubleDay = inc.Count(i => i.Type == "Dia Doble")*(employee.DailySalary*2);
-                    var tripleDay = inc.Count(i => i.Type == "Dia Triple")*(employee.DailySalary*3);
-                    var deductions = CalculateIsr(payment);
-                    var breakDay = inc.Count(i => i.Type == "Descanso Trabajando")*(employee.DailySalary);
-                    payment = payment -
-                              ((inc.Count(i => i.Type == "Falta") + inc.Count(i => i.Type == "Dia Doble") +
-                                inc.Count(i => i.Type == "Dia Triple") +
-                                inc.Count(i => i.Type == "Descanso Trabajando") + inc.Count(i => i.Type == "Vacaciones"))*
-                               employee.DailySalary) + overTime + vacation + vacationPrime + tripleDay + doubleDay +
-                              breakDay;
-                    var totalDaysforEmployee = totalDays - inc.Count(i => i.Type == "Falta");
-                    var payed = new EmployeePayDay {
-                        BreakDays = breakDay,
-                        DailySalary = employee.DailySalary,
-                        Deductions = deductions,
-                        DoublePay = doubleDay,
-                        Employee = employee,
-                        Holidays = 0,
-                        NaturalDays = totalDaysforEmployee,
-                        Overtime = overTime,
-                        PayDay = pay,
-                        SundayPrime = 0,
-                        TriplePay = tripleDay,
-                        VacationPrime = vacationPrime,
-                        Vacations = vacation,
-                        Perceptions = payment
-                    };
-                    payedEmployees.Add(payed);
+                    EmployeePayDay lastPayDay = null;
+                    var paydays = db.EmployeePayDays.ToList();
+                    if (paydays.Any(epd => epd.Employee == employee)) {
+                        lastPayDay = paydays.Last(epd => epd.Employee == employee);
+                    }
+                    var firstPay = new DateTime(payStart.Year, payStart.Month, ent.Payday1End);
+                    var daysInMonth = DateTime.DaysInMonth(payStart.Year, payStart.Month);
+                    var secondPay = new DateTime(payStart.Year, payStart.Month, ent.Payday2End == 0 || ent.Payday2End > daysInMonth ? daysInMonth : ent.Payday2End);
+                    var nextPayDate = lastPayDay?.PayDate.AddMonths(1) ?? firstPay;
+                    var multiplier = 30.4166;
+                    var lastPayDate = lastPayDay?.PayDate ?? (payStart.Day <= ent.Payday1End ? secondPay : firstPay);
+                    var factor = 1;
+                    if (employee.PaymentFrequency == 15) {
+                        factor = 2;
+                        if (ent.Payday2End == 0) {
+                            nextPayDate = lastPayDate.Day == ent.Payday1End ? new DateTime(lastPayDate.Year, lastPayDate.Month, DateTime.DaysInMonth(lastPayDate.Year, lastPayDate.Month)) : new DateTime(lastPayDate.Year, lastPayDate.Month + 1, ent.Payday1End);
+                        } else
+                            nextPayDate = lastPayDate.AddDays(15);
+                    }
+                    else if (employee.PaymentFrequency == 10) {
+                        factor = 3;
+                        nextPayDate = lastPayDay?.PayDate.AddDays(10) ?? firstPay;
+                    }
+                    else if (employee.PaymentFrequency == 7) {
+                        factor = 4;
+                        nextPayDate = lastPayDay?.PayDate.AddDays(7) ?? firstPay;
+                    }
+                    else if (employee.PaymentFrequency == 1) {
+                        factor = 30;
+                        nextPayDate = lastPayDay?.PayDate.AddDays(1) ?? firstPay;
+                    }
+                    multiplier = multiplier / factor;
+                    var payment = employee.DailySalary * multiplier;
+
+                    for (var day = 0; day <= Math.Abs(payStart.Subtract(payDate).Days); day++) {
+                        if (employee.PaymentFrequency == 15) {
+                            if (ent.Payday2End == 0) {
+                                nextPayDate = lastPayDate.Day == ent.Payday1End ? new DateTime(lastPayDate.Year, lastPayDate.Month, DateTime.DaysInMonth(lastPayDate.Year, lastPayDate.Month)) : new DateTime(lastPayDate.Year, lastPayDate.Month + 1, ent.Payday1End);
+                            } else
+                                nextPayDate = lastPayDate.AddDays(15);
+                        }
+                        else if (employee.PaymentFrequency == 10) {
+                            nextPayDate = lastPayDate.AddDays(10);
+                        }
+                        else if (employee.PaymentFrequency == 7) {
+                            nextPayDate = lastPayDate.AddDays(7);
+                        }
+                        else if (employee.PaymentFrequency == 1) {
+                            nextPayDate = lastPayDate.AddDays(1);
+                        }
+                        var today = payStart.AddDays(day);
+                        if (today.CompareTo(nextPayDate) == 0) {
+                            totalDays = nextPayDate.Subtract(lastPayDate).Days;
+                            var inc = db.Incidences.Where(i => i.Employee.Id == employee.Id && i.Date >= lastPayDate && i.Date <= nextPayDate).ToList();
+                            var overTime = inc.Any(i => i.Type == "Horas Extra")
+                                ? ((employee.DailySalary / 8) * 2) * inc.Where(i => i.Type == "Horas Extra").Sum(i => i.ExtraHours)
+                                : 0;
+                            var vacation = inc.Count(i => i.Type == "Vacaciones");
+                            var vacationPrime = vacation * (employee.DailySalary * 0.25);
+                            var doubleDay = inc.Count(i => i.Type == "Dia Doble") * (employee.DailySalary * 2);
+                            var tripleDay = inc.Count(i => i.Type == "Dia Triple") * (employee.DailySalary * 3);
+                            var deductions = DeductionHelper.CalculateDeductions(employee.DailySalary, employee.PaymentFrequency, employee.HasSocialSecurity);
+                            var breakDay = inc.Count(i => i.Type == "Descanso Trabajando") * (employee.DailySalary);
+                            payment = payment -
+                                      ((inc.Count(i => i.Type == "Falta") + inc.Count(i => i.Type == "Dia Doble") +
+                                        inc.Count(i => i.Type == "Dia Triple") +
+                                        inc.Count(i => i.Type == "Descanso Trabajando") + inc.Count(i => i.Type == "Vacaciones")) *
+                                       employee.DailySalary) + overTime + vacation + vacationPrime + tripleDay + doubleDay +
+                                      breakDay;
+                            var totalDaysforEmployee = totalDays - (!inc.Any() ? 0 : inc.Count(i => i.Type == "Falta"));
+                            var payed = new EmployeePayDay
+                            {
+                                BreakDays = breakDay,
+                                DailySalary = employee.DailySalary,
+                                Deductions = deductions,
+                                DoublePay = doubleDay,
+                                Employee = employee,
+                                Holidays = 0,
+                                NaturalDays = totalDaysforEmployee,
+                                Overtime = overTime,
+                                PayDay = pay,
+                                SundayPrime = 0,
+                                TriplePay = tripleDay,
+                                VacationPrime = vacationPrime,
+                                Vacations = vacation,
+                                Perceptions = payment,
+                                PayDate = nextPayDate,
+                            };
+                            payedEmployees.Add(payed);
+                            lastPayDate = nextPayDate;
+                        }
+                    }
                 }
                 try {
                     //db.PayDays.Add(pay);
@@ -107,165 +166,7 @@ namespace SmartAdminMvc.Controllers {
             }
             return PartialView(viewModel);
         }
-
-        public double CalculateIsr(double input) {
-            var maxImss = 1301.025;
-            var minImss = 50.91;
-            var imssDeduction = Math.Min(Math.Max((0.02375 * input), minImss), maxImss);
-            input -= imssDeduction;
-            var chargeTable = new[] {
-                new[] {0.01, 244.8, 0, 1.92},
-                new[] {244.81, 2077.50, 4.65, 6.4},
-                new[] {2077.51, 3651.00, 121.95, 10.88},
-                new[] {3651.01, 4244.10, 293.25, 16},
-                new[] {4244.11, 5081.40, 388.05, 17.92},
-                new[] {5081.41, 10248.45, 538.2, 21.36},
-                new[] {10248.46, 16153.05, 1641.75, 23.52},
-                new[] {16153.06, 30838.80, 3030.60, 30},
-                new[] {30838.81, 41118.45, 7436.25, 32},
-                new[] {41118.46, 123355.20, 10725.75, 34},
-                new[] {123355.21, double.MaxValue, 38686.35, 35}
-            };
-            var subsidyTable = new[] {
-                new[] {0.01, 581.9, 133.9},
-                new[] {581.91, 872.8, 133.8},
-                new[] {872.81, 1142.40, 133.8},
-                new[] {1142.41, 1163.80, 129.2},
-                new[] {1163.81, 1462.50, 125.8},
-                new[] {1462.51, 1551.70, 116.5},
-                new[] {1551.71, 1755.10, 106.9},
-                new[] {1755.11, 2047.60, 96.9},
-                new[] {2047.61, 2340.10, 83.4},
-                new[] {2340.11, 2428.40, 71.6},
-                new[] {2428.41, double.MaxValue, 0}
-            };
-            var tableVal = chargeTable.First(c => c[0] <= input && c[1] >= input);
-            var subsidyVal = subsidyTable.First(c => c[0] <= input && c[1] >= input);
-            var minLim = tableVal[0];
-            var baseVal = input - minLim;
-            var ratio = tableVal[3];
-            var result = baseVal * (ratio / 100);
-            var fixedVal = tableVal[2];
-            var isr = result + fixedVal;
-            var subsidy = subsidyVal[2];
-            var total = isr - subsidy;
-            return total + imssDeduction;
-        }
-
-        private double CalculateDeductions(double totalAmount) {
-            var maxImss = 1301.025;
-            var minImss = 50.91;
-            var imssDeduction = Math.Min(Math.Max((0.02375 * totalAmount), minImss), maxImss);
-            var deduction = 0d;
-            var subsidyMax = new[] {
-                581.90,
-                872.80,
-                1142.40,
-                1163.80,
-                1462.50,
-                1551.70,
-                1755.10,
-                2047.60,
-                2340.10,
-                2428.40,
-                0
-            };
-            var subsidy = new[] {
-                200.85,
-                200.70,
-                200.70,
-                193.80,
-                188.70,
-                174.75,
-                160.35,
-                145.35,
-                125.10,
-                107.40,
-                0
-            };
-            var isrFixed = new[] {
-                0,
-                4.65,
-                121.95,
-                293.25,
-                388.05,
-                538.2,
-                1641.75,
-                3030.60,
-                7436.25,
-                10725.75,
-                38686.35
-            };
-            var isrExceed = new[] {
-                6.4,
-                10.88,
-                16,
-                17.92,
-                21.36,
-                23.52,
-                30,
-                32,
-                34,
-                35
-            };
-            int reference, reference2 = 10;
-            double rest;
-            for (var i = 0; i < subsidyMax.Length; i++) {
-                if (totalAmount > subsidyMax[i])
-                    continue;
-                reference2 = i;
-            }
-            if (totalAmount <= 244.8) {
-                rest = totalAmount - 0.01;
-                reference = 0;
-            }
-            else if (totalAmount <= 2077.5) {
-                rest = totalAmount - 244.81;
-                reference = 1;
-            }
-            else if (totalAmount <= 3651) {
-                rest = totalAmount - 2077.51;
-                reference = 2;
-            }
-            else if (totalAmount <= 4244.1) {
-                rest = totalAmount - 3651.01;
-                reference = 3;
-            }
-            else if (totalAmount <= 5081.4) {
-                rest = totalAmount - 4244.11;
-                reference = 4;
-            }
-            else if (totalAmount <= 10248.45) {
-                rest = totalAmount - 5081.41;
-                reference = 5;
-            }
-            else if (totalAmount <= 16153.05) {
-                rest = totalAmount - 10248.46;
-                reference = 6;
-            }
-            else if (totalAmount <= 30838.8) {
-                rest = totalAmount - 16153.06;
-                reference = 7;
-            }
-            else if (totalAmount <= 41118.45) {
-                rest = totalAmount - 30838.81;
-                reference = 8;
-            }
-            else if (totalAmount <= 123355.2) {
-                rest = totalAmount - 41118.46;
-                reference = 9;
-            }
-            else {
-                rest = totalAmount - 123355.21;
-                reference = 10;
-            }
-
-            deduction += isrFixed[reference];
-            deduction += rest*(isrExceed[reference]/100);
-            deduction -= subsidy[reference2];
-            return deduction + imssDeduction;
-        }
-
+        
         // GET: Detalle
         public ActionResult Detalle(int id) {
             var list = new List<PayDayDetailViewModel>();

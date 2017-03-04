@@ -90,24 +90,36 @@
                         </section>
                         <section class="col col-6">
                             <label class="checkbox">
-                                <input type="checkbox" validate="" name="calculateSalary" id="calculateSalary"
+                                <input onclick="showHide(this);" type="checkbox" validate="" name="calculateSalary" id="calculateSalary"
                                        value="@(Model.CalculateSalary == "1" ? "On" : "Off")" @Html.Raw((Model.CalculateSalary == "1") ? "checked" : "")>
                                 <i></i>Calcular Salario
                             </label>
                         </section>
                     </div>
-                    <div class="row">
-                        <section class="col col-6">
-                            <label class="select">
-                                <select name="departmentId" value="@Model.DepartmentId">
-                                    <option value="0" @Html.Raw((Model.DepartmentId == -1) ? "selected=\"\"" : "") disabled="">Departamento</option>
-                                    @foreach (var item in Model.Departments) {
-                                        <option @Html.Raw((Model.DepartmentId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
-                                    }
-                                    <option @Html.Raw((Model.DepartmentId == 0) ? "selected=\"\"" : "") value="0">Ninguno</option>
-                                </select> <i></i>
-                            </label>
-                        </section>
+                    <div class="row" id="salaryPanel">
+                    <section class="col col-6">
+                        <label class="select">
+                            <select name="paymentFrequency" id="paymentFrequency" value="@Model.PaymentFrequency">
+                                <option @Html.Raw((Model.PaymentFrequency == 0) ? "selected=\"\"" : "") value="0" selected="" disabled="">Frecuencia de Pago</option>
+                                <option @Html.Raw((Model.PaymentFrequency == 1) ? "selected=\"\"" : "") value="1">Diario</option>
+                                <option @Html.Raw((Model.PaymentFrequency == 7) ? "selected=\"\"" : "") value="7">Semanal</option>
+                                <option @Html.Raw((Model.PaymentFrequency == 10) ? "selected=\"\"" : "") value="10">Decenal</option>
+                                <option @Html.Raw((Model.PaymentFrequency == 15) ? "selected=\"\"" : "") value="15">Quincenal</option>
+                                <option @Html.Raw((Model.PaymentFrequency == 30) ? "selected=\"\"" : "") value="30">Mensual</option>
+                            </select> <i></i>
+                        </label>
+                    </section>
+                    <section class="col col-6">
+                        <label class="select">
+                            <select name="departmentId" value="@Model.DepartmentId">
+                                <option value="0" @Html.Raw((Model.DepartmentId == -1) ? "selected=\"\"" : "") disabled="">Departamento</option>
+                                @foreach (var item in Model.Departments) {
+                                    <option @Html.Raw((Model.DepartmentId == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                                }
+                                <option @Html.Raw((Model.DepartmentId == 0) ? "selected=\"\"" : "") value="0">Ninguno</option>
+                            </select> <i></i>
+                        </label>
+                    </section>
                     </div>
                     <div class="row">
                         <section class="col col-6">
@@ -454,6 +466,15 @@
         $("#newModal").modal('hide');
         location.reload();
     });
+
+    function showHide(cb) {
+        if (cb.checked) {
+            $("#salaryPanel").css("display", "block");
+        } else {
+            $("#salaryPanel").css("display", "none");
+        }
+        
+    }
 
     $("#submit").on("click", function () {
         if ($('input[name="hasSocialSecurity"]').is('checked'))

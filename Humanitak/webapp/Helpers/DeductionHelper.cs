@@ -124,7 +124,7 @@ namespace SmartAdminMvc.Helpers {
             return isrDeduction + imssDeduction;
         }
 
-        public static SalaryComponentsViewModel GetCalculatedSalaryValues(double input, int totalDays) {
+        public static SalaryComponentsViewModel GetCalculatedSalaryValues(double input, int totalDays, bool hasImss = true) {
             var isr = CalculateIsr(input, totalDays);
             var newInput = input;
             while (Math.Abs(isr-input) > 0.0000001) {
@@ -142,13 +142,12 @@ namespace SmartAdminMvc.Helpers {
 
             var dailyBeforeImss = newInput / divider;
 
-            var monthlyImss = CalculateImss(dailyBeforeImss);
-            var bimonthlyImss = CalculateImss(dailyBeforeImss, false);
-            var imss = bimonthlyImss + monthlyImss;
+            var monthlyImss = hasImss ? CalculateImss(dailyBeforeImss) : 0;
+            var bimonthlyImss = hasImss ? CalculateImss(dailyBeforeImss, false) : 0;
             //imss = imss / divider;
-            var proratedMonthlyImss = monthlyImss / factor;
-            var proratedBimonthlyImss = (bimonthlyImss / 2) / factor;
-            var proratedImss = proratedMonthlyImss + proratedBimonthlyImss;
+            var proratedMonthlyImss = hasImss ? monthlyImss / factor : 0;
+            var proratedBimonthlyImss = hasImss ? (bimonthlyImss / 2) / factor : 0;
+            var proratedImss = hasImss ? proratedMonthlyImss + proratedBimonthlyImss : 0;
 
 
             var res = new SalaryComponentsViewModel {
@@ -166,8 +165,8 @@ namespace SmartAdminMvc.Helpers {
             return res;
         }
 
-        public static double CalculateSalary(double input, int totalDays) {
-            var result = GetCalculatedSalaryValues(input, totalDays);
+        public static double CalculateSalary(double input, int totalDays, bool hasImss = true) {
+            var result = GetCalculatedSalaryValues(input, totalDays, hasImss);
             return result.DailySalary;
         }
     }

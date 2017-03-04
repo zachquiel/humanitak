@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LinqToExcel;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Models;
@@ -23,8 +24,28 @@ namespace SmartAdminMvc.Controllers {
         public ActionResult Index() {
             var list = new List<EnterpriseViewModel>();
             using (var db = new DataContext()) {
+                var enterprises = db.Enterprises.ToList();
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var enterprise in db.Enterprises.ToList()) list.Add(enterprise.ToEnterpriseViewModel());
+                foreach (var enterprise in enterprises)
+                    list.Add(new EnterpriseViewModel {
+                        Id = enterprise.Id,
+                        Name = enterprise.Name,
+                        Payday1Start = enterprise.Payday1Start,
+                        Payday1End = enterprise.Payday1End,
+                        Payday2Start = enterprise.Payday2Start,
+                        Payday2End = enterprise.Payday2End,
+                        LogoImage = enterprise.Logo?.Image,
+                        HeaderImage = enterprise.Header?.Image,
+                        UsesPunchClock = enterprise.UsesPunchClock ? "1" : "0",
+                        //Commission = enterprise.Commission,
+                        Vat = enterprise.Vat,
+                        IsActive = enterprise.IsActive ? "1" : "0",
+                        ParentEnterprise = enterprise.ParentEnterprise?.Id ?? 0,
+                        Operations = enterprise.Operations,
+                        City = enterprise.City,
+                        LastPayday = enterprise.LastPayday,
+                        State = enterprise.State
+                    });
             }
             return View(list);
         }
@@ -254,6 +275,75 @@ namespace SmartAdminMvc.Controllers {
                 }
                 return PartialView(viewModel);
             }
+        }
+
+        public PartialViewResult _Bulk() {
+            var viewModel = new EnterpriseReference
+            {
+                Id = 0,
+                Name = "",
+                Processed = false,
+                ProcessedMessage = "No hay datos para mostrar",
+                Success = false
+            };
+            return PartialView(viewModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult _Bulk(HttpPostedFileBase file) {
+            var viewModel = new EnterpriseReference {
+                Id = 0,
+                Name = "",
+                Processed = true,
+                ProcessedMessage = "No hay datos para mostrar",
+                Success = false
+            };
+            if (file == null || file.ContentLength <= 0) return PartialView(viewModel);
+            var fileName = Path.GetFileName(file.FileName);
+            var path = Path.Combine(Server.MapPath("~/Excel/"), fileName);
+            file.SaveAs(path);
+            var inserted = 0;
+            using (var book = new ExcelQueryFactory(path)) {
+                var sheet = book.Worksheet(0);
+                var total = sheet.Count();
+                using (var db = new DataContext()) {
+                    viewModel.Processed = true;
+                    foreach (var row in sheet) {
+                        var pay2End = 0;
+                        int.TryParse(row[4].Value.ToString(), out pay2End);
+                        Enterprise parentEnt = null;
+                        if (row[10].Value.ToString().ToLower() != "primaria") {
+                            var name = row[11].Value.ToString();
+                            if (db.Enterprises.Any(e => e.Name == name))
+                                parentEnt = db.Enterprises.First(e => e.Name == name);
+                        }
+                        var ent = new Enterprise {
+                            City = row[8].Value.ToString(),
+                            IsActive = true,
+                            Name = row[0].Value.ToString(),
+                            Operations = string.IsNullOrEmpty(row[9].Value.ToString()) ? null : row[9].Value.ToString(),
+                            Payday1Start = int.Parse(row[1].Value.ToString()),
+                            Payday1End = int.Parse(row[2].Value.ToString()),
+                            Payday2Start = int.Parse(row[3].Value.ToString()),
+                            Payday2End = pay2End,
+                            State = row[7].Value.ToString(),
+                            Vat = double.Parse(row[6].Value.ToString()),
+                            UsesPunchClock = !(string.IsNullOrEmpty(row[5].Value.ToString()) || row[5].Value.ToString().ToLower() == "no" || row[5].Value.ToString().ToLower() == "0"),
+                            LastPayday = new DateTime(1970, 1, 1),
+                            ParentEnterprise = parentEnt
+                        };
+                        try {
+                            db.Enterprises.AddOrUpdate(ent);
+                            db.SaveChanges();
+                            inserted++;
+                        }
+                        catch (Exception e) {}
+                    }
+                    viewModel.ProcessedMessage = $"{inserted} Empresas fueron insertadas con éxito";
+                    viewModel.Success = total == inserted;
+                }
+            }
+            return PartialView(viewModel);
         }
 
         private void AddErrors(DbEntityValidationException exc) {

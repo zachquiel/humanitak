@@ -42,9 +42,11 @@
                     </div>
                 </fieldset>
                 <footer>
-                    <button type="button" id="submit" class="btn btn-primary">
-                        Guardar
-                    </button>
+                    @if (!Model.Processed) {
+                        <button type="button" id="submit" class="btn btn-primary">
+                            Guardar
+                        </button>
+                    }
                     <button type="button" id="close" class="btn btn-default">
                         Cerrar
                     </button>
