@@ -78,52 +78,53 @@ namespace SmartAdminMvc.Controllers {
             if (viewModel.Id == 0) {
                 //new
                 using (var db = new DataContext()) {
-                    var parent = db.Enterprises.First(e => e.Id == viewModel.EnterpriseId);
-                    var paying = db.Enterprises.FirstOrDefault(e => e.Id == viewModel.PayingEnterpriseId);
-                    var secondary = db.Enterprises.FirstOrDefault(e => e.Id == viewModel.SecondaryEnterpriseId);
-                    var department = db.Departments.FirstOrDefault(e => e.Id == viewModel.DepartmentId);
-                    var position = db.Positions.FirstOrDefault(e => e.Id == viewModel.PositionId);
-                    var group = db.Groups.FirstOrDefault(e => e.Id == viewModel.GroupId);
-                    var emp = new Employee {
-                        Name = viewModel.FirstName,
-                        LastName = viewModel.LastName,
-                        Ssn = viewModel.Ssn,
-                        Curp = viewModel.Curp,
-                        Rfc = viewModel.Rfc,
-                        Email = viewModel.Email,
-                        Gender = viewModel.Gender,
-                        Department = department,
-                        Position = position,
-                        Group = group,
-                        DailySalary = dailySalary,
-                        StartDate = viewModel.StartDate,
-                        Bank = viewModel.Bank,
-                        AccountNumber = viewModel.AccountNumber,
-                        OffDays = viewModel.OffDays,
-                        IsActive = viewModel.IsActive,
-                        Address = viewModel.Address,
-                        Area = viewModel.Area,
-                        ZipCode = viewModel.ZipCode,
-                        City = viewModel.City,
-                        State = viewModel.State,
-                        Phone = viewModel.Phone,
-                        HasSocialSecurity = viewModel.HasSocialSecurity != null,
-                        DoB = viewModel.DoB,
-                        SsRegistrationDate = viewModel.SsRegistrationDate,
-                        PlaceOfBirth = viewModel.PlaceOfBirth,
-                        IdNumber = viewModel.IdNumber,
-                        MaritalStatus = viewModel.MaritalStatus,
-                        PayingEnterprise = paying,
-                        SecondaryEnterprise = secondary,
-                        StartContractDate = viewModel.StartContractDate,
-                        EndContractDate = viewModel.EndContractDate,
-                        PermanentContractDate = viewModel.PermanentContractDate,
-                        WorkState = viewModel.WorkState,
-                        PatronalRegistryNo = viewModel.PatronalRegistryNo,
-                        Regime = viewModel.Regime,
-                        PaymentFrequency = viewModel.PaymentFrequency
-                    };
                     try {
+                        var parent = db.Enterprises.First(e => e.Id == viewModel.EnterpriseId);
+                        var paying = db.Enterprises.FirstOrDefault(e => e.Id == viewModel.PayingEnterpriseId);
+                        var secondary = db.Enterprises.FirstOrDefault(e => e.Id == viewModel.SecondaryEnterpriseId);
+                        var department = db.Departments.FirstOrDefault(e => e.Id == viewModel.DepartmentId);
+                        var position = db.Positions.FirstOrDefault(e => e.Id == viewModel.PositionId);
+                        var group = db.Groups.FirstOrDefault(e => e.Id == viewModel.GroupId);
+                        var emp = new Employee {
+                            Name = viewModel.FirstName,
+                            LastName = viewModel.LastName,
+                            Ssn = viewModel.Ssn,
+                            Curp = viewModel.Curp,
+                            Rfc = viewModel.Rfc,
+                            Email = viewModel.Email,
+                            Gender = viewModel.Gender,
+                            Department = department,
+                            Position = position,
+                            Group = group,
+                            DailySalary = dailySalary,
+                            StartDate = viewModel.StartDate,
+                            Bank = viewModel.Bank,
+                            AccountNumber = viewModel.AccountNumber,
+                            OffDays = viewModel.OffDays,
+                            IsActive = viewModel.IsActive,
+                            Address = viewModel.Address,
+                            Area = viewModel.Area,
+                            ZipCode = viewModel.ZipCode,
+                            City = viewModel.City,
+                            State = viewModel.State,
+                            Phone = viewModel.Phone,
+                            HasSocialSecurity = viewModel.HasSocialSecurity != null,
+                            DoB = viewModel.DoB,
+                            SsRegistrationDate = viewModel.SsRegistrationDate,
+                            PlaceOfBirth = viewModel.PlaceOfBirth,
+                            IdNumber = viewModel.IdNumber,
+                            MaritalStatus = viewModel.MaritalStatus,
+                            PayingEnterprise = paying,
+                            SecondaryEnterprise = secondary,
+                            StartContractDate = viewModel.StartContractDate,
+                            EndContractDate = viewModel.EndContractDate,
+                            PermanentContractDate = viewModel.PermanentContractDate,
+                            WorkState = viewModel.WorkState,
+                            PatronalRegistryNo = viewModel.PatronalRegistryNo,
+                            Regime = viewModel.Regime,
+                            PaymentFrequency = viewModel.PaymentFrequency
+                        };
+                    
                         db.Employees.AddOrUpdate(emp);
                         parent.Employees.Add(emp);
                         db.SaveChanges();
