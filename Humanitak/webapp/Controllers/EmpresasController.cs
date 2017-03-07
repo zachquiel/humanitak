@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using LinqToExcel;
+using DataAccess;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Models;
@@ -303,45 +303,45 @@ namespace SmartAdminMvc.Controllers {
             var path = Path.Combine(Server.MapPath("~/Excel/"), fileName);
             file.SaveAs(path);
             var inserted = 0;
-            using (var book = new ExcelQueryFactory(path)) {
-                var sheet = book.Worksheet(0);
-                var total = sheet.Count();
-                using (var db = new DataContext()) {
-                    viewModel.Processed = true;
-                    foreach (var row in sheet) {
-                        var pay2End = 0;
-                        int.TryParse(row[4].Value.ToString(), out pay2End);
-                        Enterprise parentEnt = null;
-                        if (row[10].Value.ToString().ToLower() != "primaria") {
-                            var name = row[11].Value.ToString();
-                            if (db.Enterprises.Any(e => e.Name == name))
-                                parentEnt = db.Enterprises.First(e => e.Name == name);
-                        }
-                        var ent = new Enterprise {
-                            City = row[8].Value.ToString(),
-                            IsActive = true,
-                            Name = row[0].Value.ToString(),
-                            Operations = string.IsNullOrEmpty(row[9].Value.ToString()) ? null : row[9].Value.ToString(),
-                            Payday1Start = int.Parse(row[1].Value.ToString()),
-                            Payday1End = int.Parse(row[2].Value.ToString()),
-                            Payday2Start = int.Parse(row[3].Value.ToString()),
-                            Payday2End = pay2End,
-                            State = row[7].Value.ToString(),
-                            Vat = double.Parse(row[6].Value.ToString()),
-                            UsesPunchClock = !(string.IsNullOrEmpty(row[5].Value.ToString()) || row[5].Value.ToString().ToLower() == "no" || row[5].Value.ToString().ToLower() == "0"),
-                            LastPayday = new DateTime(1970, 1, 1),
-                            ParentEnterprise = parentEnt
-                        };
-                        try {
-                            db.Enterprises.AddOrUpdate(ent);
-                            db.SaveChanges();
-                            inserted++;
-                        }
-                        catch (Exception e) {}
+
+            var sheet = DataTable.New.ReadExcel(path);
+            var total = sheet.Rows.Count();
+            var columns = sheet.ColumnNames.ToList();
+            using (var db = new DataContext()) {
+                viewModel.Processed = true;
+                foreach (var row in sheet.Rows) {
+                    var pay2End = 0;
+                    int.TryParse(row[columns[4]], out pay2End);
+                    Enterprise parentEnt = null;
+                    if (row[columns[10]].ToLower() != "primaria") {
+                        var name = row[columns[11]];
+                        if (db.Enterprises.Any(e => e.Name == name))
+                            parentEnt = db.Enterprises.First(e => e.Name == name);
                     }
-                    viewModel.ProcessedMessage = $"{inserted} Empresas fueron insertadas con éxito";
-                    viewModel.Success = total == inserted;
+                    var ent = new Enterprise {
+                        City = row[columns[8]],
+                        IsActive = true,
+                        Name = row[columns[0]],
+                        Operations = string.IsNullOrEmpty(row[columns[9]]) ? null : row[columns[9]],
+                        Payday1Start = int.Parse(row[columns[1]]),
+                        Payday1End = int.Parse(row[columns[2]]),
+                        Payday2Start = int.Parse(row[columns[3]]),
+                        Payday2End = pay2End,
+                        State = row[columns[7]],
+                        Vat = double.Parse(row[columns[6]]),
+                        UsesPunchClock = !(string.IsNullOrEmpty(row[columns[5]]) || row[columns[5]].ToLower() == "no" || row[columns[5]].ToLower() == "0"),
+                        LastPayday = new DateTime(1970, 1, 1),
+                        ParentEnterprise = parentEnt
+                    };
+                    try {
+                        db.Enterprises.AddOrUpdate(ent);
+                        db.SaveChanges();
+                        inserted++;
+                    }
+                    catch (Exception e) {}
                 }
+                viewModel.ProcessedMessage = $"{inserted} Empresas fueron insertadas con éxito";
+                viewModel.Success = total == inserted;
             }
             return PartialView(viewModel);
         }

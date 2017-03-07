@@ -45,8 +45,11 @@
                     
                     <section class="col col-4"></section>
                     <section class="col col-4">
-                        <button type="button" id="submit" class="btn btn-primary">
-                            &nbsp;&nbsp;&nbsp;Calcular&nbsp;&nbsp;&nbsp;
+                        <button type="button" id="submit1" class="btn btn-primary">
+                            &nbsp;&nbsp;&nbsp;Calcular Neto&nbsp;&nbsp;&nbsp;
+                        </button>
+                        <button type="button" id="submit2" class="btn btn-primary">
+                            &nbsp;&nbsp;&nbsp;Calcular Bruto&nbsp;&nbsp;&nbsp;
                         </button>
                     </section>
                     <section class="col col-4"></section>
@@ -77,14 +80,30 @@
     <script src="/scripts/plugin/typeahead/typeaheadjs.min.js"></script>
 
     <script type="text/javascript">
-        $("#submit").on("click",
+        $("#submit1").on("click",
             function () {
                 var totalDays = parseInt($('#totalDays :selected').val());
                 var wantedSalary = parseFloat($('#wantedSalary').val());
                 var data = new FormData($("#newForm")[0]);
                 data.totalDays = parseInt($('#totalDays :selected').val());
                 $.ajax({
-                    url: "/Calc/_CalcData",
+                    url: "/Calc/_CalcData1",
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false
+                }).done(function (partialViewResult) {
+                    $("#resultTable").html(partialViewResult);
+                });
+            });
+        $("#submit2").on("click",
+            function () {
+                var totalDays = parseInt($('#totalDays :selected').val());
+                var wantedSalary = parseFloat($('#wantedSalary').val());
+                var data = new FormData($("#newForm")[0]);
+                data.totalDays = parseInt($('#totalDays :selected').val());
+                $.ajax({
+                    url: "/Calc/_CalcData2",
                     type: "POST",
                     data: data,
                     processData: false,

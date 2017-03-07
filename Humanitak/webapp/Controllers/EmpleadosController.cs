@@ -4,10 +4,9 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using LinqToExcel;
+using DataAccess;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Helpers;
@@ -252,111 +251,114 @@ namespace SmartAdminMvc.Controllers {
             var path = Path.Combine(Server.MapPath("~/Excel/"), fileName);
             file.SaveAs(path);
             var inserted = 0;
-            using (var book = new ExcelQueryFactory(path)) {
-                var sheet = book.Worksheet(0);
-                var total = sheet.Count();
-                using (var db = new DataContext()) {
-                    viewModel.Processed = true;
-                    foreach (var row in sheet) {
-                        try {
-                            var hasImss = !string.IsNullOrEmpty(row[2].Value.ToString());
-                            var dailySalary = !string.IsNullOrEmpty(row[7].Value.ToString()) && row[7].Value.ToString().ToLower() == "si" ? 
-                                DeductionHelper.CalculateSalary(double.Parse(row[6].Value.ToString()), int.Parse(row[35].Value.ToString()), hasImss) :
-                                double.Parse(row[6].Value.ToString());
-                            var parent = db.Enterprises.First(e => e.Id == enterpriseId);
-                            Department department;
-                            Position position;
-                            Group group;
-                            var payingName = row[24].Value.ToString();
-                            if(!db.Enterprises.Any(e => e.Name == payingName)) continue;
-                            var paying = db.Enterprises.First(e => e.Name == payingName);
-                            var secondaryName = row[25].Value.ToString();
-                            var secondary = db.Enterprises.FirstOrDefault(e => e.Name == secondaryName);
-                            var departmentName = row[22].Value.ToString();
-                            if (!parent.Departments.Any(e => e.Name == departmentName)) {
-                                department = new Department {
-                                    Name = departmentName,
-                                    Criteria = "Horarios Completos",
-                                    DoubleTimeHours = 0,
-                                    Overtime = false,
-                                    OvertimeThreshold = 0
-                                };
-                                db.Departments.AddOrUpdate(department);
-                                parent.Departments.Add(department);
-                                db.SaveChanges();
-                            } else
-                                department = parent.Departments.FirstOrDefault(e => e.Name == departmentName);
-                            var positionName = row[23].Value.ToString();
-                            if (!parent.Positions.Any(e => e.Name != positionName)) {
-                                position = new Position {
-                                    Name = positionName
-                                };
-                                db.Positions.AddOrUpdate(position);
-                                parent.Positions.Add(position);
-                                db.SaveChanges();
-                            } else
-                                position = parent.Positions.FirstOrDefault(e => e.Name == positionName);
-                            var groupName = row[26].Value.ToString();
-                            if (!string.IsNullOrEmpty(groupName) && !parent.Groups.Any(e => e.Name == groupName)) {
-                                group = new Group {
-                                    Name = groupName
-                                };
-                                db.Groups.AddOrUpdate(group);
-                                parent.Groups.Add(group);
-                                db.SaveChanges();
-                            } else
-                                group = parent.Groups.FirstOrDefault(e => e.Name == groupName);
-                            var emp = new Employee {
-                                Name = row[0].Value.ToString(),
-                                LastName = row[1].Value.ToString(),
-                                Ssn = row[2].Value.ToString(),
-                                Curp = row[3].Value.ToString(),
-                                Rfc = row[4].Value.ToString(),
-                                Email = row[27].Value.ToString(),
-                                Gender = row[5].Value.ToString(),
-                                Department = department,
-                                Position = position,
-                                Group = group,
-                                DailySalary = dailySalary,
-                                StartDate = DateTime.ParseExact(row[8].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                                Bank = row[9].Value.ToString(),
-                                AccountNumber = row[10].Value.ToString(),
-                                OffDays = row[11].Value.ToString(),
-                                IsActive = true,
-                                Address = row[12].Value.ToString(),
-                                Area = row[13].Value.ToString(),
-                                ZipCode = row[14].Value.ToString(),
-                                City = row[15].Value.ToString(),
-                                State = row[16].Value.ToString(),
-                                Phone = row[17].Value.ToString(),
-                                HasSocialSecurity = hasImss,
-                                DoB = DateTime.ParseExact(row[18].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                                SsRegistrationDate = DateTime.ParseExact(row[28].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                                PlaceOfBirth = row[19].Value.ToString(),
-                                IdNumber = row[20].Value.ToString(),
-                                MaritalStatus = row[21].Value.ToString(),
-                                PayingEnterprise = paying,
-                                SecondaryEnterprise = secondary,
-                                StartContractDate = DateTime.ParseExact(row[29].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                                EndContractDate = string.IsNullOrEmpty(row[30].Value.ToString()) ? (DateTime?)null : DateTime.ParseExact(row[30].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                                PermanentContractDate = string.IsNullOrEmpty(row[31].Value.ToString()) ? (DateTime?)null : DateTime.ParseExact(row[31].Value.ToString().Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                                WorkState = row[32].Value.ToString(),
-                                PatronalRegistryNo = row[33].Value.ToString(),
-                                Regime = row[34].Value.ToString(),
-                                PaymentFrequency = int.Parse(row[35].Value.ToString())
+            
+            var sheet = DataTable.New.ReadExcel(path);
+            //var sheet = book.Worksheet(0);
+            var total = sheet.Rows.Count();
+            var columns = sheet.ColumnNames.ToList();
+            using (var db = new DataContext()) {
+                viewModel.Processed = true;
+                foreach (var row in sheet.Rows) {
+                    try {
+                        var hasImss = !string.IsNullOrEmpty(row[columns[2]]);
+                        var dailySalary = !string.IsNullOrEmpty(row[columns[7]]) && row[columns[7]].ToLower() == "si" ? 
+                            DeductionHelper.CalculateSalary(double.Parse(row[columns[6]]), int.Parse(row[columns[35]]), hasImss) :
+                            double.Parse(row[columns[6]]);
+                        var parent = db.Enterprises.First(e => e.Id == enterpriseId);
+                        Department department;
+                        Position position;
+                        Group group;
+                        var payingName = row[columns[24]];
+                        if(!db.Enterprises.Any(e => e.Name == payingName)) continue;
+                        var paying = db.Enterprises.First(e => e.Name == payingName);
+                        var secondaryName = row[columns[25]];
+                        var secondary = db.Enterprises.FirstOrDefault(e => e.Name == secondaryName);
+                        var departmentName = row[columns[22]];
+                        if (!parent.Departments.Any(e => e.Name == departmentName)) {
+                            department = new Department {
+                                Name = departmentName,
+                                Criteria = "Horarios Completos",
+                                DoubleTimeHours = 0,
+                                Overtime = false,
+                                OvertimeThreshold = 0
                             };
-                        
-                            db.Employees.AddOrUpdate(emp);
+                            db.Departments.AddOrUpdate(department);
+                            parent.Departments.Add(department);
                             db.SaveChanges();
-                            inserted++;
-                        }
-                        catch (Exception e) {
-                            viewModel.ProcessedMessage = e.Message;
-                        }
+                        } else
+                            department = parent.Departments.FirstOrDefault(e => e.Name == departmentName);
+                        var positionName = row[columns[23]];
+                        if (!parent.Positions.Any(e => e.Name != positionName)) {
+                            position = new Position {
+                                Name = positionName
+                            };
+                            db.Positions.AddOrUpdate(position);
+                            parent.Positions.Add(position);
+                            db.SaveChanges();
+                        } else
+                            position = parent.Positions.FirstOrDefault(e => e.Name == positionName);
+                        var groupName = row[columns[26]];
+                        if (!string.IsNullOrEmpty(groupName) && !parent.Groups.Any(e => e.Name == groupName)) {
+                            group = new Group {
+                                Name = groupName
+                            };
+                            db.Groups.AddOrUpdate(group);
+                            parent.Groups.Add(group);
+                            db.SaveChanges();
+                        } else
+                            group = parent.Groups.FirstOrDefault(e => e.Name == groupName);
+                        var emp = new Employee {
+                            Name = row[columns[0]],
+                            LastName = row[columns[1]],
+                            Ssn = row[columns[2]],
+                            Curp = row[columns[3]],
+                            Rfc = row[columns[4]],
+                            Email = row[columns[27]],
+                            Gender = row[columns[5]],
+                            Department = department,
+                            Position = position,
+                            Group = group,
+                            DailySalary = dailySalary,
+                            StartDate = DateTime.ParseExact(row[columns[8]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            Bank = row[columns[9]],
+                            AccountNumber = row[columns[10]],
+                            OffDays = row[columns[11]],
+                            IsActive = true,
+                            Address = row[columns[12]],
+                            Area = row[columns[13]],
+                            ZipCode = row[columns[14]],
+                            City = row[columns[15]],
+                            State = row[columns[16]],
+                            Phone = row[columns[17]],
+                            HasSocialSecurity = hasImss,
+                            DoB = DateTime.ParseExact(row[columns[18]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            SsRegistrationDate = DateTime.ParseExact(row[columns[28]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            PlaceOfBirth = row[columns[19]],
+                            IdNumber = row[columns[20]],
+                            MaritalStatus = row[columns[21]],
+                            PayingEnterprise = paying,
+                            SecondaryEnterprise = secondary,
+                            StartContractDate = DateTime.ParseExact(row[columns[29]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            EndContractDate = string.IsNullOrEmpty(row[columns[30]]) ? (DateTime?)null : DateTime.ParseExact(row[columns[30]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            PermanentContractDate = string.IsNullOrEmpty(row[columns[31]]) ? (DateTime?)null : DateTime.ParseExact(row[columns[31]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            WorkState = row[columns[32]],
+                            PatronalRegistryNo = row[columns[33]],
+                            Regime = row[columns[34]],
+                            PaymentFrequency = int.Parse(row[columns[35]]),
+                        };
+                    
+                        db.Employees.AddOrUpdate(emp);
+                        db.SaveChanges();
+                        parent.Employees.Add(emp);
+                        db.SaveChanges();
+                        inserted++;
                     }
-                    viewModel.ProcessedMessage = $"{inserted} Empleados fueron insertados con éxito";
-                    viewModel.Success = total == inserted;
+                    catch (Exception e) {
+                        viewModel.ProcessedMessage = e.Message;
+                    }
                 }
+                viewModel.ProcessedMessage = $"{inserted} Empleados fueron insertados con éxito";
+                viewModel.Success = total == inserted;
             }
             return PartialView(viewModel);
         }

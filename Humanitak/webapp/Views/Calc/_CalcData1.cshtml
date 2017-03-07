@@ -1,0 +1,76 @@
+﻿@using SmartAdminMvc.ViewModels
+@model SalaryComponentsViewModel
+    
+<div class="row">&nbsp;</div>
+<div class="row">&nbsp;</div>
+<div class="label row">
+    <div class="col col-1">&nbsp;</div>
+    <table class="col col-5">
+        <tr>
+            <td>ISR Fijo</td>
+            <td>&nbsp;@Model.FixedIsrDeduction.ToString("C")</td>
+        </tr>
+        <tr>
+            <td>ISR Porcentual</td>
+            <td>&nbsp;@Model.PctIsrDeduction.ToString("C")</td>
+        </tr>
+        <tr style="border-bottom: solid 2px black">
+            <td>Subsidio ISR</td>
+            <td>-@Model.IsrDeductionSubsidy.ToString("C")</td>
+        </tr>
+        <tr>
+            <td>ISR Total</td>
+            <td>&nbsp;@((Model.FixedIsrDeduction + Model.PctIsrDeduction - Model.IsrDeductionSubsidy).ToString("C"))</td>
+        </tr>
+    </table>
+    <div class="col col-1">&nbsp;</div>
+    <table class="col col-5">
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>IMSS Mensual</td>
+            <td>&nbsp;@Model.MonthlyImss.ToString("C")</td>
+        </tr>
+        <tr style="border-bottom: solid 2px black">
+            <td>IMSS Bimestral (Prorrateado Mensual)</td>
+            <td>&nbsp;@((Model.BimonthlyImss / 2).ToString("C"))</td>
+        </tr>
+        <tr>
+            <td>IMSS Mensual Total</td>
+            <td>&nbsp;@Model.Imss.ToString("C")</td>
+        </tr>
+    </table>
+</div>
+<div class="row">&nbsp;</div>
+<div class="row">&nbsp;</div>
+<div class="label row">
+    <div class="col col-3">&nbsp;</div>
+    <table class="col col-6">
+        <tr>
+            <td>Salario Bruto</td>
+            <td>&nbsp;@Model.GrossSalary.ToString("C")</td>
+        </tr>
+        <tr>
+            <td>Deducción ISR</td>
+            <td>-@((Model.FixedIsrDeduction + Model.PctIsrDeduction - Model.IsrDeductionSubsidy).ToString("C"))</td>
+        </tr>
+        <tr style="border-bottom: solid 4px black">
+            <td>Deducción IMSS</td>
+            <td>-@Model.ProratedImss.ToString("C")</td>
+        </tr>
+        <tr>
+            <td>Salario Neto</td>
+            <td>&nbsp;@((Model.GrossSalary - Model.ProratedImss - (Model.FixedIsrDeduction + Model.PctIsrDeduction - Model.IsrDeductionSubsidy)).ToString("C"))</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Salario Diario</td>
+            <td>&nbsp;@Model.DailySalary.ToString("C")</td>
+        </tr>
+    </table>
+</div>

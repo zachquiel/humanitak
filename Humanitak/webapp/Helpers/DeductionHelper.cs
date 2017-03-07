@@ -165,6 +165,47 @@ namespace SmartAdminMvc.Helpers {
             return res;
         }
 
+        public static SalaryComponentsViewModel GetStraightCalculatedSalaryValues(double input, int totalDays, bool hasImss = true) {
+            //var isr = CalculateIsr(input, totalDays);
+            var newInput = input;
+            //while (Math.Abs(isr-input) > 0.0000001) {
+              //  newInput = input - isr + newInput;
+                //isr = CalculateIsr(newInput, totalDays);
+            //}
+
+            var divider = 30.4166;
+            var factor = 1;
+            if (totalDays == 15) factor = 2;
+            else if (totalDays == 10) factor = 3;
+            else if (totalDays == 7) factor = 4;
+            else if (totalDays == 1) factor = 30;
+            divider = divider / factor;
+
+            var dailyBeforeImss = newInput / divider;
+
+            var monthlyImss = hasImss ? CalculateImss(dailyBeforeImss) : 0;
+            var bimonthlyImss = hasImss ? CalculateImss(dailyBeforeImss, false) : 0;
+            //imss = imss / divider;
+            var proratedMonthlyImss = hasImss ? monthlyImss / factor : 0;
+            var proratedBimonthlyImss = hasImss ? (bimonthlyImss / 2) / factor : 0;
+            var proratedImss = hasImss ? proratedMonthlyImss + proratedBimonthlyImss : 0;
+
+
+            var res = new SalaryComponentsViewModel {
+                FixedIsrDeduction = CalculateIsrFixed(newInput, totalDays),
+                PctIsrDeduction = CalculateIsrPct(newInput, totalDays),
+                IsrDeductionSubsidy = CalculateIsrSubsidy(newInput, totalDays),
+                Divider = divider,
+                MonthlyImss = monthlyImss,
+                BimonthlyImss = bimonthlyImss,
+                GrossSalary = newInput,
+                ProratedMonthlyImss = monthlyImss / factor,
+                ProratedBimonthlyImss = (bimonthlyImss / 2) / factor
+            };
+
+            return res;
+        }
+
         public static double CalculateSalary(double input, int totalDays, bool hasImss = true) {
             var result = GetCalculatedSalaryValues(input, totalDays, hasImss);
             return result.DailySalary;

@@ -97,8 +97,8 @@ D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.dll
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.pdb
 D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.EmpleadosN.resources
 D:\humanitak\Humanitak\webapp\obj\Debug\Humanitak.csprojResolveAssemblyReference.cache
-D:\humanitak\Humanitak\webapp\bin\LinqToExcel.dll
-D:\humanitak\Humanitak\webapp\bin\Remotion.Data.Linq.dll
-D:\humanitak\Humanitak\webapp\bin\Remotion.dll
-D:\humanitak\Humanitak\webapp\bin\Remotion.Interfaces.dll
-D:\humanitak\Humanitak\webapp\bin\LinqToExcel.xml
+D:\humanitak\Humanitak\webapp\bin\CsvReader.dll
+D:\humanitak\Humanitak\webapp\bin\CsvReader.Excel.dll
+D:\humanitak\Humanitak\webapp\bin\DocumentFormat.OpenXml.dll
+D:\humanitak\Humanitak\webapp\bin\CsvReader.xml
+D:\humanitak\Humanitak\webapp\bin\CsvReader.Excel.xml

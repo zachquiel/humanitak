@@ -35,11 +35,14 @@ namespace SmartAdminMvc.Controllers {
                             type = "Horas Extra";
                         }
                         viewModel.Type = viewModel.Type.Replace("Día", "Dia");
+                        var incidenceDate = DateTime.ParseExact(viewModel.StringDate, "dd/MM/yyyy",
+                                new CultureInfo("es-MX"))
+                            .AddMonths(1)
+                            .AddDays(1);
+                        if (db.Incidences.Any(i => i.Employee == emp && i.Type == type && i.Date == incidenceDate))
+                        return db.Incidences.First(i => i.Employee == emp && i.Type == type && i.Date == incidenceDate).Id;
                         var inc = new Incidence {
-                            Date =
-                                DateTime.ParseExact(viewModel.StringDate, "dd/MM/yyyy", new CultureInfo("es-MX"))
-                                    .AddMonths(1)
-                                    .AddDays(1),
+                            Date = incidenceDate,
                             Employee = emp,
                             Enterprise = ent,
                             ExtraHours = hours,
