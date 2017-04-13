@@ -87,7 +87,7 @@
                 var data = new FormData($("#newForm")[0]);
                 data.totalDays = parseInt($('#totalDays :selected').val());
                 $.ajax({
-                    url: "/Calc/_CalcData1",
+                    url: "/Calc/_CalcData",
                     type: "POST",
                     data: data,
                     processData: false,
