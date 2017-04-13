@@ -25,7 +25,7 @@ namespace SmartAdminMvc.Controllers
 
         [HttpPost]
         public PartialViewResult _CalcData(SalaryComponentsViewModel model) {
-            return PartialView("_CalcData", DeductionHelper.GetCalculatedSalaryValues(model.WantedSalary, model.TotalDays, model.HasImss == "on"));
+            return PartialView("~/Views/Calc/_CalcData.cshtml", DeductionHelper.GetCalculatedSalaryValues(model.WantedSalary, model.TotalDays, model.HasImss == "on"));
         }
 
         [HttpPost]
