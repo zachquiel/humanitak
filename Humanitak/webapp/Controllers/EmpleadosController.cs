@@ -121,7 +121,8 @@ namespace SmartAdminMvc.Controllers {
                             WorkState = viewModel.WorkState,
                             PatronalRegistryNo = viewModel.PatronalRegistryNo,
                             Regime = viewModel.Regime,
-                            PaymentFrequency = viewModel.PaymentFrequency
+                            PaymentFrequency = viewModel.PaymentFrequency,
+                            Visible = true
                         };
                     
                         db.Employees.AddOrUpdate(emp);
@@ -181,6 +182,7 @@ namespace SmartAdminMvc.Controllers {
                 emp.PatronalRegistryNo = viewModel.PatronalRegistryNo;
                 emp.Regime = viewModel.Regime;
                 emp.PaymentFrequency = viewModel.PaymentFrequency;
+                emp.Visible = true;
                 try {
                     db.Employees.AddOrUpdate(emp);
                     db.SaveChanges();
@@ -211,8 +213,9 @@ namespace SmartAdminMvc.Controllers {
                 var emp = db.Employees.First(e => e.Id == viewModel.Id);
                 var ent = db.Enterprises.First(e => e.Id == viewModel.EnterpriseId);
                 try {
-                    ent.Employees.Remove(emp);
-                    db.Employees.Remove(emp);
+                    emp.Visible = false;
+                    //ent.Employees.Remove(emp);
+                    //db.Employees.Remove(emp);
                     db.SaveChanges();
                     viewModel.Success = true;
                     viewModel.ProcessedMessage = "El empleado fue eliminado con éxito";
@@ -345,6 +348,7 @@ namespace SmartAdminMvc.Controllers {
                             PatronalRegistryNo = row[columns[33]],
                             Regime = row[columns[34]],
                             PaymentFrequency = int.Parse(row[columns[35]]),
+                            Visible = true,
                         };
                     
                         db.Employees.AddOrUpdate(emp);

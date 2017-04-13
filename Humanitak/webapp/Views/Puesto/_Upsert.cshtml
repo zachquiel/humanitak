@@ -19,21 +19,25 @@
                     <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
                     <!--#fff0f0 -->
                 }
-                @if (!string.IsNullOrEmpty(Model.Name)) {
-                    <input type="hidden" name="id" id="id" value="@Model.Id"/>
+                else {
+                    if (!string.IsNullOrEmpty(Model.Name)) {
+                         <input type="hidden" name="id" id="id" value="@Model.Id"/>
+                     }
+                    <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.EnterpriseId"/>
+                    <fieldset>
+                        <section>
+                            <label class="input">
+                                <input type="text" name="name" placeholder="Nombre" value="@Model.Name">
+                            </label>
+                        </section>
+                    </fieldset>
                 }
-                <input type="hidden" name="enterpriseId" id="enterpriseId" value="@Model.EnterpriseId" />
-                <fieldset>
-                    <section>
-                        <label class="input">
-                            <input type="text" name="name" placeholder="Nombre" value="@Model.Name">
-                        </label>
-                    </section>
-                </fieldset>
                 <footer>
-                    <button type="button" id="submit" class="btn btn-primary">
-                        Guardar
-                    </button>
+                    @if (!Model.Processed) {
+                        <button type="button" id="submit" class="btn btn-primary">
+                            Guardar
+                        </button>
+                    }
                     <button type="button" id="close" class="btn btn-default">
                         Cerrar
                     </button>

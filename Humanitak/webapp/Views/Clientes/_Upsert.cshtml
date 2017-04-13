@@ -17,16 +17,16 @@
         </div>
         <div id="partialContent" class="modal-body no-padding">
             <form action="@Url.Action("_Upsert", "Cliente")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
-                @if (Model.Processed)
-                {
-                    <header style="background-color:@(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header><!--#fff0f0 -->
+                @if (Model.Processed) {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
                 }
-                @if (!string.IsNullOrEmpty(Model.Name))
-                {
-                    <input type="hidden" name="id" id="id" value="@Model.Id" />
-                    <input type="hidden" name="fiscalId" id="fiscalId" value="@Model.FiscalId" />
-                }
-                <fieldset>
+                else {
+                    if (!string.IsNullOrEmpty(Model.Name)) {
+                        <input type="hidden" name="id" id="id" value="@Model.Id"/>
+                        <input type="hidden" name="fiscalId" id="fiscalId" value="@Model.FiscalId"/>
+                    }
+                    <fieldset>
                     <section>
                         <label class="input">
                             <i class="icon-prepend fa fa-building"></i>
@@ -205,18 +205,16 @@
                     </div>
                     <div class="row">
                         @{
-                            if (Model.LogoImage != null && Model.LogoImage.Length != 0)
-                            {
+                            if (Model.LogoImage != null && Model.LogoImage.Length != 0) {
                                 var logoBase64 = Convert.ToBase64String(Model.LogoImage);
                                 var logoImg = String.Format("data:image/png;base64,{0}", logoBase64);
                                 <section class="col col-2">
-                                    <img width="60vw" src="@logoImg" />
+                                    <img width="60vw" src="@logoImg"/>
                                 </section>
                             }
-                            else
-                            {
+                            else {
                                 <section class="col col-2">
-                                    <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png" />
+                                    <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png"/>
                                 </section>
                             }
                         }
@@ -229,18 +227,16 @@
                     </div>
                     <div class="row">
                         @{
-                            if (Model.LogoImage != null && Model.LogoImage.Length != 0)
-                            {
+                            if (Model.LogoImage != null && Model.LogoImage.Length != 0) {
                                 var headerBase64 = Convert.ToBase64String(Model.LogoImage);
                                 var headerImg = String.Format("data:image/png;base64,{0}", headerBase64);
                                 <section class="col col-2">
-                                    <img width="60vw" src="@headerImg" />
+                                    <img width="60vw" src="@headerImg"/>
                                 </section>
                             }
-                            else
-                            {
+                            else {
                                 <section class="col col-2">
-                                    <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png" />
+                                    <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png"/>
                                 </section>
                             }
                         }
@@ -367,15 +363,17 @@
                             </label>
                         </section>
                     </div>
-                </fieldset>
+                    </fieldset>
+                }
                 <footer>
-                    <button type="button" id="submit" class="btn btn-primary">
-                        Guardar
-                    </button>
+                    @if (!Model.Processed) {
+                        <button type="button" id="submit" class="btn btn-primary">
+                            Guardar
+                        </button>
+                    }
                     <button type="button" id="close" class="btn btn-default">
                         Cerrar
                     </button>
-
                 </footer>
             </form>
         </div>
@@ -393,6 +391,7 @@
     });
 
     $("#submit").on("click", function () {
+        $("#submit").css("display", "none");
         $.ajax({
             url: "/Clientes/_Upsert",
             type: "POST",

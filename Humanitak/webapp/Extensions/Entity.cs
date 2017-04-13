@@ -8,14 +8,14 @@ using SmartAdminMvc.ViewModels;
 namespace SmartAdminMvc.Extensions {
     public static partial class Extensions {
         public static EnterpriseInfoViewModel ToEnterpriseInfoViewModel(this Enterprise enterprise) {
-            var employeeCount = enterprise.Employees.Count;
+            var employeeCount = enterprise.Employees.Count(e => e.Visible);
             return new EnterpriseInfoViewModel {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
                 Departments = enterprise.Departments.Select(d => d.ToDepartmentViewModel(enterprise.Id)).ToList(),
                 Perceptions = enterprise.Perceptions.Select(p => p.ToPerceptionViewModel(enterprise.Id)).ToList(),
                 Positions = enterprise.Positions.Select(p => p.ToPositionViewModel(enterprise.Id)).ToList(),
-                Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList(),
+                Employees = enterprise.Employees.Where(e => e.Visible).Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList(),
                 PayDays = enterprise.PayDays.Select(e => e.ToPayDayViewModel(employeeCount)).ToList()
             };
         }
@@ -24,7 +24,7 @@ namespace SmartAdminMvc.Extensions {
             return new EnterpriseInfoViewModel {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
-                Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList()
+                Employees = enterprise.Employees.Where(e => e.Visible).Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList()
             };
         }
 
@@ -32,7 +32,7 @@ namespace SmartAdminMvc.Extensions {
             return new EnterpriseIncidenceInfoViewModel {
                 Id = enterprise.Id,
                 Name = enterprise.Name,
-                Employees = enterprise.Employees.Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList(),
+                Employees = enterprise.Employees.Where(e => e.Visible).Select(e => e.ToEmployeeViewModel(enterprise.Id)).ToList(),
                 Incidences = incidences.Select(i => i.ToIncidenceViewModel(enterprise.Id)).ToList(),
 
             };
@@ -398,7 +398,7 @@ namespace SmartAdminMvc.Extensions {
         }
 
         public static EnterpriseInfoViewModel ToPaydayListViewModel(this Enterprise enterprise) {
-            var employeeCount = enterprise.Employees.Count;
+            var employeeCount = enterprise.Employees.Count(e => e.Visible);
             return new EnterpriseInfoViewModel {
                 Id = enterprise.Id,
                 Name = enterprise.Name,

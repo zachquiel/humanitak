@@ -43,5 +43,6 @@ namespace SmartAdminMvc.Models {
         public string PatronalRegistryNo { get; set; }
         public string Regime { get; set; }
         public int PaymentFrequency { get; set; }
+        public bool Visible { get; set; }
     }
 }
