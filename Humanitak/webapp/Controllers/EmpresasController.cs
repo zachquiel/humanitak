@@ -22,6 +22,7 @@ namespace SmartAdminMvc.Controllers {
 
         // GET: Catalogo
         public ActionResult Index() {
+            Session["Empresa"] = null;
             var list = new List<EnterpriseViewModel>();
             using (var db = new DataContext()) {
                 var enterprises = db.Enterprises.ToList();
@@ -53,7 +54,9 @@ namespace SmartAdminMvc.Controllers {
         // GET: Catalogo
         public ActionResult Empresa(int id) {
             using (var db = new DataContext()) {
-                return View(db.Enterprises.First(e => e.Id == id).ToEnterpriseReference());
+                var emp = db.Enterprises.First(e => e.Id == id).ToEnterpriseReference();
+                Session["Empresa"] = emp.Name;
+                return View(emp);
             }
         }
 
@@ -116,6 +119,8 @@ namespace SmartAdminMvc.Controllers {
                         Payday1Start = -1,
                         Payday2End = -1,
                         Payday2Start = -1,
+                        Payday3Start = -1,
+                        Payday4Start = -1,
                         State = "0",
                         ParentEnterprise = -1
                     });
@@ -171,6 +176,8 @@ namespace SmartAdminMvc.Controllers {
                         Payday1End = viewModel.Payday1End,
                         Payday2Start = viewModel.Payday2Start,
                         Payday2End = viewModel.Payday2End,
+                        Payday3Start = viewModel.Payday3Start,
+                        Payday4Start = viewModel.Payday4Start,
                         State = viewModel.State,
                         Vat = viewModel.Vat,
                         UsesPunchClock =
@@ -226,6 +233,8 @@ namespace SmartAdminMvc.Controllers {
                 ent.Payday1End = viewModel.Payday1End;
                 ent.Payday2Start = viewModel.Payday2Start;
                 ent.Payday2End = viewModel.Payday2End;
+                ent.Payday3Start = viewModel.Payday3Start;
+                ent.Payday4Start = viewModel.Payday4Start;
                 ent.State = viewModel.State;
                 ent.Vat = viewModel.Vat;
                 ent.UsesPunchClock = viewModel.UsesPunchClock != null &&
@@ -327,9 +336,11 @@ namespace SmartAdminMvc.Controllers {
                         Payday1End = int.Parse(row[columns[2]]),
                         Payday2Start = int.Parse(row[columns[3]]),
                         Payday2End = pay2End,
-                        State = row[columns[7]],
-                        Vat = double.Parse(row[columns[6]]),
-                        UsesPunchClock = !(string.IsNullOrEmpty(row[columns[5]]) || row[columns[5]].ToLower() == "no" || row[columns[5]].ToLower() == "0"),
+                        Payday3Start = int.Parse(row[columns[5]]),
+                        Payday4Start = int.Parse(row[columns[6]]),
+                        State = row[columns[9]],
+                        Vat = double.Parse(row[columns[8]]),
+                        UsesPunchClock = !(string.IsNullOrEmpty(row[columns[7]]) || row[columns[7]].ToLower() == "no" || row[columns[7]].ToLower() == "0"),
                         LastPayday = new DateTime(1970, 1, 1),
                         ParentEnterprise = parentEnt
                     };

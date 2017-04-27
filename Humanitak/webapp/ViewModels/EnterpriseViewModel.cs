@@ -8,6 +8,8 @@ namespace SmartAdminMvc.ViewModels {
         public int Payday1End { get; set; }
         public int Payday2Start { get; set; }
         public int Payday2End { get; set; }
+        public int Payday3Start { get; set; }
+        public int Payday4Start { get; set; }
 
         [DataType(DataType.Upload)]
         public byte[] LogoImage { get; set; }

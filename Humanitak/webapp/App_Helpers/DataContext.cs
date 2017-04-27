@@ -20,5 +20,6 @@ namespace SmartAdminMvc.App_Helpers {
         public DbSet<PayDay> PayDays { get; set; }
         public DbSet<EmployeePayDay> EmployeePayDays { get; set; }
         public DbSet<Incidence> Incidences { get; set; }
+        public DbSet<ResumeInfo> ResumeInfo { get; set; }
     }
 }

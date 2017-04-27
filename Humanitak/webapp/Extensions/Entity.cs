@@ -324,6 +324,8 @@ namespace SmartAdminMvc.Extensions {
                 Payday1End = enterprise.Payday1End,
                 Payday2Start = enterprise.Payday2Start,
                 Payday2End = enterprise.Payday2End,
+                Payday3Start = enterprise.Payday3Start,
+                Payday4Start = enterprise.Payday4Start,
                 LogoImage = enterprise.Logo?.Image,
                 HeaderImage = enterprise.Header?.Image,
                 UsesPunchClock = enterprise.UsesPunchClock ? "1" : "0",

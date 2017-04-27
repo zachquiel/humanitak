@@ -10,8 +10,8 @@ namespace SmartAdminMvc.Controllers
     public class HomeController : Controller
     {
         // GET: home/index
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
+            Session["Empresa"] = null;
             return View();
         }
     }

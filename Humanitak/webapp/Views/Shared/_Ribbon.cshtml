@@ -3,12 +3,17 @@
 
     
 
-    <div id="preBCLabel" style="color: #e4e4e4 !important; display: inline-block; margin: 0; padding: 11px 34px 11px 0 !important; vertical-align: top;">
-        
-    </div>
+    
     <!-- breadcrumb -->
-    <ol class="breadcrumb">
+    <ol class="breadcrumb" style="padding: 11px 5px 11px 0 !important">
     </ol>
+    <div id="preBCLabel" style="color: #e4e4e4 !important; display: inline-block; margin: 0; padding: 11px 34px 11px 0 !important; vertical-align: top;">
+        @if (Session["Empresa"] != null)
+        {
+            @("/       " + Session["Empresa"])
+            
+        }
+    </div>
     <!-- end breadcrumb -->
     <!-- You can also add more buttons to the
     ribbon for further usability

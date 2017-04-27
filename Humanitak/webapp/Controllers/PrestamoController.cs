@@ -11,6 +11,7 @@ namespace SmartAdminMvc.Controllers
         // GET: Prestamo
         public ActionResult Index()
         {
+            Session["Empresa"] = null;
             return View();
         }
         public ActionResult Detalle()

@@ -11,6 +11,7 @@ namespace SmartAdminMvc.Controllers
         // GET: Dispersiones
         public ActionResult Index()
         {
+            Session["Empresa"] = null;
             return View();
         }
     }

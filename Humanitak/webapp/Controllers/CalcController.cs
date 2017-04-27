@@ -11,7 +11,9 @@ namespace SmartAdminMvc.Controllers
     public class CalcController : Controller {
         // GET: Calc
         [HttpGet]
-        public ActionResult Index() {
+        public ActionResult Index()
+        {
+            Session["Empresa"] = null;
             return View(new SalaryComponentsViewModel {
                 IsrDeductionSubsidy = 0,
                 MonthlyImss = 0,

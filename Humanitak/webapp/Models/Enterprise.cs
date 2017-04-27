@@ -12,6 +12,8 @@ namespace SmartAdminMvc.Models {
         public int Payday1End { get; set; }
         public int Payday2Start { get; set; }
         public int Payday2End { get; set; }
+        public int Payday3Start { get; set; }
+        public int Payday4Start { get; set; }
         public virtual EnterpriseImage Logo { get; set; }
         public virtual EnterpriseImage Header { get; set; }
         public bool UsesPunchClock { get; set; }

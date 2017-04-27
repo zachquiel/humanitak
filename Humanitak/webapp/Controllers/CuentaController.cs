@@ -11,6 +11,7 @@ namespace SmartAdminMvc.Controllers
         // GET: Cuenta
         public ActionResult Index()
         {
+            Session["Empresa"] = null;
             return View();
         }
     }

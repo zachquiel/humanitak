@@ -15,6 +15,7 @@ namespace SmartAdminMvc.Controllers {
         private readonly UserManager _manager = UserManager.Create();
 
         public ActionResult Index() {
+            Session["Empresa"] = null;
             var list = new List<AccountRegistrationViewModel>();
             using (var db = new DataContext()) {
                 // ReSharper disable once LoopCanBeConvertedToQuery

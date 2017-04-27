@@ -17,6 +17,7 @@ namespace SmartAdminMvc.Controllers {
     public class ClientesController : Controller {
         // GET: Catalogo
         public ActionResult Index() {
+            Session["Empresa"] = null;
             var list = new List<ClientViewModel>();
             using (var db = new DataContext()) {
                 // ReSharper disable once LoopCanBeConvertedToQuery
@@ -27,6 +28,7 @@ namespace SmartAdminMvc.Controllers {
 
         // GET: Catalogo
         public ActionResult Cliente(int id) {
+            Session["Empresa"] = null;
             using (var db = new DataContext()) {
                 return View(db.Clients.First(e => e.Id == id).ToClientFullViewModel());
             }

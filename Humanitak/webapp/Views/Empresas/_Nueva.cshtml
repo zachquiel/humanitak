@@ -1,363 +1,434 @@
-﻿@using SmartAdminMvc.ViewModels
-@model EnterpriseInsertViewModel
+﻿@model SmartAdminMvc.ViewModels.EnterpriseInsertViewModel
 <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" id="laX" aria-hidden="true">
-                &times;
-            </button>
-            @if (string.IsNullOrEmpty(Model.Name)) {
-                <h4 class="modal-title">Nueva Empresa </h4>
-            } else {
-                <h4 class="modal-title">Editar Empresa </h4>
-            }
-        </div>
-        <div id="partialContent" class="modal-body no-padding">
-            <form action="@Url.Action("_Nueva", "Empresas")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
-                @if (Model.Processed) {
-                    <header style="background-color:@(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header><!--#fff0f0 -->
-                }
-                @if (!string.IsNullOrEmpty(Model.Name)) {
-                    <input type="hidden" name="id" id="id" value="@Model.Id"/>
-                }
-                <fieldset>
-                    <section>
-                        <label class="input">
-                            <i class="icon-prepend fa fa-building"></i>
-                            <input type="text" name="name" placeholder="Razón Social" value="@Model.Name">
-                        </label>
-                    </section>
-                    <div class="row">
-                        <section class="col col-3">
-                            Primera Quincena
-                        </section>
-                        <section class="col col-1">De:</section>
-                        <section class="col col-3">
-                            <label class="select">
-                                <select name="payday1Start" value="@Model.Payday1Start">
-                                    <option value="-1" @Html.Raw((Model.Payday1Start == -1) ? "selected=\"\"" : "") disabled="">Día</option>
-                                    <option value="1" @Html.Raw((Model.Payday1Start == 1) ? "selected=\"\"" : "")>1</option>
-                                    <option value="2" @Html.Raw((Model.Payday1Start == 2) ? "selected=\"\"" : "")>2</option>
-                                    <option value="3" @Html.Raw((Model.Payday1Start == 3) ? "selected=\"\"" : "")>3</option>
-                                    <option value="4" @Html.Raw((Model.Payday1Start == 4) ? "selected=\"\"" : "")>4</option>
-                                    <option value="5" @Html.Raw((Model.Payday1Start == 5) ? "selected=\"\"" : "")>5</option>
-                                    <option value="6" @Html.Raw((Model.Payday1Start == 6) ? "selected=\"\"" : "")>6</option>
-                                    <option value="7" @Html.Raw((Model.Payday1Start == 7) ? "selected=\"\"" : "")>7</option>
-                                    <option value="8" @Html.Raw((Model.Payday1Start == 8) ? "selected=\"\"" : "")>8</option>
-                                    <option value="9" @Html.Raw((Model.Payday1Start == 9) ? "selected=\"\"" : "")>9</option>
-                                    <option value="10" @Html.Raw((Model.Payday1Start == 10) ? "selected=\"\"" : "")>10</option>
-                                    <option value="11" @Html.Raw((Model.Payday1Start == 11) ? "selected=\"\"" : "")>11</option>
-                                    <option value="12" @Html.Raw((Model.Payday1Start == 12) ? "selected=\"\"" : "")>12</option>
-                                    <option value="13" @Html.Raw((Model.Payday1Start == 13) ? "selected=\"\"" : "")>13</option>
-                                    <option value="14" @Html.Raw((Model.Payday1Start == 14) ? "selected=\"\"" : "")>14</option>
-                                    <option value="15" @Html.Raw((Model.Payday1Start == 15) ? "selected=\"\"" : "")>15</option>
-                                    <option value="16" @Html.Raw((Model.Payday1Start == 16) ? "selected=\"\"" : "")>16</option>
-                                    <option value="17" @Html.Raw((Model.Payday1Start == 17) ? "selected=\"\"" : "")>17</option>
-                                    <option value="18" @Html.Raw((Model.Payday1Start == 18) ? "selected=\"\"" : "")>18</option>
-                                    <option value="19" @Html.Raw((Model.Payday1Start == 19) ? "selected=\"\"" : "")>19</option>
-                                    <option value="20" @Html.Raw((Model.Payday1Start == 20) ? "selected=\"\"" : "")>20</option>
-                                    <option value="21" @Html.Raw((Model.Payday1Start == 21) ? "selected=\"\"" : "")>21</option>
-                                    <option value="22" @Html.Raw((Model.Payday1Start == 22) ? "selected=\"\"" : "")>22</option>
-                                    <option value="23" @Html.Raw((Model.Payday1Start == 23) ? "selected=\"\"" : "")>23</option>
-                                    <option value="24" @Html.Raw((Model.Payday1Start == 24) ? "selected=\"\"" : "")>24</option>
-                                    <option value="25" @Html.Raw((Model.Payday1Start == 25) ? "selected=\"\"" : "")>25</option>
-                                    <option value="26" @Html.Raw((Model.Payday1Start == 26) ? "selected=\"\"" : "")>26</option>
-                                    <option value="27" @Html.Raw((Model.Payday1Start == 27) ? "selected=\"\"" : "")>27</option>
-                                    <option value="28" @Html.Raw((Model.Payday1Start == 28) ? "selected=\"\"" : "")>28</option>
-                                    <option value="29" @Html.Raw((Model.Payday1Start == 29) ? "selected=\"\"" : "")>29</option>
-                                    <option value="30" @Html.Raw((Model.Payday1Start == 30) ? "selected=\"\"" : "")>30</option>
-                                    <option value="31" @Html.Raw((Model.Payday1Start == 31) ? "selected=\"\"" : "")>31</option>
-                                    <option value="0" @Html.Raw((Model.Payday1Start == 0) ? "selected=\"\"" : "")>Último</option>
-                                </select> <i></i>
-                            </label>
-                        </section>
-                        <section class="col col-1">A:</section>
-                        <section class="col col-3">
-                            <label class="select">
-                                <select name="payday1End" value="@Model.Payday1End">
-                                    <option value="-1" @Html.Raw((Model.Payday1End == -1) ? "selected=\"\"" : "") disabled="">Día</option>
-                                    <option value="1" @Html.Raw((Model.Payday1End == 1) ? "selected=\"\"" : "")>1</option>
-                                    <option value="2" @Html.Raw((Model.Payday1End == 2) ? "selected=\"\"" : "")>2</option>
-                                    <option value="3" @Html.Raw((Model.Payday1End == 3) ? "selected=\"\"" : "")>3</option>
-                                    <option value="4" @Html.Raw((Model.Payday1End == 4) ? "selected=\"\"" : "")>4</option>
-                                    <option value="5" @Html.Raw((Model.Payday1End == 5) ? "selected=\"\"" : "")>5</option>
-                                    <option value="6" @Html.Raw((Model.Payday1End == 6) ? "selected=\"\"" : "")>6</option>
-                                    <option value="7" @Html.Raw((Model.Payday1End == 7) ? "selected=\"\"" : "")>7</option>
-                                    <option value="8" @Html.Raw((Model.Payday1End == 8) ? "selected=\"\"" : "")>8</option>
-                                    <option value="9" @Html.Raw((Model.Payday1End == 9) ? "selected=\"\"" : "")>9</option>
-                                    <option value="10" @Html.Raw((Model.Payday1End == 10) ? "selected=\"\"" : "")>10</option>
-                                    <option value="11" @Html.Raw((Model.Payday1End == 11) ? "selected=\"\"" : "")>11</option>
-                                    <option value="12" @Html.Raw((Model.Payday1End == 12) ? "selected=\"\"" : "")>12</option>
-                                    <option value="13" @Html.Raw((Model.Payday1End == 13) ? "selected=\"\"" : "")>13</option>
-                                    <option value="14" @Html.Raw((Model.Payday1End == 14) ? "selected=\"\"" : "")>14</option>
-                                    <option value="15" @Html.Raw((Model.Payday1End == 15) ? "selected=\"\"" : "")>15</option>
-                                    <option value="16" @Html.Raw((Model.Payday1End == 16) ? "selected=\"\"" : "")>16</option>
-                                    <option value="17" @Html.Raw((Model.Payday1End == 17) ? "selected=\"\"" : "")>17</option>
-                                    <option value="18" @Html.Raw((Model.Payday1End == 18) ? "selected=\"\"" : "")>18</option>
-                                    <option value="19" @Html.Raw((Model.Payday1End == 19) ? "selected=\"\"" : "")>19</option>
-                                    <option value="20" @Html.Raw((Model.Payday1End == 20) ? "selected=\"\"" : "")>20</option>
-                                    <option value="21" @Html.Raw((Model.Payday1End == 21) ? "selected=\"\"" : "")>21</option>
-                                    <option value="22" @Html.Raw((Model.Payday1End == 22) ? "selected=\"\"" : "")>22</option>
-                                    <option value="23" @Html.Raw((Model.Payday1End == 23) ? "selected=\"\"" : "")>23</option>
-                                    <option value="24" @Html.Raw((Model.Payday1End == 24) ? "selected=\"\"" : "")>24</option>
-                                    <option value="25" @Html.Raw((Model.Payday1End == 25) ? "selected=\"\"" : "")>25</option>
-                                    <option value="26" @Html.Raw((Model.Payday1End == 26) ? "selected=\"\"" : "")>26</option>
-                                    <option value="27" @Html.Raw((Model.Payday1End == 27) ? "selected=\"\"" : "")>27</option>
-                                    <option value="28" @Html.Raw((Model.Payday1End == 28) ? "selected=\"\"" : "")>28</option>
-                                    <option value="29" @Html.Raw((Model.Payday1End == 29) ? "selected=\"\"" : "")>29</option>
-                                    <option value="30" @Html.Raw((Model.Payday1End == 30) ? "selected=\"\"" : "")>30</option>
-                                    <option value="31" @Html.Raw((Model.Payday1End == 31) ? "selected=\"\"" : "")>31</option>
-                                    <option value="0" @Html.Raw((Model.Payday1End == 0) ? "selected=\"\"" : "")>Último</option>
-                                </select> <i></i>
-                            </label>
-                        </section>
-                    </div>
-                <div class="row">
-                    <section class="col col-3">
-                        Segunda Quincena
-                    </section>
-                    <section class="col col-1">De:</section>
-                    <section class="col col-3">
-                        <label class="select">
-                            <select name="payday2Start" value="@Model.Payday2Start">
-                                <option value="-1" @Html.Raw((Model.Payday2Start == -1) ? "selected=\"\"" : "") disabled="">Día</option>
-                                <option value="1" @Html.Raw((Model.Payday2Start == 1) ? "selected=\"\"" : "")>1</option>
-                                <option value="2" @Html.Raw((Model.Payday2Start == 2) ? "selected=\"\"" : "")>2</option>
-                                <option value="3" @Html.Raw((Model.Payday2Start == 3) ? "selected=\"\"" : "")>3</option>
-                                <option value="4" @Html.Raw((Model.Payday2Start == 4) ? "selected=\"\"" : "")>4</option>
-                                <option value="5" @Html.Raw((Model.Payday2Start == 5) ? "selected=\"\"" : "")>5</option>
-                                <option value="6" @Html.Raw((Model.Payday2Start == 6) ? "selected=\"\"" : "")>6</option>
-                                <option value="7" @Html.Raw((Model.Payday2Start == 7) ? "selected=\"\"" : "")>7</option>
-                                <option value="8" @Html.Raw((Model.Payday2Start == 8) ? "selected=\"\"" : "")>8</option>
-                                <option value="9" @Html.Raw((Model.Payday2Start == 9) ? "selected=\"\"" : "")>9</option>
-                                <option value="10" @Html.Raw((Model.Payday2Start == 10) ? "selected=\"\"" : "")>10</option>
-                                <option value="11" @Html.Raw((Model.Payday2Start == 11) ? "selected=\"\"" : "")>11</option>
-                                <option value="12" @Html.Raw((Model.Payday2Start == 12) ? "selected=\"\"" : "")>12</option>
-                                <option value="13" @Html.Raw((Model.Payday2Start == 13) ? "selected=\"\"" : "")>13</option>
-                                <option value="14" @Html.Raw((Model.Payday2Start == 14) ? "selected=\"\"" : "")>14</option>
-                                <option value="15" @Html.Raw((Model.Payday2Start == 15) ? "selected=\"\"" : "")>15</option>
-                                <option value="16" @Html.Raw((Model.Payday2Start == 16) ? "selected=\"\"" : "")>16</option>
-                                <option value="17" @Html.Raw((Model.Payday2Start == 17) ? "selected=\"\"" : "")>17</option>
-                                <option value="18" @Html.Raw((Model.Payday2Start == 18) ? "selected=\"\"" : "")>18</option>
-                                <option value="19" @Html.Raw((Model.Payday2Start == 19) ? "selected=\"\"" : "")>19</option>
-                                <option value="20" @Html.Raw((Model.Payday2Start == 20) ? "selected=\"\"" : "")>20</option>
-                                <option value="21" @Html.Raw((Model.Payday2Start == 21) ? "selected=\"\"" : "")>21</option>
-                                <option value="22" @Html.Raw((Model.Payday2Start == 22) ? "selected=\"\"" : "")>22</option>
-                                <option value="23" @Html.Raw((Model.Payday2Start == 23) ? "selected=\"\"" : "")>23</option>
-                                <option value="24" @Html.Raw((Model.Payday2Start == 24) ? "selected=\"\"" : "")>24</option>
-                                <option value="25" @Html.Raw((Model.Payday2Start == 25) ? "selected=\"\"" : "")>25</option>
-                                <option value="26" @Html.Raw((Model.Payday2Start == 26) ? "selected=\"\"" : "")>26</option>
-                                <option value="27" @Html.Raw((Model.Payday2Start == 27) ? "selected=\"\"" : "")>27</option>
-                                <option value="28" @Html.Raw((Model.Payday2Start == 28) ? "selected=\"\"" : "")>28</option>
-                                <option value="29" @Html.Raw((Model.Payday2Start == 29) ? "selected=\"\"" : "")>29</option>
-                                <option value="30" @Html.Raw((Model.Payday2Start == 30) ? "selected=\"\"" : "")>30</option>
-                                <option value="31" @Html.Raw((Model.Payday2Start == 31) ? "selected=\"\"" : "")>31</option>
-                                <option value="0" @Html.Raw((Model.Payday2Start == 0) ? "selected=\"\"" : "")>Último</option>
-                            </select> <i></i>
-                        </label>
-                    </section>
-                    <section class="col col-1">A:</section>
-                    <section class="col col-3">
-                        <label class="select">
-                            <select name="payday2End" value="@Model.Payday2End">
-                                <option value="-1" @Html.Raw((Model.Payday2End == -1) ? "selected=\"\"" : "") disabled="">Día</option>
-                                <option value="1" @Html.Raw((Model.Payday2End == 1) ? "selected=\"\"" : "")>1</option>
-                                <option value="2" @Html.Raw((Model.Payday2End == 2) ? "selected=\"\"" : "")>2</option>
-                                <option value="3" @Html.Raw((Model.Payday2End == 3) ? "selected=\"\"" : "")>3</option>
-                                <option value="4" @Html.Raw((Model.Payday2End == 4) ? "selected=\"\"" : "")>4</option>
-                                <option value="5" @Html.Raw((Model.Payday2End == 5) ? "selected=\"\"" : "")>5</option>
-                                <option value="6" @Html.Raw((Model.Payday2End == 6) ? "selected=\"\"" : "")>6</option>
-                                <option value="7" @Html.Raw((Model.Payday2End == 7) ? "selected=\"\"" : "")>7</option>
-                                <option value="8" @Html.Raw((Model.Payday2End == 8) ? "selected=\"\"" : "")>8</option>
-                                <option value="9" @Html.Raw((Model.Payday2End == 9) ? "selected=\"\"" : "")>9</option>
-                                <option value="10" @Html.Raw((Model.Payday2End == 10) ? "selected=\"\"" : "")>10</option>
-                                <option value="11" @Html.Raw((Model.Payday2End == 11) ? "selected=\"\"" : "")>11</option>
-                                <option value="12" @Html.Raw((Model.Payday2End == 12) ? "selected=\"\"" : "")>12</option>
-                                <option value="13" @Html.Raw((Model.Payday2End == 13) ? "selected=\"\"" : "")>13</option>
-                                <option value="14" @Html.Raw((Model.Payday2End == 14) ? "selected=\"\"" : "")>14</option>
-                                <option value="15" @Html.Raw((Model.Payday2End == 15) ? "selected=\"\"" : "")>15</option>
-                                <option value="16" @Html.Raw((Model.Payday2End == 16) ? "selected=\"\"" : "")>16</option>
-                                <option value="17" @Html.Raw((Model.Payday2End == 17) ? "selected=\"\"" : "")>17</option>
-                                <option value="18" @Html.Raw((Model.Payday2End == 18) ? "selected=\"\"" : "")>18</option>
-                                <option value="19" @Html.Raw((Model.Payday2End == 19) ? "selected=\"\"" : "")>19</option>
-                                <option value="20" @Html.Raw((Model.Payday2End == 20) ? "selected=\"\"" : "")>20</option>
-                                <option value="21" @Html.Raw((Model.Payday2End == 21) ? "selected=\"\"" : "")>21</option>
-                                <option value="22" @Html.Raw((Model.Payday2End == 22) ? "selected=\"\"" : "")>22</option>
-                                <option value="23" @Html.Raw((Model.Payday2End == 23) ? "selected=\"\"" : "")>23</option>
-                                <option value="24" @Html.Raw((Model.Payday2End == 24) ? "selected=\"\"" : "")>24</option>
-                                <option value="25" @Html.Raw((Model.Payday2End == 25) ? "selected=\"\"" : "")>25</option>
-                                <option value="26" @Html.Raw((Model.Payday2End == 26) ? "selected=\"\"" : "")>26</option>
-                                <option value="27" @Html.Raw((Model.Payday2End == 27) ? "selected=\"\"" : "")>27</option>
-                                <option value="28" @Html.Raw((Model.Payday2End == 28) ? "selected=\"\"" : "")>28</option>
-                                <option value="29" @Html.Raw((Model.Payday2End == 29) ? "selected=\"\"" : "")>29</option>
-                                <option value="30" @Html.Raw((Model.Payday2End == 30) ? "selected=\"\"" : "")>30</option>
-                                <option value="31" @Html.Raw((Model.Payday2End == 31) ? "selected=\"\"" : "")>31</option>
-                                <option value="0" @Html.Raw((Model.Payday2End == 0) ? "selected=\"\"" : "")>Último</option>
-                            </select> <i></i>
-                        </label>
-                    </section>
-                </div>
-                <div class="row">
-                    @{
-                        if (Model.LogoImage != null && Model.LogoImage.Length != 0) {
-                            var logoBase64 = Convert.ToBase64String(Model.LogoImage);
-                            var logoImg = String.Format("data:image/png;base64,{0}", logoBase64);
-                            <section class="col col-2">
-                                <img width="60vw" src="@logoImg"/>
-                            </section>
-                        } else {
-                            <section class="col col-2">
-                                <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png" />
-                            </section>
-                        }
-                    }
-                    
-                    <section class="col col-10">
-                        <div class="input input-file">
-                            <span class="button"><input value="@Model.LogoImage" id="logoImage" type="file" name="logoImage" onchange="this.parentNode.nextSibling.value = this.value">Examinar</span><input type="text" placeholder="Logo" readonly="">
-                        </div>
-                    </section>
-                </div>
-                    <div class="row">
-                        @{
-                            if (Model.LogoImage != null && Model.LogoImage.Length != 0) {
-                                var headerBase64 = Convert.ToBase64String(Model.LogoImage);
-                                var headerImg = String.Format("data:image/png;base64,{0}", headerBase64);
-                                <section class="col col-2">
-                                    <img width="60vw" src="@headerImg" />
-                                </section>
-                            } else {
-                                <section class="col col-2">
-                                    <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png" />
-                                </section>
-                            }
-                        }
-                        <section class="col col-10">
-                            <div class="input input-file">
-                                <span class="button"><input value="@Model.HeaderImage" id="headerImage" type="file" name="headerImage" onchange="this.parentNode.nextSibling.value = this.value">Examinar</span><input type="text" placeholder="Encabezado" readonly="">
-                            </div>
-                        </section>
-                    </div>
-                        <div class="row">
-                            <section class="col col-6">
-                                <label class="checkbox">
-                                    <input type="checkbox" validate="" name="usesPunchClock" id="usesPunchClock" 
-                                    value="@Model.UsesPunchClock" @Html.Raw((Model.UsesPunchClock == "1") ? "checked" : "")>
-                                    <i></i>¿Utiliza reloj checador?
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row">
-                            <section class="col col-6">
-                                <label class="input">
-                                    <i class="icon-prepend fa fa-dollar"></i>
-                                    <input type="number" name="vat" placeholder="IVA (%)" value="@Model.Vat">
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row">
-                            <section class="col col-6">
-                                <label class="select">
-                                    <select name="state" value="@Model.State">
-                                        <option value="0" @Html.Raw((Model.State == "0") ? "selected=\"\"" : "")  disabled="">Entidad Federativa</option>
-                                        <option @Html.Raw((Model.State == "Aguascalientes") ? "selected=\"\"" : "") value="Aguascalientes">Aguascalientes</option>
-                                        <option @Html.Raw((Model.State == "Baja California") ? "selected=\"\"" : "") value="Baja California">Baja California</option>
-                                        <option @Html.Raw((Model.State == "Baja California Sur") ? "selected=\"\"" : "") value="Baja California Sur">Baja California Sur</option>
-                                        <option @Html.Raw((Model.State == "Campeche") ? "selected=\"\"" : "") value="Campeche">Campeche</option>
-                                        <option @Html.Raw((Model.State == "Chiapas") ? "selected=\"\"" : "") value="Chiapas">Chiapas</option>
-                                        <option @Html.Raw((Model.State == "Chihuahua") ? "selected=\"\"" : "") value="Chihuahua">Chihuahua</option>
-                                        <option @Html.Raw((Model.State == "Ciudad de México") ? "selected=\"\"" : "") value="Ciudad de México">Ciudad de México</option>
-                                        <option @Html.Raw((Model.State == "Coahuila de Zaragoza") ? "selected=\"\"" : "") value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
-                                        <option @Html.Raw((Model.State == "Colima") ? "selected=\"\"" : "") value="Colima">Colima</option>
-                                        <option @Html.Raw((Model.State == "Durango") ? "selected=\"\"" : "") value="Durango">Durango</option>
-                                        <option @Html.Raw((Model.State == "Guanajuato") ? "selected=\"\"" : "") value="Guanajuato">Guanajuato</option>
-                                        <option @Html.Raw((Model.State == "Guerrero") ? "selected=\"\"" : "") value="Guerrero">Guerrero</option>
-                                        <option @Html.Raw((Model.State == "Hidalgo") ? "selected=\"\"" : "") value="Hidalgo">Hidalgo</option>
-                                        <option @Html.Raw((Model.State == "Jalisco") ? "selected=\"\"" : "") value="Jalisco">Jalisco</option>
-                                        <option @Html.Raw((Model.State == "México") ? "selected=\"\"" : "") value="México">México</option>
-                                        <option @Html.Raw((Model.State == "Michoacán de Ocampo") ? "selected=\"\"" : "") value="Michoacán de Ocampo">Michoacán de Ocampo</option>
-                                        <option @Html.Raw((Model.State == "Morelos") ? "selected=\"\"" : "") value="Morelos">Morelos</option>
-                                        <option @Html.Raw((Model.State == "Nayarit") ? "selected=\"\"" : "") value="Nayarit">Nayarit</option>
-                                        <option @Html.Raw((Model.State == "Nuevo León") ? "selected=\"\"" : "") value="Nuevo León">Nuevo León</option>
-                                        <option @Html.Raw((Model.State == "Oaxaca") ? "selected=\"\"" : "") value="Oaxaca">Oaxaca</option>
-                                        <option @Html.Raw((Model.State == "Puebla") ? "selected=\"\"" : "") value="Puebla">Puebla</option>
-                                        <option @Html.Raw((Model.State == "Querétaro de Arteaga") ? "selected=\"\"" : "") value="Querétaro de Arteaga">Querétaro de Arteaga</option>
-                                        <option @Html.Raw((Model.State == "Quintana Roo") ? "selected=\"\"" : "") value="Quintana Roo">Quintana Roo</option>
-                                        <option @Html.Raw((Model.State == "San Luis Potosí") ? "selected=\"\"" : "") value="San Luis Potosí">San Luis Potosí</option>
-                                        <option @Html.Raw((Model.State == "Sinaloa") ? "selected=\"\"" : "") value="Sinaloa">Sinaloa</option>
-                                        <option @Html.Raw((Model.State == "Sonora") ? "selected=\"\"" : "") value="Sonora">Sonora</option>
-                                        <option @Html.Raw((Model.State == "Tabasco") ? "selected=\"\"" : "") value="Tabasco">Tabasco</option>
-                                        <option @Html.Raw((Model.State == "Tamaulipas") ? "selected=\"\"" : "") value="Tamaulipas">Tamaulipas</option>
-                                        <option @Html.Raw((Model.State == "Tlaxcala") ? "selected=\"\"" : "") value="Tlaxcala">Tlaxcala</option>
-                                        <option @Html.Raw((Model.State == "Veracruz de Ignacio de la Llave") ? "selected=\"\"" : "") value="Veracruz de Ignacio de la Llave">Veracruz de Ignacio de la Llave</option>
-                                        <option @Html.Raw((Model.State == "Yucatán") ? "selected=\"\"" : "") value="Yucatán">Yucatán</option>
-                                        <option @Html.Raw((Model.State == "Zacatecas") ? "selected=\"\"" : "") value="Zacatecas">Zacatecas</option>
-                                    </select> <i></i>
-                                </label>
-                            </section>
-                            <section class="col col-6">
-                                <label class="input">
-                                    <i class=""></i>
-                                    <input type="text" name="city" placeholder="Ciudad" value="@Model.City">
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row">
-                            <section class="col col-6">
-                                <label class="select">
-                                    <select name="parentEnterprise" value="@Model.Enterprises">
-                                        <option value="0" @Html.Raw((Model.ParentEnterprise == -1) ? "selected=\"\"" : "") disabled="">Depende de...</option>
-                                        @foreach (var item in Model.Enterprises) {
-                                            <option @Html.Raw((Model.ParentEnterprise == @item.Id) ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
-                                        }
-                                        <option @Html.Raw((Model.ParentEnterprise == 0) ? "selected=\"\"" : "") value="0">Ninguna</option>
-                                    </select> <i></i>
-                                </label>
-                            </section>
-                            <section class="col col-6">
-                                <label class="select">
-                                    <select name="operations" value="@Model.Operations">
-                                        <option @Html.Raw((Model.Operations == "0") ? "selected=\"\"" : "") value="0" selected="" disabled="">Operaciones</option>
-                                        <option @Html.Raw((Model.Operations == "A") ? "selected=\"\"" : "") value="A">A</option>
-                                        <option @Html.Raw((Model.Operations == "B") ? "selected=\"\"" : "") value="B">B</option>
-                                    </select> <i></i>
-                                </label>
-                            </section>
-                        </div>
-                </fieldset>
-                <footer>
-                    <button type="button" id="submit" class="btn btn-primary">
-                        Guardar
-                    </button>
-                    <button type="button" id="close" class="btn btn-default">
-                        Cerrar
-                    </button>
+<div class="modal-content">
+<div class="modal-header">
+    <button type="button" class="close" id="laX" aria-hidden="true">
+        &times;
+    </button>
+    @if (string.IsNullOrEmpty(Model.Name)) {
+        <h4 class="modal-title">Nueva Empresa </h4>
+    }
+    else {
+        <h4 class="modal-title">Editar Empresa </h4>
+    }
+</div>
+<div id="partialContent" class="modal-body no-padding">
+<form action="@Url.Action("_Nueva", "Empresas")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+@if (Model.Processed) {
+    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+    <!--#fff0f0 -->
+}
+@if (!string.IsNullOrEmpty(Model.Name)) {
+    <input type="hidden" name="id" id="id" value="@Model.Id"/>
+}
+<fieldset>
+<section>
+    <label class="input">
+        <i class="icon-prepend fa fa-building"></i>
+        <input type="text" name="name" placeholder="Razón Social" value="@Model.Name">
+    </label>
+</section>
+<div class="row">
+    <section class="col col-3">
+        Pago mensual
+    </section>
+    <section class="col col-1">Día:</section>
+    <section class="col col-3">
+        <label class="select">
+            <select name="payday3Start" value="@Model.Payday3Start">
+                <option value="-1" @Html.Raw(Model.Payday3Start == -1 ? "selected=\"\"" : "") disabled="">Día</option>
+                <option value="1" @Html.Raw(Model.Payday3Start == 1 ? "selected=\"\"" : "")>1</option>
+                <option value="2" @Html.Raw(Model.Payday3Start == 2 ? "selected=\"\"" : "")>2</option>
+                <option value="3" @Html.Raw(Model.Payday3Start == 3 ? "selected=\"\"" : "")>3</option>
+                <option value="4" @Html.Raw(Model.Payday3Start == 4 ? "selected=\"\"" : "")>4</option>
+                <option value="5" @Html.Raw(Model.Payday3Start == 5 ? "selected=\"\"" : "")>5</option>
+                <option value="6" @Html.Raw(Model.Payday3Start == 6 ? "selected=\"\"" : "")>6</option>
+                <option value="7" @Html.Raw(Model.Payday3Start == 7 ? "selected=\"\"" : "")>7</option>
+                <option value="8" @Html.Raw(Model.Payday3Start == 8 ? "selected=\"\"" : "")>8</option>
+                <option value="9" @Html.Raw(Model.Payday3Start == 9 ? "selected=\"\"" : "")>9</option>
+                <option value="10" @Html.Raw(Model.Payday3Start == 10 ? "selected=\"\"" : "")>10</option>
+                <option value="11" @Html.Raw(Model.Payday3Start == 11 ? "selected=\"\"" : "")>11</option>
+                <option value="12" @Html.Raw(Model.Payday3Start == 12 ? "selected=\"\"" : "")>12</option>
+                <option value="13" @Html.Raw(Model.Payday3Start == 13 ? "selected=\"\"" : "")>13</option>
+                <option value="14" @Html.Raw(Model.Payday3Start == 14 ? "selected=\"\"" : "")>14</option>
+                <option value="15" @Html.Raw(Model.Payday3Start == 15 ? "selected=\"\"" : "")>15</option>
+                <option value="16" @Html.Raw(Model.Payday3Start == 16 ? "selected=\"\"" : "")>16</option>
+                <option value="17" @Html.Raw(Model.Payday3Start == 17 ? "selected=\"\"" : "")>17</option>
+                <option value="18" @Html.Raw(Model.Payday3Start == 18 ? "selected=\"\"" : "")>18</option>
+                <option value="19" @Html.Raw(Model.Payday3Start == 19 ? "selected=\"\"" : "")>19</option>
+                <option value="20" @Html.Raw(Model.Payday3Start == 20 ? "selected=\"\"" : "")>20</option>
+                <option value="21" @Html.Raw(Model.Payday3Start == 21 ? "selected=\"\"" : "")>21</option>
+                <option value="22" @Html.Raw(Model.Payday3Start == 22 ? "selected=\"\"" : "")>22</option>
+                <option value="23" @Html.Raw(Model.Payday3Start == 23 ? "selected=\"\"" : "")>23</option>
+                <option value="24" @Html.Raw(Model.Payday3Start == 24 ? "selected=\"\"" : "")>24</option>
+                <option value="25" @Html.Raw(Model.Payday3Start == 25 ? "selected=\"\"" : "")>25</option>
+                <option value="26" @Html.Raw(Model.Payday3Start == 26 ? "selected=\"\"" : "")>26</option>
+                <option value="27" @Html.Raw(Model.Payday3Start == 27 ? "selected=\"\"" : "")>27</option>
+                <option value="28" @Html.Raw(Model.Payday3Start == 28 ? "selected=\"\"" : "")>28</option>
+                <option value="29" @Html.Raw(Model.Payday3Start == 29 ? "selected=\"\"" : "")>29</option>
+                <option value="30" @Html.Raw(Model.Payday3Start == 30 ? "selected=\"\"" : "")>30</option>
+                <option value="31" @Html.Raw(Model.Payday3Start == 31 ? "selected=\"\"" : "")>31</option>
+                <option value="0" @Html.Raw(Model.Payday3Start == 0 ? "selected=\"\"" : "")>Último</option>
+            </select> <i></i>
+        </label>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-3">
+        Primera Quincena
+    </section>
+    <section class="col col-1">De:</section>
+    <section class="col col-3">
+        <label class="select">
+            <select name="payday1Start" value="@Model.Payday1Start">
+                <option value="-1" @Html.Raw(Model.Payday1Start == -1 ? "selected=\"\"" : "") disabled="">Día</option>
+                <option value="1" @Html.Raw(Model.Payday1Start == 1 ? "selected=\"\"" : "")>1</option>
+                <option value="2" @Html.Raw(Model.Payday1Start == 2 ? "selected=\"\"" : "")>2</option>
+                <option value="3" @Html.Raw(Model.Payday1Start == 3 ? "selected=\"\"" : "")>3</option>
+                <option value="4" @Html.Raw(Model.Payday1Start == 4 ? "selected=\"\"" : "")>4</option>
+                <option value="5" @Html.Raw(Model.Payday1Start == 5 ? "selected=\"\"" : "")>5</option>
+                <option value="6" @Html.Raw(Model.Payday1Start == 6 ? "selected=\"\"" : "")>6</option>
+                <option value="7" @Html.Raw(Model.Payday1Start == 7 ? "selected=\"\"" : "")>7</option>
+                <option value="8" @Html.Raw(Model.Payday1Start == 8 ? "selected=\"\"" : "")>8</option>
+                <option value="9" @Html.Raw(Model.Payday1Start == 9 ? "selected=\"\"" : "")>9</option>
+                <option value="10" @Html.Raw(Model.Payday1Start == 10 ? "selected=\"\"" : "")>10</option>
+                <option value="11" @Html.Raw(Model.Payday1Start == 11 ? "selected=\"\"" : "")>11</option>
+                <option value="12" @Html.Raw(Model.Payday1Start == 12 ? "selected=\"\"" : "")>12</option>
+                <option value="13" @Html.Raw(Model.Payday1Start == 13 ? "selected=\"\"" : "")>13</option>
+                <option value="14" @Html.Raw(Model.Payday1Start == 14 ? "selected=\"\"" : "")>14</option>
+                <option value="15" @Html.Raw(Model.Payday1Start == 15 ? "selected=\"\"" : "")>15</option>
+                <option value="16" @Html.Raw(Model.Payday1Start == 16 ? "selected=\"\"" : "")>16</option>
+                <option value="17" @Html.Raw(Model.Payday1Start == 17 ? "selected=\"\"" : "")>17</option>
+                <option value="18" @Html.Raw(Model.Payday1Start == 18 ? "selected=\"\"" : "")>18</option>
+                <option value="19" @Html.Raw(Model.Payday1Start == 19 ? "selected=\"\"" : "")>19</option>
+                <option value="20" @Html.Raw(Model.Payday1Start == 20 ? "selected=\"\"" : "")>20</option>
+                <option value="21" @Html.Raw(Model.Payday1Start == 21 ? "selected=\"\"" : "")>21</option>
+                <option value="22" @Html.Raw(Model.Payday1Start == 22 ? "selected=\"\"" : "")>22</option>
+                <option value="23" @Html.Raw(Model.Payday1Start == 23 ? "selected=\"\"" : "")>23</option>
+                <option value="24" @Html.Raw(Model.Payday1Start == 24 ? "selected=\"\"" : "")>24</option>
+                <option value="25" @Html.Raw(Model.Payday1Start == 25 ? "selected=\"\"" : "")>25</option>
+                <option value="26" @Html.Raw(Model.Payday1Start == 26 ? "selected=\"\"" : "")>26</option>
+                <option value="27" @Html.Raw(Model.Payday1Start == 27 ? "selected=\"\"" : "")>27</option>
+                <option value="28" @Html.Raw(Model.Payday1Start == 28 ? "selected=\"\"" : "")>28</option>
+                <option value="29" @Html.Raw(Model.Payday1Start == 29 ? "selected=\"\"" : "")>29</option>
+                <option value="30" @Html.Raw(Model.Payday1Start == 30 ? "selected=\"\"" : "")>30</option>
+                <option value="31" @Html.Raw(Model.Payday1Start == 31 ? "selected=\"\"" : "")>31</option>
+                <option value="0" @Html.Raw(Model.Payday1Start == 0 ? "selected=\"\"" : "")>Último</option>
+            </select> <i></i>
+        </label>
+    </section>
+    <section class="col col-1">A:</section>
+    <section class="col col-3">
+        <label class="select">
+            <select name="payday1End" value="@Model.Payday1End">
+                <option value="-1" @Html.Raw(Model.Payday1End == -1 ? "selected=\"\"" : "") disabled="">Día</option>
+                <option value="1" @Html.Raw(Model.Payday1End == 1 ? "selected=\"\"" : "")>1</option>
+                <option value="2" @Html.Raw(Model.Payday1End == 2 ? "selected=\"\"" : "")>2</option>
+                <option value="3" @Html.Raw(Model.Payday1End == 3 ? "selected=\"\"" : "")>3</option>
+                <option value="4" @Html.Raw(Model.Payday1End == 4 ? "selected=\"\"" : "")>4</option>
+                <option value="5" @Html.Raw(Model.Payday1End == 5 ? "selected=\"\"" : "")>5</option>
+                <option value="6" @Html.Raw(Model.Payday1End == 6 ? "selected=\"\"" : "")>6</option>
+                <option value="7" @Html.Raw(Model.Payday1End == 7 ? "selected=\"\"" : "")>7</option>
+                <option value="8" @Html.Raw(Model.Payday1End == 8 ? "selected=\"\"" : "")>8</option>
+                <option value="9" @Html.Raw(Model.Payday1End == 9 ? "selected=\"\"" : "")>9</option>
+                <option value="10" @Html.Raw(Model.Payday1End == 10 ? "selected=\"\"" : "")>10</option>
+                <option value="11" @Html.Raw(Model.Payday1End == 11 ? "selected=\"\"" : "")>11</option>
+                <option value="12" @Html.Raw(Model.Payday1End == 12 ? "selected=\"\"" : "")>12</option>
+                <option value="13" @Html.Raw(Model.Payday1End == 13 ? "selected=\"\"" : "")>13</option>
+                <option value="14" @Html.Raw(Model.Payday1End == 14 ? "selected=\"\"" : "")>14</option>
+                <option value="15" @Html.Raw(Model.Payday1End == 15 ? "selected=\"\"" : "")>15</option>
+                <option value="16" @Html.Raw(Model.Payday1End == 16 ? "selected=\"\"" : "")>16</option>
+                <option value="17" @Html.Raw(Model.Payday1End == 17 ? "selected=\"\"" : "")>17</option>
+                <option value="18" @Html.Raw(Model.Payday1End == 18 ? "selected=\"\"" : "")>18</option>
+                <option value="19" @Html.Raw(Model.Payday1End == 19 ? "selected=\"\"" : "")>19</option>
+                <option value="20" @Html.Raw(Model.Payday1End == 20 ? "selected=\"\"" : "")>20</option>
+                <option value="21" @Html.Raw(Model.Payday1End == 21 ? "selected=\"\"" : "")>21</option>
+                <option value="22" @Html.Raw(Model.Payday1End == 22 ? "selected=\"\"" : "")>22</option>
+                <option value="23" @Html.Raw(Model.Payday1End == 23 ? "selected=\"\"" : "")>23</option>
+                <option value="24" @Html.Raw(Model.Payday1End == 24 ? "selected=\"\"" : "")>24</option>
+                <option value="25" @Html.Raw(Model.Payday1End == 25 ? "selected=\"\"" : "")>25</option>
+                <option value="26" @Html.Raw(Model.Payday1End == 26 ? "selected=\"\"" : "")>26</option>
+                <option value="27" @Html.Raw(Model.Payday1End == 27 ? "selected=\"\"" : "")>27</option>
+                <option value="28" @Html.Raw(Model.Payday1End == 28 ? "selected=\"\"" : "")>28</option>
+                <option value="29" @Html.Raw(Model.Payday1End == 29 ? "selected=\"\"" : "")>29</option>
+                <option value="30" @Html.Raw(Model.Payday1End == 30 ? "selected=\"\"" : "")>30</option>
+                <option value="31" @Html.Raw(Model.Payday1End == 31 ? "selected=\"\"" : "")>31</option>
+                <option value="0" @Html.Raw(Model.Payday1End == 0 ? "selected=\"\"" : "")>Último</option>
+            </select> <i></i>
+        </label>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-3">
+        Segunda Quincena
+    </section>
+    <section class="col col-1">De:</section>
+    <section class="col col-3">
+        <label class="select">
+            <select name="payday2Start" value="@Model.Payday2Start">
+                <option value="-1" @Html.Raw(Model.Payday2Start == -1 ? "selected=\"\"" : "") disabled="">Día</option>
+                <option value="1" @Html.Raw(Model.Payday2Start == 1 ? "selected=\"\"" : "")>1</option>
+                <option value="2" @Html.Raw(Model.Payday2Start == 2 ? "selected=\"\"" : "")>2</option>
+                <option value="3" @Html.Raw(Model.Payday2Start == 3 ? "selected=\"\"" : "")>3</option>
+                <option value="4" @Html.Raw(Model.Payday2Start == 4 ? "selected=\"\"" : "")>4</option>
+                <option value="5" @Html.Raw(Model.Payday2Start == 5 ? "selected=\"\"" : "")>5</option>
+                <option value="6" @Html.Raw(Model.Payday2Start == 6 ? "selected=\"\"" : "")>6</option>
+                <option value="7" @Html.Raw(Model.Payday2Start == 7 ? "selected=\"\"" : "")>7</option>
+                <option value="8" @Html.Raw(Model.Payday2Start == 8 ? "selected=\"\"" : "")>8</option>
+                <option value="9" @Html.Raw(Model.Payday2Start == 9 ? "selected=\"\"" : "")>9</option>
+                <option value="10" @Html.Raw(Model.Payday2Start == 10 ? "selected=\"\"" : "")>10</option>
+                <option value="11" @Html.Raw(Model.Payday2Start == 11 ? "selected=\"\"" : "")>11</option>
+                <option value="12" @Html.Raw(Model.Payday2Start == 12 ? "selected=\"\"" : "")>12</option>
+                <option value="13" @Html.Raw(Model.Payday2Start == 13 ? "selected=\"\"" : "")>13</option>
+                <option value="14" @Html.Raw(Model.Payday2Start == 14 ? "selected=\"\"" : "")>14</option>
+                <option value="15" @Html.Raw(Model.Payday2Start == 15 ? "selected=\"\"" : "")>15</option>
+                <option value="16" @Html.Raw(Model.Payday2Start == 16 ? "selected=\"\"" : "")>16</option>
+                <option value="17" @Html.Raw(Model.Payday2Start == 17 ? "selected=\"\"" : "")>17</option>
+                <option value="18" @Html.Raw(Model.Payday2Start == 18 ? "selected=\"\"" : "")>18</option>
+                <option value="19" @Html.Raw(Model.Payday2Start == 19 ? "selected=\"\"" : "")>19</option>
+                <option value="20" @Html.Raw(Model.Payday2Start == 20 ? "selected=\"\"" : "")>20</option>
+                <option value="21" @Html.Raw(Model.Payday2Start == 21 ? "selected=\"\"" : "")>21</option>
+                <option value="22" @Html.Raw(Model.Payday2Start == 22 ? "selected=\"\"" : "")>22</option>
+                <option value="23" @Html.Raw(Model.Payday2Start == 23 ? "selected=\"\"" : "")>23</option>
+                <option value="24" @Html.Raw(Model.Payday2Start == 24 ? "selected=\"\"" : "")>24</option>
+                <option value="25" @Html.Raw(Model.Payday2Start == 25 ? "selected=\"\"" : "")>25</option>
+                <option value="26" @Html.Raw(Model.Payday2Start == 26 ? "selected=\"\"" : "")>26</option>
+                <option value="27" @Html.Raw(Model.Payday2Start == 27 ? "selected=\"\"" : "")>27</option>
+                <option value="28" @Html.Raw(Model.Payday2Start == 28 ? "selected=\"\"" : "")>28</option>
+                <option value="29" @Html.Raw(Model.Payday2Start == 29 ? "selected=\"\"" : "")>29</option>
+                <option value="30" @Html.Raw(Model.Payday2Start == 30 ? "selected=\"\"" : "")>30</option>
+                <option value="31" @Html.Raw(Model.Payday2Start == 31 ? "selected=\"\"" : "")>31</option>
+                <option value="0" @Html.Raw(Model.Payday2Start == 0 ? "selected=\"\"" : "")>Último</option>
+            </select> <i></i>
+        </label>
+    </section>
+    <section class="col col-1">A:</section>
+    <section class="col col-3">
+        <label class="select">
+            <select name="payday2End" value="@Model.Payday2End">
+                <option value="-1" @Html.Raw(Model.Payday2End == -1 ? "selected=\"\"" : "") disabled="">Día</option>
+                <option value="1" @Html.Raw(Model.Payday2End == 1 ? "selected=\"\"" : "")>1</option>
+                <option value="2" @Html.Raw(Model.Payday2End == 2 ? "selected=\"\"" : "")>2</option>
+                <option value="3" @Html.Raw(Model.Payday2End == 3 ? "selected=\"\"" : "")>3</option>
+                <option value="4" @Html.Raw(Model.Payday2End == 4 ? "selected=\"\"" : "")>4</option>
+                <option value="5" @Html.Raw(Model.Payday2End == 5 ? "selected=\"\"" : "")>5</option>
+                <option value="6" @Html.Raw(Model.Payday2End == 6 ? "selected=\"\"" : "")>6</option>
+                <option value="7" @Html.Raw(Model.Payday2End == 7 ? "selected=\"\"" : "")>7</option>
+                <option value="8" @Html.Raw(Model.Payday2End == 8 ? "selected=\"\"" : "")>8</option>
+                <option value="9" @Html.Raw(Model.Payday2End == 9 ? "selected=\"\"" : "")>9</option>
+                <option value="10" @Html.Raw(Model.Payday2End == 10 ? "selected=\"\"" : "")>10</option>
+                <option value="11" @Html.Raw(Model.Payday2End == 11 ? "selected=\"\"" : "")>11</option>
+                <option value="12" @Html.Raw(Model.Payday2End == 12 ? "selected=\"\"" : "")>12</option>
+                <option value="13" @Html.Raw(Model.Payday2End == 13 ? "selected=\"\"" : "")>13</option>
+                <option value="14" @Html.Raw(Model.Payday2End == 14 ? "selected=\"\"" : "")>14</option>
+                <option value="15" @Html.Raw(Model.Payday2End == 15 ? "selected=\"\"" : "")>15</option>
+                <option value="16" @Html.Raw(Model.Payday2End == 16 ? "selected=\"\"" : "")>16</option>
+                <option value="17" @Html.Raw(Model.Payday2End == 17 ? "selected=\"\"" : "")>17</option>
+                <option value="18" @Html.Raw(Model.Payday2End == 18 ? "selected=\"\"" : "")>18</option>
+                <option value="19" @Html.Raw(Model.Payday2End == 19 ? "selected=\"\"" : "")>19</option>
+                <option value="20" @Html.Raw(Model.Payday2End == 20 ? "selected=\"\"" : "")>20</option>
+                <option value="21" @Html.Raw(Model.Payday2End == 21 ? "selected=\"\"" : "")>21</option>
+                <option value="22" @Html.Raw(Model.Payday2End == 22 ? "selected=\"\"" : "")>22</option>
+                <option value="23" @Html.Raw(Model.Payday2End == 23 ? "selected=\"\"" : "")>23</option>
+                <option value="24" @Html.Raw(Model.Payday2End == 24 ? "selected=\"\"" : "")>24</option>
+                <option value="25" @Html.Raw(Model.Payday2End == 25 ? "selected=\"\"" : "")>25</option>
+                <option value="26" @Html.Raw(Model.Payday2End == 26 ? "selected=\"\"" : "")>26</option>
+                <option value="27" @Html.Raw(Model.Payday2End == 27 ? "selected=\"\"" : "")>27</option>
+                <option value="28" @Html.Raw(Model.Payday2End == 28 ? "selected=\"\"" : "")>28</option>
+                <option value="29" @Html.Raw(Model.Payday2End == 29 ? "selected=\"\"" : "")>29</option>
+                <option value="30" @Html.Raw(Model.Payday2End == 30 ? "selected=\"\"" : "")>30</option>
+                <option value="31" @Html.Raw(Model.Payday2End == 31 ? "selected=\"\"" : "")>31</option>
+                <option value="0" @Html.Raw(Model.Payday2End == 0 ? "selected=\"\"" : "")>Último</option>
+            </select> <i></i>
+        </label>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-3">
+        Pago semanal
+    </section>
+    <section class="col col-1">Día:</section>
+    <section class="col col-3">
+        <label class="select">
+            <select name="payday4Start" value="@Model.Payday4Start">
+                <option value="-1" @Html.Raw(Model.Payday4Start == -1 ? "selected=\"\"" : "") disabled="">Día</option>
+                <option value="1" @Html.Raw(Model.Payday4Start == 1 ? "selected=\"\"" : "")>Lunes</option>
+                <option value="2" @Html.Raw(Model.Payday4Start == 2 ? "selected=\"\"" : "")>Martes</option>
+                <option value="3" @Html.Raw(Model.Payday4Start == 3 ? "selected=\"\"" : "")>Miércoles</option>
+                <option value="4" @Html.Raw(Model.Payday4Start == 4 ? "selected=\"\"" : "")>Jueves</option>
+                <option value="5" @Html.Raw(Model.Payday4Start == 5 ? "selected=\"\"" : "")>Viernes</option>
+                <option value="6" @Html.Raw(Model.Payday4Start == 6 ? "selected=\"\"" : "")>Sábado</option>
+                <option value="7" @Html.Raw(Model.Payday4Start == 7 ? "selected=\"\"" : "")>Domingo</option>
+            </select> <i></i>
+        </label>
+    </section>
+</div>
+<div class="row">
+    @{
+        if (Model.LogoImage != null && Model.LogoImage.Length != 0) {
+            var logoBase64 = Convert.ToBase64String(Model.LogoImage);
+            var logoImg = string.Format("data:image/png;base64,{0}", logoBase64);
+            <section class="col col-2">
+                <img width="60vw" src="@logoImg"/>
+            </section>
+        }
+        else {
+            <section class="col col-2">
+                <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png"/>
+            </section>
+        }
+    }
 
-                </footer>
-            </form>
+    <section class="col col-10">
+        <div class="input input-file">
+            <span class="button"><input value="@Model.LogoImage" id="logoImage" type="file" name="logoImage" onchange="this.parentNode.nextSibling.value = this.value">Examinar</span><input type="text" placeholder="Logo" readonly="">
         </div>
-    </div><!-- /.modal-content -->
+    </section>
+</div>
+<div class="row">
+    @{
+        if (Model.LogoImage != null && Model.LogoImage.Length != 0) {
+            var headerBase64 = Convert.ToBase64String(Model.LogoImage);
+            var headerImg = string.Format("data:image/png;base64,{0}", headerBase64);
+            <section class="col col-2">
+                <img width="60vw" src="@headerImg"/>
+            </section>
+        }
+        else {
+            <section class="col col-2">
+                <img width="60vw" src="http://info.astronauts.es/css/img/icono_companies.png"/>
+            </section>
+        }
+    }
+    <section class="col col-10">
+        <div class="input input-file">
+            <span class="button"><input value="@Model.HeaderImage" id="headerImage" type="file" name="headerImage" onchange="this.parentNode.nextSibling.value = this.value">Examinar</span><input type="text" placeholder="Encabezado" readonly="">
+        </div>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-6">
+        <label class="checkbox">
+            <input type="checkbox" validate="" name="usesPunchClock" id="usesPunchClock"
+                   value="@Model.UsesPunchClock" @Html.Raw(Model.UsesPunchClock == "1" ? "checked" : "")>
+            <i></i>¿Utiliza reloj checador?
+        </label>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-6">
+        <label class="input">
+            <i class="icon-prepend fa fa-dollar"></i>
+            <input type="number" name="vat" placeholder="IVA (%)" value="@Model.Vat">
+        </label>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-6">
+        <label class="select">
+            <select name="state" value="@Model.State">
+                <option value="0" @Html.Raw(Model.State == "0" ? "selected=\"\"" : "") disabled="">Entidad Federativa</option>
+                <option @Html.Raw(Model.State == "Aguascalientes" ? "selected=\"\"" : "") value="Aguascalientes">Aguascalientes</option>
+                <option @Html.Raw(Model.State == "Baja California" ? "selected=\"\"" : "") value="Baja California">Baja California</option>
+                <option @Html.Raw(Model.State == "Baja California Sur" ? "selected=\"\"" : "") value="Baja California Sur">Baja California Sur</option>
+                <option @Html.Raw(Model.State == "Campeche" ? "selected=\"\"" : "") value="Campeche">Campeche</option>
+                <option @Html.Raw(Model.State == "Chiapas" ? "selected=\"\"" : "") value="Chiapas">Chiapas</option>
+                <option @Html.Raw(Model.State == "Chihuahua" ? "selected=\"\"" : "") value="Chihuahua">Chihuahua</option>
+                <option @Html.Raw(Model.State == "Ciudad de México" ? "selected=\"\"" : "") value="Ciudad de México">Ciudad de México</option>
+                <option @Html.Raw(Model.State == "Coahuila de Zaragoza" ? "selected=\"\"" : "") value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
+                <option @Html.Raw(Model.State == "Colima" ? "selected=\"\"" : "") value="Colima">Colima</option>
+                <option @Html.Raw(Model.State == "Durango" ? "selected=\"\"" : "") value="Durango">Durango</option>
+                <option @Html.Raw(Model.State == "Guanajuato" ? "selected=\"\"" : "") value="Guanajuato">Guanajuato</option>
+                <option @Html.Raw(Model.State == "Guerrero" ? "selected=\"\"" : "") value="Guerrero">Guerrero</option>
+                <option @Html.Raw(Model.State == "Hidalgo" ? "selected=\"\"" : "") value="Hidalgo">Hidalgo</option>
+                <option @Html.Raw(Model.State == "Jalisco" ? "selected=\"\"" : "") value="Jalisco">Jalisco</option>
+                <option @Html.Raw(Model.State == "México" ? "selected=\"\"" : "") value="México">México</option>
+                <option @Html.Raw(Model.State == "Michoacán de Ocampo" ? "selected=\"\"" : "") value="Michoacán de Ocampo">Michoacán de Ocampo</option>
+                <option @Html.Raw(Model.State == "Morelos" ? "selected=\"\"" : "") value="Morelos">Morelos</option>
+                <option @Html.Raw(Model.State == "Nayarit" ? "selected=\"\"" : "") value="Nayarit">Nayarit</option>
+                <option @Html.Raw(Model.State == "Nuevo León" ? "selected=\"\"" : "") value="Nuevo León">Nuevo León</option>
+                <option @Html.Raw(Model.State == "Oaxaca" ? "selected=\"\"" : "") value="Oaxaca">Oaxaca</option>
+                <option @Html.Raw(Model.State == "Puebla" ? "selected=\"\"" : "") value="Puebla">Puebla</option>
+                <option @Html.Raw(Model.State == "Querétaro de Arteaga" ? "selected=\"\"" : "") value="Querétaro de Arteaga">Querétaro de Arteaga</option>
+                <option @Html.Raw(Model.State == "Quintana Roo" ? "selected=\"\"" : "") value="Quintana Roo">Quintana Roo</option>
+                <option @Html.Raw(Model.State == "San Luis Potosí" ? "selected=\"\"" : "") value="San Luis Potosí">San Luis Potosí</option>
+                <option @Html.Raw(Model.State == "Sinaloa" ? "selected=\"\"" : "") value="Sinaloa">Sinaloa</option>
+                <option @Html.Raw(Model.State == "Sonora" ? "selected=\"\"" : "") value="Sonora">Sonora</option>
+                <option @Html.Raw(Model.State == "Tabasco" ? "selected=\"\"" : "") value="Tabasco">Tabasco</option>
+                <option @Html.Raw(Model.State == "Tamaulipas" ? "selected=\"\"" : "") value="Tamaulipas">Tamaulipas</option>
+                <option @Html.Raw(Model.State == "Tlaxcala" ? "selected=\"\"" : "") value="Tlaxcala">Tlaxcala</option>
+                <option @Html.Raw(Model.State == "Veracruz de Ignacio de la Llave" ? "selected=\"\"" : "") value="Veracruz de Ignacio de la Llave">Veracruz de Ignacio de la Llave</option>
+                <option @Html.Raw(Model.State == "Yucatán" ? "selected=\"\"" : "") value="Yucatán">Yucatán</option>
+                <option @Html.Raw(Model.State == "Zacatecas" ? "selected=\"\"" : "") value="Zacatecas">Zacatecas</option>
+            </select> <i></i>
+        </label>
+    </section>
+    <section class="col col-6">
+        <label class="input">
+            <i class=""></i>
+            <input type="text" name="city" placeholder="Ciudad" value="@Model.City">
+        </label>
+    </section>
+</div>
+<div class="row">
+    <section class="col col-6">
+        <label class="select">
+            <select name="parentEnterprise" value="@Model.Enterprises">
+                <option value="0" @Html.Raw(Model.ParentEnterprise == -1 ? "selected=\"\"" : "") disabled="">Depende de...</option>
+                @foreach (var item in Model.Enterprises) {
+                    <option @Html.Raw(Model.ParentEnterprise == item.Id ? "selected=\"\"" : "") value="@item.Id">@item.Name</option>
+                }
+                <option @Html.Raw(Model.ParentEnterprise == 0 ? "selected=\"\"" : "") value="0">Ninguna</option>
+            </select> <i></i>
+        </label>
+    </section>
+    <section class="col col-6">
+        <label class="select">
+            <select name="operations" value="@Model.Operations">
+                <option @Html.Raw(Model.Operations == "0" ? "selected=\"\"" : "") value="0" selected="" disabled="">Operaciones</option>
+                <option @Html.Raw(Model.Operations == "A" ? "selected=\"\"" : "") value="A">A</option>
+                <option @Html.Raw(Model.Operations == "B" ? "selected=\"\"" : "") value="B">B</option>
+            </select> <i></i>
+        </label>
+    </section>
+</div>
+</fieldset>
+<footer>
+    <button type="button" id="submit" class="btn btn-primary">
+        Guardar
+    </button>
+    <button type="button" id="close" class="btn btn-default">
+        Cerrar
+    </button>
+
+</footer>
+</form>
+</div>
+</div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 
 <script type="text/javascript">
-    $("#laX").on("click", function () {
-        $("#newModal").modal('hide');
-        location.reload();
-    });
-    $("#close").on("click", function () {
-        $("#newModal").modal('hide');
-        location.reload();
-    });
-
-    $("#submit").on("click", function () {
-        $.ajax({
-            url: "/Empresas/_Nueva",
-            type: "POST",
-            data: new FormData($("#newForm")[0]),
-            processData: false,
-            contentType: false,
-        }).done(function (partialViewResult) {
-            $("#newModalBody").html(partialViewResult);
+    $("#laX").on("click",
+        function() {
+            $("#newModal").modal('hide');
+            location.reload();
         });
-    });
+    $("#close").on("click",
+        function() {
+            $("#newModal").modal('hide');
+            location.reload();
+        });
+
+    $("#submit").on("click",
+        function() {
+            $.ajax({
+                url: "/Empresas/_Nueva",
+                type: "POST",
+                data: new FormData($("#newForm")[0]),
+                processData: false,
+                contentType: false,
+            }).done(function(partialViewResult) {
+                $("#newModalBody").html(partialViewResult);
+            });
+        });
 </script>

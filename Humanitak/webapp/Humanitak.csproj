@@ -1060,11 +1060,12 @@
     <Content Include="Views\Clientes\_RemoveEnterprise.cshtml" />
     <Content Include="Views\Nominas\_Nueva.cshtml" />
     <Content Include="Views\Calc\Index.cshtml" />
-    <None Include="Views\Calc\_CalcData1.cshtml" />
+    <None Include="Views\Calc\_CalcData.cshtml" />
     <Content Include="Views\Clientes\_Bulk.cshtml" />
     <Content Include="Views\Empresas\_Bulk.cshtml" />
     <Content Include="Views\Empleados\_Bulk.cshtml" />
     <Content Include="Views\Calc\_CalcData2.cshtml" />
+    <Content Include="Views\CvUpload\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1098,6 +1099,7 @@
     <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CuentaController.cs" />
     <Compile Include="Controllers\CurriculumController.cs" />
+    <Compile Include="Controllers\CvUploadController.cs" />
     <Compile Include="Controllers\DepartamentoController.cs" />
     <Compile Include="Controllers\DispersionesController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
@@ -1231,6 +1233,8 @@
     <Compile Include="Models\PayDay.cs" />
     <Compile Include="Models\Perception.cs" />
     <Compile Include="Models\Position.cs" />
+    <Compile Include="Models\ResumeInfo.cs" />
+    <Compile Include="ViewModels\CvViewModel.cs" />
     <Compile Include="ViewModels\SalaryComponentsViewModel.cs" />
     <Compile Include="Models\SpecialPerception.cs" />
     <Compile Include="ViewModels\AccountForgotPasswordViewModel.cs" />
@@ -1269,6 +1273,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\realestate\thumbs\" />
+    <Folder Include="Cvs\" />
     <Folder Include="Views\Administracion\" />
     <Folder Include="Views\Puestos\" />
     <Folder Include="Views\Usuario\" />

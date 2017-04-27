@@ -1,0 +1,93 @@
+﻿@model SmartAdminMvc.ViewModels.CvViewModel
+@{
+    ViewBag.PageId = "extr-page";
+    ViewBag.PageClass = "animated fadeInDown";
+}
+@section topright{
+    <span id="extr-page-header-space" style="float: left;">¡Mándanos tu CV y estaremos en contacto contigo!</span>
+}
+<div id="content" class="container">
+
+    <section id="widget-grid" class="">
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                <div class="well no-padding">
+                    <form action="@Url.Action("Index", "CvUpload")" method="POST" id="login-form" class="smart-form client-form" enctype="multipart/form-data">
+                        <fieldset>
+                            @Html.AntiForgeryToken()
+                            <section>
+                                <label class="label">E-mail</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-user"></i>
+                                    <input type="email" name="email_cv" value="">
+                                    <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Escribe una dirección de correo electrónico</b>
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">Nombre</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-user"></i>
+                                    <input type="text" name="name">
+                                    <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Escribe tu nombre</b>
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">Seleccione un archivo</label>
+                                <div class="input input-file">
+                                    <span class="button"><input type="file" id="file" name="file" onchange="this.parentNode.nextSibling.value = this.value">Examinar</span><input type="text" placeholder="Selecciona un archivo" readonly="">
+                                </div>
+                            </section>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Enviar
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal hide" id="newModal" tabindex="-1" role="dialog">
+            <div id="newModalBody">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" id="laX" aria-hidden="true">
+                                &times;
+                            </button>
+                        </div>
+                        <div id="partialContent" class="modal-body no-padding" align="center">
+                            @if (Model.Processed) {
+                                <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                                <!--#fff0f0 -->
+                            }
+                            <br/><br/><br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+@section pagespecific{
+    <script type="text/javascript">
+        $("#laX").on("click",
+            function() {
+                $("#newModalBody").modal('hide');
+                window.location = window.location.href;
+            });
+    </script>
+    @if (Model.Processed) {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#newModal").removeClass("hide");
+                $("#newModal").addClass("show");
+                $("#newModalBody").modal('show');
+            });
+
+        </script>
+    }
+}
