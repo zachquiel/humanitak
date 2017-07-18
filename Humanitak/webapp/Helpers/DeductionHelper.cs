@@ -105,7 +105,7 @@ namespace SmartAdminMvc.Helpers {
             return imss;
         }
 
-        public static double CalculateDeductions(double dailyAmount, int totalDays, bool evenMonth = true) {
+        public static double CalculateDeductions(double dailyAmount, int totalDays, bool hasSocialSecurity, bool evenMonth = true) {
             var multiplier = 30.4166;
             var factor = 1;
             if (totalDays == 15) factor = 2;
@@ -114,12 +114,15 @@ namespace SmartAdminMvc.Helpers {
             else if (totalDays == 1) factor = 30;
             multiplier = multiplier / factor;
 
-            var imssDeduction = DeductImss(dailyAmount);
-            imssDeduction += (DeductImss(dailyAmount, !evenMonth) / 2);
-            if (totalDays == 1) imssDeduction = imssDeduction / 30;
-            else if (totalDays == 7) imssDeduction = imssDeduction / 4;
-            else if (totalDays == 10) imssDeduction = imssDeduction / 3;
-            else if (totalDays == 15) imssDeduction = imssDeduction / 2;
+            var imssDeduction = 0d;
+            if (hasSocialSecurity) {
+                imssDeduction = DeductImss(dailyAmount);
+                imssDeduction += (DeductImss(dailyAmount, !evenMonth) / 2);
+                if (totalDays == 1) imssDeduction = imssDeduction / 30;
+                else if (totalDays == 7) imssDeduction = imssDeduction / 4;
+                else if (totalDays == 10) imssDeduction = imssDeduction / 3;
+                else if (totalDays == 15) imssDeduction = imssDeduction / 2;
+            }
             var isrDeduction = CalculateIsrDeduction((dailyAmount * multiplier) - imssDeduction, totalDays);
             return isrDeduction + imssDeduction;
         }

@@ -59,6 +59,9 @@
       <HintPath>..\packages\DocumentFormat.OpenXml.1.0\lib\DocumentFormat.OpenXml.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DocX">
+      <HintPath>..\..\DocX.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -82,6 +85,8 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -504,6 +509,7 @@
     <Content Include="Content\sound\voice_on.mp3" />
     <Content Include="Content\xml\gmap\pins.xml" />
     <Content Include="Global.asax" />
+    <Content Include="Images\spinner.gif" />
     <Content Include="packages.config" />
     <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\fonts\fontawesome-webfont.ttf" />
@@ -968,6 +974,12 @@
     <Content Include="Scripts\smart-chat-ui\smart.chat.ui.min.js" />
     <Content Include="Scripts\smartwidgets\jarvis.widget.min.js" />
     <Content Include="Scripts\speech\voicecommand.min.js" />
+    <None Include="Service References\ServicioNomina\configuration91.svcinfo" />
+    <None Include="Service References\ServicioNomina\configuration.svcinfo" />
+    <None Include="Service References\ServicioNomina\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Views\web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Scripts\libs\jquery-2.1.1.min.map" />
@@ -1058,12 +1070,111 @@
     <Content Include="Views\Clientes\_RemoveEnterprise.cshtml" />
     <Content Include="Views\Nominas\_Nueva.cshtml" />
     <Content Include="Views\Calc\Index.cshtml" />
+    <None Include="Service References\ServicioNomina\ComprobantesTimbrado.wsdl" />
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ActualizarDatosFiscalesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ArrayOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.CambiarPasswordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.CancelarCFDIObjResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.CancelarCFDIResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ConfirmarRecepcionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ConsultaporEmisorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ConsultarComplementoTimbreResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ConsultarCreditosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ConsultarEstadoComprobanteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ConsultarTimbreporReferenciaResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.FacturarTicketGralResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.FacturarTicketResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.GenerarQRResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ObtenerAcuseCancelacionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ObtenerAcuseEnvioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ObtenerPDFObjResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ObtenerPDFResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.ObtenerXMLResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.RegistrarDatosFiscalesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.RegistroTicketResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.Respuesta.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.RespuestaCancelacion.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.RespuestaPDF.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.RespuestaTimbrado.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.RRegistroTicket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.SellarResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.TimbradoObjResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.TimbradoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.Timbrado_bdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.TimbrarTxTResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ServicioNomina\SmartAdminMvc.ServicioNomina.TimbrarXMLconComplementosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Templates\Contrato.docx" />
     <None Include="Views\Calc\_CalcData.cshtml" />
     <Content Include="Views\Clientes\_Bulk.cshtml" />
     <Content Include="Views\Empresas\_Bulk.cshtml" />
     <Content Include="Views\Empleados\_Bulk.cshtml" />
     <Content Include="Views\Calc\_CalcData2.cshtml" />
     <Content Include="Views\CvUpload\Index.cshtml" />
+    <Content Include="Views\Nominas\_Autorizar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1078,6 +1189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Helpers\BaseUserStore.cs" />
+    <Compile Include="App_Helpers\CatalogManager.cs" />
     <Compile Include="App_Helpers\DashRouteHandler.cs" />
     <Compile Include="App_Helpers\DataContext.cs" />
     <Compile Include="App_Helpers\StringExtensions.cs" />
@@ -1110,12 +1222,15 @@
     <Compile Include="Controllers\PrestamoController.cs" />
     <Compile Include="Controllers\PuestoController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Extensions\Double.cs" />
     <Compile Include="Extensions\Entity.cs" />
+    <Compile Include="Extensions\Int.cs" />
     <Compile Include="Extensions\String.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DeductionHelper.cs" />
+    <Compile Include="Helpers\ServiceObjects.cs" />
     <Compile Include="Migrations\201610120029420_InitialCreate.cs" />
     <Compile Include="Migrations\201610120029420_InitialCreate.Designer.cs">
       <DependentUpon>201610120029420_InitialCreate.cs</DependentUpon>
@@ -1220,7 +1335,12 @@
     <Compile Include="Migrations\201612261945229_EmpleadosN.Designer.cs">
       <DependentUpon>201612261945229_EmpleadosN.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707121037343_deNuez.cs" />
+    <Compile Include="Migrations\201707121037343_deNuez.Designer.cs">
+      <DependentUpon>201707121037343_deNuez.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CatalogEntry.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -1232,6 +1352,11 @@
     <Compile Include="Models\Perception.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\ResumeInfo.cs" />
+    <Compile Include="Service References\ServicioNomina\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CvViewModel.cs" />
     <Compile Include="ViewModels\SalaryComponentsViewModel.cs" />
     <Compile Include="Models\SpecialPerception.cs" />
@@ -1272,6 +1397,9 @@
   <ItemGroup>
     <Folder Include="Content\img\realestate\thumbs\" />
     <Folder Include="Excel\" />
+    <Folder Include="RecibosNomina\errors\" />
+    <Folder Include="RecibosNomina\pdf\" />
+    <Folder Include="RecibosNomina\xml\" />
     <Folder Include="Views\Administracion\" />
     <Folder Include="Views\Puestos\" />
     <Folder Include="Views\Usuario\" />
@@ -1355,6 +1483,15 @@
     <EmbeddedResource Include="Migrations\201612261945229_EmpleadosN.resx">
       <DependentUpon>201612261945229_EmpleadosN.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707121037343_deNuez.resx">
+      <DependentUpon>201707121037343_deNuez.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServicioNomina\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

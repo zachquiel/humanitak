@@ -68,9 +68,10 @@
                                         <th data-hide="phone">Fecha Final</th>
                                         <th data-class="expand">Acción</th>
                                         <th data-hide="phone">Estado</th>
+                                        @if (Session["User"] != null && ((User) Session["User"]).CanIssuePayments) {
+                                            <th data-hide="phone">Autorizar</th>
+                                        }
                                         <!--<th data-hide="phone">Aniversario</th>-->
-                                        <th data-hide="phone">Detalle</th>
-                                        <th data-hide="phone">Descarga</th>
                                         <th data-hide="phone">Número de Facturas por Nómina</th>
                                         <th data-hide="phone">Usuario que aprobó</th>
                                         <th data-hide="phone">Fecha de Aprobación</th>
@@ -89,16 +90,15 @@
                                                 <!--@Html.ActionLink("Días Pagados", "Dias", new {@id = item.Id })<br/>-->
                                             </td>
                                             <td style="vertical-align: middle">@item.Authorized</td>
-                                            <td style="vertical-align: middle">
-                                                <h3>
-                                                    <i class="fa fa-print fa-fw editor_edit"></i>
-                                                </h3>
-                                            </td>
-                                            <td style="vertical-align: middle">
-                                                <h3>
-                                                    <i class="fa fa-file-excel-o fa-fw editor_edit"></i>
-                                                </h3>
-                                            </td>
+                                            @if (Session["User"] != null && ((User)Session["User"]).CanIssuePayments && item.Authorized != "Aprobada") {
+                                                <td style="vertical-align: middle">
+                                                    <h3>
+                                                        <a style="color: black; cursor: pointer" onclick="showModal('#authorizeModal', '#authorizeModalBody', '@item.Id')">
+                                                            <i class="fa fa-check fa-fw editor_edit"></i>
+                                                        </a>
+                                                    </h3>
+                                                </td>
+                                            }
                                             <td style="vertical-align: middle">@item.Employees</td>
                                             <td style="vertical-align: middle">@item.Authorizer</td>
                                             <td style="vertical-align: middle">@item.AuthorizationDate</td>
@@ -129,8 +129,8 @@
     <div class="modal fade" id="newModal" data-url='@Url.Action("_Nueva", "Nominas")' tabindex="-1" role="dialog">
         <div id="newModalBody"></div>
     </div>
-    <div class="modal fade" id="deleteModal" data-url='@Url.Action("_Autorizar", "Nominas")' tabindex="-1" role="dialog">
-        <div id="deleteModalBody"></div>
+    <div class="modal fade" id="authorizeModal" data-url='@Url.Action("_Autorizar", "Nominas")' tabindex="-1" role="dialog">
+        <div id="authorizeModalBody"></div>
     </div>
 </div>
 <!-- END MAIN CONTENT -->

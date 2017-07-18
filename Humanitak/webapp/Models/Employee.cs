@@ -17,6 +17,7 @@ namespace SmartAdminMvc.Models {
         public virtual Position Position { get; set; }
         public virtual Group Group { get; set; }
         public double DailySalary { get; set; }
+        public double ComplementSalary { get; set; }
         public DateTime StartDate { get; set; }
         public string Bank { get; set; }
         public string AccountNumber { get; set; }

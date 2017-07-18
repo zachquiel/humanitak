@@ -3,10 +3,11 @@
     ViewBag.PageId = "extr-page";
     ViewBag.PageClass = "animated fadeInDown";
 }
-@section topright{
+@*@section topright{
     <span id="extr-page-header-space" style="float: left;">¡Mándanos tu CV y estaremos en contacto contigo!</span>
-}
-<div id="content" class="container">
+}*@
+<span id="extr-page-header-space" style="float: left;">¡Mándanos tu CV y estaremos en contacto contigo!</span>
+<div id="content" class="container" style="margin-top: 60px;">
 
     <section id="widget-grid" class="">
         <div class="row">
@@ -80,12 +81,18 @@
                 window.location = window.location.href;
             });
     </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("$left-panel").css("display", "none");
+        });
+    </script>
     @if (Model.Processed) {
         <script type="text/javascript">
             $(document).ready(function () {
                 $("#newModal").removeClass("hide");
                 $("#newModal").addClass("show");
                 $("#newModalBody").modal('show');
+                $("$left-panel").css("display", "none");
             });
 
         </script>

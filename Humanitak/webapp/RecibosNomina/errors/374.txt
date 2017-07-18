@@ -1,0 +1,2 @@
+2
+NOM164|El atributo Nomina.Receptor.NumSeguridadSocial debe existir.

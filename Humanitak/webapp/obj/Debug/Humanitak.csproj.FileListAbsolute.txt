@@ -102,3 +102,5 @@ D:\humanitak\Humanitak\webapp\bin\CsvReader.Excel.dll
 D:\humanitak\Humanitak\webapp\bin\DocumentFormat.OpenXml.dll
 D:\humanitak\Humanitak\webapp\bin\CsvReader.xml
 D:\humanitak\Humanitak\webapp\bin\CsvReader.Excel.xml
+D:\humanitak\Humanitak\webapp\obj\Debug\SmartAdminMvc.Migrations.deNuez.resources
+D:\humanitak\Humanitak\webapp\bin\DocX.dll

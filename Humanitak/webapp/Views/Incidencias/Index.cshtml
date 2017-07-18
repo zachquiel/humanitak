@@ -169,13 +169,38 @@
 
         </div>
     </section>
-    
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog">
+        <div id="newModalBody" align="center" style="width: 100%; height: 100%; margin-top: 25%;">
+            <img src="/Images/spinner.gif"/>
+        </div>
+    </div>
 </div>
 <!-- END MAIN CONTENT -->
 @section pagespecific {
     <script type="text/javascript">
+        function deleteEntry(eventId) {
+            $('#calendar').fullCalendar('removeEvents', eventId);
+            var theData = new FormData();
+            theData.append("EnterpriseId", @Model.Id);
+            theData.append("Id", eventId);
+            $.ajax({
+                url: "/Incidencias/DeleteEvent",
+                type: "POST",
+                data: theData,
+                processData: false,
+                contentType: false,
+                async: false
+            }).done(function(newId) {
+                if (eventId == 0)
+                    eventId = newId;
+                //alert(localEvent.id);
+                //$("#newModalBody").html(partialViewResult);
+            });
+            ///AQUI ES DONDE LLAMAMOS AL DELETE
+        }
         function checkEnable() {
-            var val = document.getElementById('event').options.item(document.getElementById('event').options.selectedIndex).value;
+            var val = document.getElementById('event').options
+                .item(document.getElementById('event').options.selectedIndex).value;
             if (val == "Horas Extra")
                 document.getElementById('horas').disabled = false;
             else
@@ -213,7 +238,9 @@
                     title: $.trim(e.children().text()), // use the element's text as the event title
                     description: $.trim(e.children('span').attr('data-description')),
                     icon: $.trim(e.children('span').attr('data-icon')),
-                    className: $.trim(e.children('span').attr('class')) // use the element's children as the event class,
+                    className: $.trim(e.children('span')
+                        .attr('class')), // use the element's children as the event class,
+                    isDirty : true
                 };
                 // store the Event Object in the DOM element so we can get to it later
                 e.data('eventObject', eventObject);
@@ -232,8 +259,15 @@
                 icon = icon.length === 0 ? " " : icon;
                 priority = priority.length === 0 ? "label label-default" : priority;
 
-                var html = $('<li><span class="' + priority + '" data-description="' + description + '" data-icon="' +
-                    icon + '">' + title + '</span></li>').prependTo('ul#external-events').hide().fadeIn();
+                var html = $('<li><span class="' +
+                    priority +
+                    '" data-description="' +
+                    description +
+                    '" data-icon="' +
+                    icon +
+                    '">' +
+                    title +
+                    '</span></li>').prependTo('ul#external-events').hide().fadeIn();
 
                 $("#event-container").effect("highlight", 800);
 
@@ -250,7 +284,8 @@
             $('#add-event').click(function() {
                 var num = document.getElementById('event').options.selectedIndex;
                 var val = document.getElementById('event').options.item(num).value;
-                var emp = document.getElementById('employee').options.item(document.getElementById('employee').options.selectedIndex).innerHTML;
+                var emp = document.getElementById('employee').options
+                    .item(document.getElementById('employee').options.selectedIndex).innerHTML;
                 /*
                  value="bg-color-darken txt-color-white"
                  value="bg-color-blue txt-color-white"
@@ -275,14 +310,16 @@
             var theEvents = [
                 @foreach (var item in Model.Incidences) {
                     @:{
-                    @:id:@item.Id,
+                    @:id: @item.Id,
                     @:title: '@item.Type' == 'Horas Extra' ? '@item.ExtraHours' + ' ' + '@item.Type' : '@item.Type',
-                    @:start: new Date(@item.Date.Year, (@item.Date.Month-1), (@item.Date.Day)),
+                    @:start: new Date(@item.Date.Year, (@item.Date.Month - 1), (@item.Date.Day)),
+                    @:modelDate: new Date(@item.Date.Year, (@item.Date.Month - 1), (@item.Date.Day)),
                     @:description: '@item.EmployeeName',
                     @:priority: "bg-color-" + options[@item.TypeIndex] + " txt-color-white",
                     @:icon: icons[@item.TypeIndex],
-                    @:allDay : true,
-                    @:className: ["event", "bg-color-"+ options[@item.TypeIndex]]
+                    @:allDay: true,
+                    @:isDirty: false,
+                    @:className: ["event", "bg-color-" + options[@item.TypeIndex]]
                     @:},
                 }
             ];
@@ -310,6 +347,7 @@
                     // assign it the date that was reported
                     copiedEventObject.start = date;
                     copiedEventObject.allDay = allDay;
+                    copiedEventObject.modelDate = date;
                     // render the event on the calendar
                     // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                     $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
@@ -321,12 +359,14 @@
                 select: function(start, end, allDay) {
                     var title = prompt('Event Title:');
                     if (title) {
-                        calendar.fullCalendar('renderEvent', {
+                        calendar.fullCalendar('renderEvent',
+                            {
                                 title: title,
                                 start: start,
                                 end: end,
                                 allDay: allDay
-                            }, true // make the event "stick"
+                            },
+                            true // make the event "stick"
                         );
                     }
                     calendar.fullCalendar('unselect');
@@ -336,21 +376,31 @@
 
                 eventRender: function(event, element, icon) {
                     allEvents.push(event);
-                    element.prepend("<span class='closeon' style='cursor:pointer;'><i class='air air-top-right fa fa-times-circle' style='right: 4px; top: 4px;'></i></span>");
+                    element
+                        .prepend("<span class='closeon' onclick='deleteEntry("+event.id+")' style='cursor:pointer;'><i class='air air-top-right fa fa-times-circle' style='right: 4px; top: 4px;'></i></span>");
                     if (!event.description == "") {
-                        element.find('.fc-event-title').append("<br/><span class='ultra-light'>" + event.description +
+                        element.find('.fc-event-title').append("<br/><span class='ultra-light'>" +
+                            event.description +
                             "</span>");
                     }
                     if (!event.icon == "") {
                         if (event.icon.substring(0, 2) != "fa") {
                             element.find('.fc-event-title').prepend("<br>");
-                            element.find('.fc-event-title').append("<i class='air air-top-left fc-event-title'>" + event.icon +
+                            element.find('.fc-event-title').append("<i class='air air-top-left fc-event-title'>" +
+                                event.icon +
                                 "</i><br>");
                         } else {
                             element.find('.fc-event-title').prepend("<br>");
-                            element.find('.fc-event-title').append("<i class='air air-top-left fa " + event.icon +
+                            element.find('.fc-event-title').append("<i class='air air-top-left fa " +
+                                event.icon +
                                 " '></i><br>");
                         }
+                        var origDate = "";
+                        if (!event.isDirty)
+                            origDate= event.modelDate.getDate() + "-"+ event.modelDate.getMonth() + "-" + event.modelDate.getFullYear();
+                        var newDate= event.start._d.getUTCDate() + "-"+ event.start._d.getUTCMonth() + "-" + event.start._d.getUTCFullYear();
+                        if (event.id != null && origDate === newDate)
+                            return;
                         ///AQUI ES DONDE LLAMAMOS AL UPSERT
                         //insercion a db:
                         var theData = new FormData();
@@ -368,6 +418,7 @@
                         theData.append("Type", event.title);
                         theData.append("ExtraHours", event.title);
                         theData.append("Id", event.id);
+                        $("#newModal").modal('show');
                         $.ajax({
                             url: "/Incidencias/InsertEvent",
                             type: "POST",
@@ -376,16 +427,16 @@
                             contentType: false,
                             async: false
                         }).done(function(newId) {
-                            if (event.id == 0)
+                            if (isNaN(event.id) || event.id === 0) {
                                 event.id = newId;
+                                event._id = newId;
+                            }
+                            $("#newModal").modal('hide');
                             //alert(localEvent.id);
                             //$("#newModalBody").html(partialViewResult);
                         });
                     }
-                    element.find(".closeon").click(function() {
-                        $('#calendar').fullCalendar('removeEvents', event._id);
-                        ///AQUI ES DONDE LLAMAMOS AL DELETE
-                    });
+
                 },
                 eventAfterAllRender: function(view) {
                     for (var index = 0; index < allEvents.length; ++index) {
@@ -401,7 +452,7 @@
                     $('#calendar').fullCalendar('render');
                 }
             });
-
+            
             /* hide default buttons */
             $('.fc-header-right, .fc-header-center').hide();
 
@@ -465,27 +516,32 @@
             function newTask() {
 
                 var myModal = $('#myModal');
-                $.get('/Empresas/Nueva', function(data) {
-                    $('#mydiv2').html(data);
-                    $('#myModal .modal-header .modal-title').html('Nueva Empresa');
-                    $('#myModal').appendTo("body").modal('show');
-                });
+                $.get('/Empresas/Nueva',
+                    function(data) {
+                        $('#mydiv2').html(data);
+                        $('#myModal .modal-header .modal-title').html('Nueva Empresa');
+                        $('#myModal').appendTo("body").modal('show');
+                    });
 
             }
 
             // Edit record
-            $('#datatable_tabletools').on('click', 'a.editor_edit', function(e) {
-                e.preventDefault();
+            $('#datatable_tabletools').on('click',
+                'a.editor_edit',
+                function(e) {
+                    e.preventDefault();
 
 
-            });
+                });
 
             // Delete a record
-            $('#datatable_tabletools').on('click', 'a.editor_remove', function(e) {
-                e.preventDefault();
+            $('#datatable_tabletools').on('click',
+                'a.editor_remove',
+                function(e) {
+                    e.preventDefault();
 
 
-            });
+                });
 
             $('#dt_basic').dataTable({
                 "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
@@ -495,7 +551,8 @@
                 "preDrawCallback": function() {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+                        responsiveHelper_dt_basic = new
+                            ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
                     }
                 },
                 "rowCallback": function(nRow) {
@@ -523,7 +580,8 @@
                 "preDrawCallback": function() {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_datatable_fixed_column) {
-                        responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
+                        responsiveHelper_datatable_fixed_column = new
+                            ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
                     }
                 },
                 "rowCallback": function(nRow) {
@@ -536,17 +594,19 @@
             });
 
             // custom toolbar
-            $("div.toolbar").html('<div class="text-right"><img src="/Content/img/logo.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
+            $("div.toolbar")
+                .html('<div class="text-right"><img src="/Content/img/logo.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
 
             // Apply the filter
-            $("#datatable_fixed_column thead th input[type=text]").on('keyup change', function() {
+            $("#datatable_fixed_column thead th input[type=text]").on('keyup change',
+                function() {
 
-                otable
-                    .column($(this).parent().index() + ':visible')
-                    .search(this.value)
-                    .draw();
+                    otable
+                        .column($(this).parent().index() + ':visible')
+                        .search(this.value)
+                        .draw();
 
-            });
+                });
             /* END COLUMN FILTER */
 
             /* COLUMN SHOW - HIDE */
@@ -558,7 +618,8 @@
                 "preDrawCallback": function() {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_datatable_col_reorder) {
-                        responsiveHelper_datatable_col_reorder = new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
+                        responsiveHelper_datatable_col_reorder = new
+                            ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
                     }
                 },
                 "rowCallback": function(nRow) {
@@ -625,7 +686,8 @@
                 "preDrawCallback": function() {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_datatable_tabletools) {
-                        responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#datatable_tabletools'), breakpointDefinition);
+                        responsiveHelper_datatable_tabletools = new
+                            ResponsiveDatatablesHelper($('#datatable_tabletools'), breakpointDefinition);
                     }
                 },
                 "rowCallback": function(nRow) {

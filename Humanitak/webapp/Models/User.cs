@@ -23,7 +23,8 @@ namespace SmartAdminMvc.Models {
 
 
         public string UserName { get; set; }
-        public string BusinessType { get; set; }
+
+        public virtual Client LinkedEnterprise { get; set; }
 
         public string FirstName { get; set; }
 

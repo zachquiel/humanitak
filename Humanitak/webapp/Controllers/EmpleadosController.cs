@@ -4,14 +4,17 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using DataAccess;
+using Novacode;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Helpers;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
+using Group = SmartAdminMvc.Models.Group;
 
 namespace SmartAdminMvc.Controllers {
     public class EmpleadosController : Controller {
@@ -30,6 +33,7 @@ namespace SmartAdminMvc.Controllers {
             using (var db = new DataContext()) {
                 var emp =
                     db.Enterprises.Where(e => e.Id == enterpriseId || e.ParentEnterprise.Id == enterpriseId).ToList();
+                var banks = db.Catalog.Where(c => c.Type == "Bank").Select(c => c.Name).ToArray();
                 var gps = new List<GroupReferenceViewModel>();
                 var pos = new List<PositionViewModel>();
                 var dep = new List<DepartmentReferenceViewModel>();
@@ -55,14 +59,79 @@ namespace SmartAdminMvc.Controllers {
                     WorkState = "0",
                     Regime = "0",
                     CalculateSalary = "0",
-                    HasSocialSecurity = "0"
+                    HasSocialSecurity = "0",
+                    BankList = banks
                 });
                 var vm = db.Employees.First(e => e.Id == employeeId).ToEmployeeViewModel(enterpriseId);
                 vm.Enterprises = mps;
                 vm.Groups = gps;
                 vm.Departments = dep;
                 vm.Positions = pos;
+                vm.BankList = banks;
                 return PartialView(vm);
+            }
+        }
+
+        public FileResult GenerateContract(long id) {
+            using (var db = new DataContext()) {
+                var emp = db.Employees.First(e => e.Id == id);
+                var ent = emp.PayingEnterprise.Client;
+                var fis = ent.FiscalInformation;
+                var fullAddress = fis.StreetAddress + " " + fis.OuterNumeral +
+                                 (string.IsNullOrEmpty(fis.InnerNumeral) ? "" : " Interior " + fis.InnerNumeral) +
+                                 ", " + fis.Area + ", " + fis.Town + ", CP " + fis.ZipCode;
+                var multiplier = 30.4166;
+                var factor = 1;
+                var frequency = "mensuales";
+                if (emp.PaymentFrequency == 15) {
+                    factor = 2;
+                    frequency = "quincenales";
+                }
+                else if (emp.PaymentFrequency == 10) {
+                    factor = 3;
+                    frequency = "catorcenales";
+                }
+                else if (emp.PaymentFrequency == 7) {
+                    factor = 4;
+                    frequency = "semanales";
+                }
+                else if (emp.PaymentFrequency == 1) {
+                    factor = 30;
+                    frequency = "diarios";
+                }
+                multiplier = multiplier / factor;
+                var salary = emp.DailySalary * multiplier;
+                var deductions = DeductionHelper.CalculateDeductions(emp.DailySalary, emp.PaymentFrequency, emp.HasSocialSecurity);
+                salary = salary - deductions;
+                var fullSalary = salary.ToString("C") + " (" + salary.ToText() + ")";
+                var fullPathOrig = Path.Combine(Server.MapPath("~/Templates/"), "Contrato.docx");
+                var fullPath = Path.Combine(Server.MapPath("~/Templates/"), new Guid() + ".docx");
+                System.IO.File.Copy(fullPathOrig, fullPath, true);
+                using (var document = DocX.Load(fullPath)) {
+                    document.ReplaceText("#NOMBREEMPRESA#", ent.Name);
+                    document.ReplaceText("#DIRECCIONEMPRESA#", fullAddress);
+                    document.ReplaceText("#REPRESENTANTELEGAL#", ent.LegalRepresentative);
+                    document.ReplaceText("#NOMBREEMPLEADO#", emp.Name + " " + emp.LastName);
+                    document.ReplaceText("#DIRECCIONEMPLEADO#", emp.Address);
+                    document.ReplaceText("#CURPEMPLEADO#", emp.Curp);
+                    document.ReplaceText("#NSSEMPLEADO#", emp.Ssn);
+                    document.ReplaceText("#PUESTOEMPLEADO#", emp.Position.Name);
+                    document.ReplaceText("#DIAINICIO#", "" + emp.StartDate.Day);
+                    document.ReplaceText("#MESINICIO#", "" + emp.StartDate.Month.ToMonth());
+                    document.ReplaceText("#ANYOINICIO#", "" + emp.StartDate.Year);
+                    document.ReplaceText("#SALARIOEMPLEADO#", "" + fullSalary);
+                    document.ReplaceText("#TEMPORALIDADPAGO#", "" + frequency);
+                    document.ReplaceText("#DIACONTRATO#", "" + emp.StartContractDate.Day);
+                    document.ReplaceText("#MESCONTRATO#", "" + emp.StartContractDate.Month.ToMonth().ToUpper());
+                    document.ReplaceText("#ANYOCONTRATO#", "" + emp.StartContractDate.Year);
+                    document.ReplaceText("#RFCEMPRESA#", "" + emp.Rfc);
+                    document.Save();
+                }
+
+                var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read) {Position = 0};
+                stream.Flush();
+                return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "Contrato"+ emp.Id + ".docx");
             }
         }
 
@@ -72,7 +141,9 @@ namespace SmartAdminMvc.Controllers {
             if (!ModelState.IsValid || viewModel == null) return _Upsert(0, 0);
             viewModel.Processed = true;
             var hasImss = !string.IsNullOrEmpty(viewModel.Ssn);
-            var dailySalary = viewModel.CalculateSalary != null ? DeductionHelper.CalculateSalary(viewModel.DailySalary, viewModel.PaymentFrequency, hasImss) : viewModel.DailySalary;
+            var dailySalary = viewModel.DailySalary;
+            if (viewModel.ComplementSalary > 0)
+                dailySalary = viewModel.CalculateSalary != null ? DeductionHelper.CalculateSalary(viewModel.DailySalary, viewModel.PaymentFrequency, hasImss) : viewModel.DailySalary;
 
             if (viewModel.Id == 0) {
                 //new
@@ -96,6 +167,7 @@ namespace SmartAdminMvc.Controllers {
                             Position = position,
                             Group = group,
                             DailySalary = dailySalary,
+                            ComplementSalary = viewModel.ComplementSalary,
                             StartDate = viewModel.StartDate,
                             Bank = viewModel.Bank,
                             AccountNumber = viewModel.AccountNumber,
@@ -156,6 +228,7 @@ namespace SmartAdminMvc.Controllers {
                 emp.Position = position;
                 emp.Group = group;
                 emp.DailySalary = dailySalary;
+                emp.ComplementSalary = viewModel.ComplementSalary;
                 emp.StartDate = viewModel.StartDate;
                 emp.Bank = viewModel.Bank;
                 emp.AccountNumber = viewModel.AccountNumber;
@@ -265,18 +338,19 @@ namespace SmartAdminMvc.Controllers {
                     try {
                         var hasImss = !string.IsNullOrEmpty(row[columns[2]]);
                         var dailySalary = !string.IsNullOrEmpty(row[columns[7]]) && row[columns[7]].ToLower() == "si" ? 
-                            DeductionHelper.CalculateSalary(double.Parse(row[columns[6]]), int.Parse(row[columns[35]]), hasImss) :
+                            DeductionHelper.CalculateSalary(double.Parse(row[columns[6]]), int.Parse(row[columns[36]]), hasImss) :
                             double.Parse(row[columns[6]]);
+                        var complementSalary = double.Parse(row[columns[8]]);
                         var parent = db.Enterprises.First(e => e.Id == enterpriseId);
                         Department department;
                         Position position;
                         Group group;
-                        var payingName = row[columns[24]];
+                        var payingName = row[columns[25]];
                         if(!db.Enterprises.Any(e => e.Name == payingName)) continue;
                         var paying = db.Enterprises.First(e => e.Name == payingName);
-                        var secondaryName = row[columns[25]];
+                        var secondaryName = row[columns[26]];
                         var secondary = db.Enterprises.FirstOrDefault(e => e.Name == secondaryName);
-                        var departmentName = row[columns[22]];
+                        var departmentName = row[columns[23]];
                         if (!parent.Departments.Any(e => e.Name == departmentName)) {
                             department = new Department {
                                 Name = departmentName,
@@ -290,7 +364,7 @@ namespace SmartAdminMvc.Controllers {
                             db.SaveChanges();
                         } else
                             department = parent.Departments.FirstOrDefault(e => e.Name == departmentName);
-                        var positionName = row[columns[23]];
+                        var positionName = row[columns[24]];
                         if (!parent.Positions.Any(e => e.Name != positionName)) {
                             position = new Position {
                                 Name = positionName
@@ -300,7 +374,7 @@ namespace SmartAdminMvc.Controllers {
                             db.SaveChanges();
                         } else
                             position = parent.Positions.FirstOrDefault(e => e.Name == positionName);
-                        var groupName = row[columns[26]];
+                        var groupName = row[columns[27]];
                         if (!string.IsNullOrEmpty(groupName) && !parent.Groups.Any(e => e.Name == groupName)) {
                             group = new Group {
                                 Name = groupName
@@ -316,38 +390,39 @@ namespace SmartAdminMvc.Controllers {
                             Ssn = row[columns[2]],
                             Curp = row[columns[3]],
                             Rfc = row[columns[4]],
-                            Email = row[columns[27]],
+                            Email = row[columns[28]],
                             Gender = row[columns[5]],
                             Department = department,
                             Position = position,
                             Group = group,
                             DailySalary = dailySalary,
-                            StartDate = DateTime.ParseExact(row[columns[8]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                            Bank = row[columns[9]],
-                            AccountNumber = row[columns[10]],
-                            OffDays = row[columns[11]],
+                            ComplementSalary = complementSalary,
+                            StartDate = DateTime.ParseExact(row[columns[9]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            Bank = row[columns[10]],
+                            AccountNumber = row[columns[11]],
+                            OffDays = row[columns[12]],
                             IsActive = true,
-                            Address = row[columns[12]],
-                            Area = row[columns[13]],
-                            ZipCode = row[columns[14]],
-                            City = row[columns[15]],
-                            State = row[columns[16]],
-                            Phone = row[columns[17]],
+                            Address = row[columns[13]],
+                            Area = row[columns[14]],
+                            ZipCode = row[columns[15]],
+                            City = row[columns[16]],
+                            State = row[columns[17]],
+                            Phone = row[columns[18]],
                             HasSocialSecurity = hasImss,
-                            DoB = DateTime.ParseExact(row[columns[18]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                            SsRegistrationDate = DateTime.ParseExact(row[columns[28]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                            PlaceOfBirth = row[columns[19]],
-                            IdNumber = row[columns[20]],
-                            MaritalStatus = row[columns[21]],
+                            DoB = DateTime.ParseExact(row[columns[19]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            SsRegistrationDate = DateTime.ParseExact(row[columns[29]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            PlaceOfBirth = row[columns[20]],
+                            IdNumber = row[columns[21]],
+                            MaritalStatus = row[columns[22]],
                             PayingEnterprise = paying,
                             SecondaryEnterprise = secondary,
-                            StartContractDate = DateTime.ParseExact(row[columns[29]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                            EndContractDate = string.IsNullOrEmpty(row[columns[30]]) ? (DateTime?)null : DateTime.ParseExact(row[columns[30]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                            PermanentContractDate = string.IsNullOrEmpty(row[columns[31]]) ? (DateTime?)null : DateTime.ParseExact(row[columns[31]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
-                            WorkState = row[columns[32]],
-                            PatronalRegistryNo = row[columns[33]],
-                            Regime = row[columns[34]],
-                            PaymentFrequency = int.Parse(row[columns[35]]),
+                            StartContractDate = DateTime.ParseExact(row[columns[30]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            EndContractDate = string.IsNullOrEmpty(row[columns[31]]) ? (DateTime?)null : DateTime.ParseExact(row[columns[31]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            PermanentContractDate = string.IsNullOrEmpty(row[columns[32]]) ? (DateTime?)null : DateTime.ParseExact(row[columns[32]].Split(' ')[0], "d/M/yyyy", new CultureInfo("es-MX")),
+                            WorkState = row[columns[33]],
+                            PatronalRegistryNo = row[columns[34]],
+                            Regime = row[columns[35]],
+                            PaymentFrequency = int.Parse(row[columns[36]]),
                             Visible = true,
                         };
                     

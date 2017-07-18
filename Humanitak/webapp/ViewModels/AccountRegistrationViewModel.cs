@@ -5,7 +5,8 @@ using SmartAdminMvc.Models;
 namespace SmartAdminMvc.ViewModels {
     public class AccountRegistrationViewModel {
         public string UserType { get; set; }
-        public string BusinessType { get; set; }
+        public long LinkedEnterprise { get; set; }
+        public string LinkedEnterpriseName { get; set; }
 
         public string FirstName { get; set; }
         public string UserName { get; set; }
@@ -39,5 +40,7 @@ namespace SmartAdminMvc.ViewModels {
         public bool Success { get; set; }
 
         public string ProcessedMessage { get; set; }
+
+        public ClientReference[] EnterpriseCatalog { get; set; }
     }
 }

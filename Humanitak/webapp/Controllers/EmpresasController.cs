@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using DataAccess;
 using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
@@ -25,7 +26,12 @@ namespace SmartAdminMvc.Controllers {
             Session["Empresa"] = null;
             var list = new List<EnterpriseViewModel>();
             using (var db = new DataContext()) {
-                var enterprises = db.Enterprises.ToList();
+                var user = (User)Session["User"];
+                var enterprises = user.LinkedEnterprise == null
+                    ? db.Enterprises.ToList()
+                    : db.Clients.First(c => c.Id == user.LinkedEnterprise.Id).Enterprises;
+                var ids = enterprises.Select(e => e.Id);
+                enterprises.AddRange(db.Enterprises.Where(c => ids.Contains(c.ParentEnterprise.Id)));
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var enterprise in enterprises)
                     list.Add(new EnterpriseViewModel {

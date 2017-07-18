@@ -20,6 +20,8 @@ namespace SmartAdminMvc.Models {
         public double VacationPrime { get; set; }
         public double Perceptions { get; set; }
         public double Deductions { get; set; }
+        public double IsrDeduction { get; set; }
+        public double ImssDeduction { get; set; }
         public DateTime PayDate { get; set; }
     }
 }

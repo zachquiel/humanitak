@@ -96,6 +96,13 @@
                             </label>
                         </section>
                     </div>
+                    <div class="row">
+                        <section class="col col-6">
+                            <label class="input">
+                                <input type="number" name="complementSalary" placeholder="Complemento Salario" value="@(Model.ComplementSalary == 0 ? "" : Model.ComplementSalary.ToString())">
+                            </label>
+                        </section>
+                    </div>
                     <div class="row" id="salaryPanel">
                     <section class="col col-6">
                         <label class="select">
@@ -175,13 +182,9 @@
                                     <option @Html.Raw((Model.Bank == "0") ? "selected=\"\"" : "") value="0" selected="" disabled="">Banco</option>
                                     <option @Html.Raw((Model.Bank == "(Pago en efectivo)") ? "selected=\"\"" : "") value="(Pago en efectivo)">(Pago en efectivo)</option>
                                     <option @Html.Raw((Model.Bank == "(Cheque)") ? "selected=\"\"" : "") value="(Cheque)">(Cheque)</option>
-                                    <option @Html.Raw((Model.Bank == "HSBC") ? "selected=\"\"" : "") value="HSBC">HSBC</option>
-                                    <option @Html.Raw((Model.Bank == "BANORTE") ? "selected=\"\"" : "") value="BANORTE">BANORTE</option>
-                                    <option @Html.Raw((Model.Bank == "BANCOMER") ? "selected=\"\"" : "") value="BANCOMER">BANCOMER</option>
-                                    <option @Html.Raw((Model.Bank == "SANTANDER") ? "selected=\"\"" : "") value="SANTANDER">SANTANDER</option>
-                                    <option @Html.Raw((Model.Bank == "BANAMEX") ? "selected=\"\"" : "") value="BANAMEX">BANAMEX</option>
-                                    <option @Html.Raw((Model.Bank == "SCOTIABANK") ? "selected=\"\"" : "") value="SCOTIABANK">SCOTIABANK</option>
-                                    <option @Html.Raw((Model.Bank == "BANCOPPEL") ? "selected=\"\"" : "") value="BANCOPPEL">BANCOPPEL</option>
+                                    @foreach (var b in Model.BankList) {
+                                        <option @Html.Raw((Model.Bank == b) ? "selected=\"\"" : "") value="@b">@b</option>
+                                    }
                                 </select> <i></i>
                             </label>
                         </section>

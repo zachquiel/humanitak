@@ -1,30 +1,45 @@
-﻿<!-- RIBBON -->
-<div id="ribbon">
+﻿@using SmartAdminMvc.ViewModels
 
-    
+@if (Model == null || Model.GetType() != typeof(CvViewModel)) {
+    <!-- RIBBON -->
+    <div id="ribbon" style="padding: 0px">
 
-    
-    <!-- breadcrumb -->
-    <ol class="breadcrumb" style="padding: 11px 5px 11px 0 !important">
-    </ol>
-    <div id="preBCLabel" style="color: #e4e4e4 !important; display: inline-block; margin: 0; padding: 11px 34px 11px 0 !important; vertical-align: top;">
-        @if (Session["Empresa"] != null)
+
+
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb" style="padding: 11px 5px 11px 0 !important">
+        </ol>
+        <div id="preBCLabel" style="color: #e4e4e4 !important; display: inline-block; margin: 0; padding: 11px 34px 11px 0 !important; vertical-align: top;">
+            @if (Session["Empresa"] != null) {
+                @("/       " + Session["Empresa"])
+
+            }
+        </div>
+        @if (@Model is HelperResult)
         {
-            @("/       " + Session["Empresa"])
-            
+            @Model
         }
+        else
+        {
+            <div class="pull-right">
+                <div id="logout" class="btn-header transparent pull-right">
+                    <span> <a style="margin-top: 5px;" href="@Url.Action("login", "account")" title="Cerrar Sesión" data-action="userLogout"><i class="fa fa-sign-out"></i></a> </span>
+                </div>
+            </div>
+        }
+        <!-- end breadcrumb -->
+        <!-- You can also add more buttons to the
+        ribbon for further usability
+
+        Example below:
+
+        <span class="ribbon-button-alignment pull-right">
+            <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+            <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+            <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+        </span> -->
+
     </div>
-    <!-- end breadcrumb -->
-    <!-- You can also add more buttons to the
-    ribbon for further usability
-
-    Example below:
-
-    <span class="ribbon-button-alignment pull-right">
-    <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-    <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-    <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-    </span> -->
-
-</div>
-<!-- END RIBBON -->
+    <!-- END RIBBON -->
+}

@@ -1,0 +1,2 @@
+5
+NOM173|El valor del atributo Nomina.Receptor.FechaInicioRelLaboral no es menor o igual al atributo a FechaFinalPago.

@@ -72,7 +72,7 @@
                                     <th data-hide="phone">Tipo de Usuario</th>
                                     <th data-hide="phone,tablet">Último acceso</th>
                                     <th data-hide="phone,tablet">Estado</th>
-                                    <th data-hide="phone,tablet">Empresas ligadas</th>
+                                    <th data-hide="phone,tablet">Empresa ligada</th>
                                     <th data-hide="phone,tablet">Reset password</th>
                                     <th data-hide="phone,tablet">Editar</th>
                                     <th data-hide="phone,tablet">Eliminar</th>
@@ -87,7 +87,7 @@
                                         <td style="vertical-align: middle">@Html.DisplayFor(modelItem => item.UserType)</td>
                                         <td style="vertical-align: middle">@item.LastAccess.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                         <td style="vertical-align: middle">@(item.IsActive ? "Activo" : "Inactivo")</td>
-                                        <td style="vertical-align: middle">@Html.DisplayFor(modelItem => item.BusinessType)</td>
+                                        <td style="vertical-align: middle">@Html.DisplayFor(modelItem => item.LinkedEnterpriseName)</td>
                                         <td style="vertical-align: middle"><h3><i class="fa fa-unlock fa-fw editor_edit"></i></h3></td>
                                         <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" data-toggle="modal" onclick="showModal('#editModal', '#editModalBody', '@item.Id')"><i class="fa fa-pencil-square-o fa-fw editor_edit"></i></a></h3></td>
                                         <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="showModal('#deleteModal', '#deleteModalBody', '@item.Id')"><i class="fa fa-trash-o fa-fw editor_remove"></i></a></h3></td>

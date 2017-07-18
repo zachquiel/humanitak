@@ -1,4 +1,6 @@
-﻿namespace SmartAdminMvc
+﻿using SmartAdminMvc.App_Helpers;
+
+namespace SmartAdminMvc
 {
     public static class IdentityConfig
     {
@@ -6,6 +8,7 @@
         {
             // Ensures the default demo user is available to login with
             UserManager.Seed();
+            CatalogManager.Seed();
         }
     }
 }

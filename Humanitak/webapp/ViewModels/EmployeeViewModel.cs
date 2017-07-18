@@ -17,6 +17,7 @@ namespace SmartAdminMvc.ViewModels {
         public long GroupId { get; set; }
         public string GroupName { get; set; }
         public double DailySalary { get; set; }
+        public double ComplementSalary { get; set; }
         public DateTime StartDate { get; set; }
         public string Bank { get; set; }
         public string AccountNumber { get; set; }
@@ -50,5 +51,6 @@ namespace SmartAdminMvc.ViewModels {
         public string Regime { get; set; }
         public string CalculateSalary { get; set; }
         public int PaymentFrequency { get; set; }
+        public string[] BankList { get; set; }
     }
 }

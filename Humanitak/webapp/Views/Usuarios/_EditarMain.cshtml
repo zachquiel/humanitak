@@ -47,9 +47,14 @@
         </div>
         <div class="row">
             <section class="col col-6">
-                <label class="input">
-                    <i class="icon-prepend fa fa-building"></i>
-                    <input type="text" name="businessType" placeholder="Tipo/Empresa" value="@Model.BusinessType">
+                <label class="select">
+                    <select name="linkedEnterprise" value="@Model.LinkedEnterprise">
+                        <option @Html.Raw((Model.LinkedEnterprise == -1) ? "selected=\"\"" : "") value="-1" selected="" disabled="">Empresa Ligada</option>
+                        <option @Html.Raw((Model.LinkedEnterprise == 0) ? "selected=\"\"" : "") value="0">Todas</option>
+                        @foreach (var b in Model.EnterpriseCatalog) {
+                            <option @Html.Raw((Model.LinkedEnterprise == b.Id) ? "selected=\"\"" : "") value="@b.Id">@b.Name</option>
+                        }
+                    </select> <i></i>
                 </label>
             </section>
             <section class="col col-6">
@@ -88,6 +93,7 @@
         var userType = $('[name="userType"]').val();
         var businessType = $('[name="businessType"]').val();
         var canIssuePayments = $('[name="canIssuePayments"]').val();
+        var linkedEnterprise = $('[name="linkedEnterprise"]').val();
         $.ajax({
                 url: "/Usuarios/_EditarMain",
                 type: "POST",
@@ -97,7 +103,8 @@
                     email: email,
                     userType: userType,
                     businessType: businessType,
-                    canIssuePayments: canIssuePayments
+                    canIssuePayments: canIssuePayments,
+                    linkedEnterprise: linkedEnterprise
                 }
             })
             .done(function (partialViewResult) {

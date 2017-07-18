@@ -21,10 +21,12 @@ namespace SmartAdminMvc.Controllers {
 
         [HttpPost]
         [Authorize]
+        [ValidateInput(false)]
         public long InsertEvent(IncidenceViewModel viewModel) {
             if (viewModel == null) return 0;
             try {
                 using (var db = new DataContext()) {
+                    var incidences = db.Incidences.ToList();
                     var ent = db.Enterprises.First(e => e.Id == viewModel.EnterpriseId);
                     if (viewModel.Id == 0) {
                         var emp = ent.Employees.First(e => (e.Name + " " + e.LastName) == viewModel.EmployeeName);
@@ -39,8 +41,10 @@ namespace SmartAdminMvc.Controllers {
                                 new CultureInfo("es-MX"))
                             .AddMonths(1)
                             .AddDays(1);
-                        if (db.Incidences.Any(i => i.Employee == emp && i.Type == type && i.Date == incidenceDate))
-                        return db.Incidences.First(i => i.Employee == emp && i.Type == type && i.Date == incidenceDate).Id;
+                        if (incidences.Any(i => i.Employee.Id == emp.Id && i.Type == type && i.Date == incidenceDate))
+                            return
+                                incidences.First(
+                                    i => i.Employee.Id == emp.Id && i.Type == type && i.Date == incidenceDate).Id;
                         var inc = new Incidence {
                             Date = incidenceDate,
                             Employee = emp,
@@ -53,7 +57,7 @@ namespace SmartAdminMvc.Controllers {
                         return inc.Id;
                     }
                     else {
-                        var inc = db.Incidences.First(i => i.Id == viewModel.Id);
+                        var inc = incidences.First(i => i.Id == viewModel.Id);
                         var date = DateTime.ParseExact(viewModel.StringDate, "dd/MM/yyyy", new CultureInfo("es-MX"))
                             .AddMonths(1)
                             .AddDays(1);
@@ -65,10 +69,33 @@ namespace SmartAdminMvc.Controllers {
                     }
                     return viewModel.Id;
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
+                var valid = ModelState.IsValid;
+            }
+            return 0;
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateInput(false)]
+        public long DeleteEvent(IncidenceViewModel viewModel) {
+            if (viewModel == null) return 0;
+            try {
+                using (var db = new DataContext()) {
+                    var incidences = db.Incidences.ToList();
+                    if (viewModel.Id == 0 || incidences.All(i => i.Id != viewModel.Id)) return viewModel.Id;
+                    var inc = incidences.First(i => i.Id == viewModel.Id);
+                    db.Incidences.Remove(inc);
+                    db.SaveChanges();
+                    return viewModel.Id;
+                }
+            }
+            catch (Exception e) {
                 var valid = ModelState.IsValid;
             }
             return 0;
         }
     }
+
 }

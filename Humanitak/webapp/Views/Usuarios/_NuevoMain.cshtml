@@ -49,17 +49,24 @@
                     <select name="userType" value="@Model.UserType">
                         <option value="0" selected="" disabled="">Nivel de Permisos</option>
                         <option value="Administrador">Administrador</option>
+                        <option value="Supervisor">Supervisor</option>
                         <option value="Reportes">Reportes</option>
                         <option value="Nómina">Nómina</option>
+                        <option value="Empleado">Empleado</option>
                     </select> <i></i>
                 </label>
             </section>
         </div>
         <div class="row">
             <section class="col col-6">
-                <label class="input">
-                    <i class="icon-prepend fa fa-building"></i>
-                    <input type="text" name="businessType" placeholder="Tipo/Empresa" value="@Model.BusinessType">
+                <label class="select">
+                    <select name="linkedEnterprise" value="@Model.LinkedEnterprise">
+                        <option @Html.Raw((Model.LinkedEnterprise == -1) ? "selected=\"\"" : "") value="-1" selected="" disabled="">Empresa Ligada</option>
+                        <option @Html.Raw((Model.LinkedEnterprise == 0) ? "selected=\"\"" : "") value="0">Todas</option>
+                        @foreach (var b in Model.EnterpriseCatalog) {
+                            <option @Html.Raw((Model.LinkedEnterprise == b.Id) ? "selected=\"\"" : "") value="@b.Id">@b.Name</option>
+                        }
+                    </select> <i></i>
                 </label>
             </section>
             <section class="col col-6">

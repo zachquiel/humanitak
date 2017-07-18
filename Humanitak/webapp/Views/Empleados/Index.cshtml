@@ -84,6 +84,7 @@
                                         <th data-class="expand">Fecha de inicio del contrato </th>
                                         <th data-class="expand">Fecha de finalización </th>
                                         <th data-class="expand">Fecha del contrato indefinido</th>
+                                        <th data-class="expand">Generar Contrato</th>
                                         <th data-class="expand">Editar</th>
                                         <th data-class="expand">Eliminar</th>
                                     </tr>
@@ -108,6 +109,7 @@
                                         <td style="vertical-align: middle">@item.StartContractDate.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                         <td style="vertical-align: middle">@(item.EndContractDate != null ? ((DateTime)item.EndContractDate).ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper() : "")</td>
                                         <td style="vertical-align: middle">@(item.PermanentContractDate != null ? ((DateTime)item.PermanentContractDate).ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper() : "")</td>
+                                        <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="generateFile('@item.Id', '@item.EnterpriseId')"><i class="fa fa-paperclip fa-fw"></i></a></h3></td>
                                         <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="showModal('#newModal', '#newModalBody', '@item.Id', '@item.EnterpriseId', false)"><i class="fa fa-pencil-square-o fa-fw editor_edit"></i></a></h3></td>
                                         <td style="vertical-align: middle"><h3><a style="color: black; cursor: pointer" onclick="showModal('#deleteModal', '#deleteModalBody', '@item.Id', '@item.EnterpriseId', false)"><i class="fa fa-trash-o fa-fw editor_remove"></i></a></h3></td>
                                     </tr>
@@ -155,6 +157,21 @@
                 $(modalContainerId).modal('show');
             });
         }
+
+        function generateFile(employeeId, enterpriseId) {
+            window.location.href = "/Empleados/GenerateContract?id=" + employeeId;
+            //$.ajax({
+            //    url: "/Empleados/_Upsert",
+            //    type: "POST",
+            //    data: { employeeId: employeeId, enterpriseId: enterpriseId },
+            //    processData: false,
+            //    contentType: false
+            //}).done(function (partialViewResult) {
+            //    $("#newModalBody").html(partialViewResult);
+            //});
+
+        }
+
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
     var editor;
     $(document).ready(function () {

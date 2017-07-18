@@ -1,0 +1,65 @@
+﻿@using SmartAdminMvc.ViewModels
+@model PayDayReference
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" id="laX" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">Autorizar Nómina </h4>
+        </div>
+        <div id="partialContent" class="modal-body no-padding">
+            <form action="@Url.Action("_Autorizar", "Nominas")" enctype="multipart/form-data" method="POST" id="newForm" class="smart-form client-form" autocomplete="off">
+                @if (Model.Processed)
+                {
+                    <header style="background-color: @(Model.Success ? "#f0fff0" : "#fff0f0");"> @Html.DisplayFor(modelItem => Model.ProcessedMessage) </header>
+                    <!--#fff0f0 -->
+                }
+                <fieldset>
+                    <div class="row">
+                        <section class="col col-12">
+                            Una vez que se autorice la nómina, se timbrarán los recibos de nómina, ¿Seguro que deseas continuar?
+                        </section>
+                    </div>
+                </fieldset>
+                <footer>
+                    @if (!Model.Processed)
+                    {
+                        <button type="button" id="submit" class="btn btn-primary">
+                            Autorizar
+                        </button>
+                    }
+                    <button type="button" id="close" class="btn btn-default">
+                        Cerrar
+                    </button>
+
+                </footer>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+
+    $("#laX").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+    $("#close").on("click", function() {
+        $("#newModal").modal('hide');
+        location.reload();
+    });
+
+    $("#submit").on("click", function () {
+        var id = '@Model.Id';
+        $.ajax({
+            url: "/Nominas/_Autorizar",
+            type: "POST",
+            data: {
+                id: id
+            },
+        }).done(function(partialViewResult) {
+            $("#authorizeModalBody").html(partialViewResult);
+        });
+    });
+</script>

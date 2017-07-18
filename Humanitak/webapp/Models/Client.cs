@@ -8,6 +8,7 @@ namespace SmartAdminMvc.Models {
         public long Id { get; set; }
 
         public string Name { get; set; }
+        public string LegalRepresentative { get; set; }
         public int Payday1Start { get; set; }
         public int Payday1End { get; set; }
         public int Payday2Start { get; set; }

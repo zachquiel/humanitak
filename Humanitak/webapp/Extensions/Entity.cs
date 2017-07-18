@@ -372,30 +372,36 @@ namespace SmartAdminMvc.Extensions {
             };
         }
 
-        public static AccountRegistrationViewModel ToAccountRegistrationViewModel(this User u) {
+        public static AccountRegistrationViewModel ToAccountRegistrationViewModel(this User u, ClientReference[] entRefs) {
             return new AccountRegistrationViewModel {
                 UserName = u.UserName,
                 UserType = u.UserType,
-                BusinessType = u.BusinessType,
+                //BusinessType = u.BusinessType,
+                LinkedEnterprise = u.LinkedEnterprise?.Id ?? -1,
+                LinkedEnterpriseName = u.LinkedEnterprise?.Name ?? "Todas",
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Id = u.Id,
                 Email = u.Email,
                 LastAccess = u.LastAccess,
                 CanIssuePayments = u.CanIssuePayments ? "1" : "0",
-                IsActive = u.IsActive
+                IsActive = u.IsActive,
+                EnterpriseCatalog = entRefs
             };
         }
 
-        public static AccountUpdateViewModel ToAccountUpdateViewModel(this User u) {
+        public static AccountUpdateViewModel ToAccountUpdateViewModel(this User u, ClientReference[] entRefs) {
             return new AccountUpdateViewModel {
                 UserName = u.UserName,
                 UserType = u.UserType,
-                BusinessType = u.BusinessType,
+                //BusinessType = u.BusinessType,
+                LinkedEnterprise = u.LinkedEnterprise?.Id ?? 0,
+                LinkedEnterpriseName = u.LinkedEnterprise?.Name ?? "Todas",
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
-                CanIssuePayments = u.CanIssuePayments ? "1" : "0"
+                CanIssuePayments = u.CanIssuePayments ? "1" : "0",
+                EnterpriseCatalog = entRefs
             };
         }
 

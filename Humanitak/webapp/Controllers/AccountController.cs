@@ -10,6 +10,7 @@ using System.Web.Security;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using SmartAdminMvc.App_Helpers;
 using SmartAdminMvc.Extensions;
 using SmartAdminMvc.Models;
 using SmartAdminMvc.ViewModels;
@@ -58,26 +59,29 @@ namespace SmartAdminMvc.Controllers
             if (!ModelState.IsValid)
                 return View(viewViewModel);
 
-            // Verify if a user exists with the provided identity information
-            var user = await _manager.FindByEmailAsync(viewViewModel.Email);
+            using (var db = new DataContext()) {
+                // Verify if a user exists with the provided identity information
+                var user = db.Users.FirstOrDefault(u => u.Email == viewViewModel.Email);
+                    //await _manager.FindByEmailAsync(viewViewModel.Email);
 
-            var valid = user.PasswordHash == viewViewModel.Password.Md5Hash();
+                if (user != null) {
+                    var valid = user.PasswordHash == viewViewModel.Password.Md5Hash();
 
-            // If a user was found
-            if (user != null && valid)
-            {
-                // Then create an identity for it and sign it in
-                await SignInAsync(user, viewViewModel.RememberMe);
-                
-                // If the user came from a specific page, redirect back to it
-                return RedirectToLocal(viewViewModel.ReturnUrl);
+                    // If a user was found
+                    if (valid) {
+                        // Then create an identity for it and sign it in
+                        await SignInAsync(user, viewViewModel.RememberMe);
+
+                        // If the user came from a specific page, redirect back to it
+                        return RedirectToLocal(viewViewModel.ReturnUrl);
+                    }
+                }
+                // No existing user was found that matched the given criteria
+                ModelState.AddModelError("", "Invalid username or password.");
+
+                // If we got this far, something failed, redisplay form
+                return View(viewViewModel);
             }
-
-            // No existing user was found that matched the given criteria
-            ModelState.AddModelError("", "Invalid username or password.");
-
-            // If we got this far, something failed, redisplay form
-            return View(viewViewModel);
         }
 
         // GET: /account/error
@@ -205,6 +209,7 @@ namespace SmartAdminMvc.Controllers
             var identity = await _manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
             user.LastAccess = DateTime.Now;
             await _manager.UpdateAsync(user);
+            Session["User"] = user;
             // Write the authentication cookie
             FormsAuthentication.SetAuthCookie(identity.Name, isPersistent);
         }

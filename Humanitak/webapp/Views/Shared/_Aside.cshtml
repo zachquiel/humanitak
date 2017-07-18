@@ -1,68 +1,71 @@
-﻿    <!-- Left panel : Navigation area -->
+﻿@using SmartAdminMvc.ViewModels
+    <!-- Left panel : Navigation area -->
 <!-- Note: This width of the aside area can be adjusted through LESS variables -->
-<aside id="left-panel">
+@if(Model == null || Model.GetType() != typeof(CvViewModel)) { 
+    <aside id="left-panel" style="padding-top: 0px;">
 
-    <!-- User info -->
-    @{ Html.RenderPartial("_CurrentUser"); }
-    <!-- end user info -->
-    <!-- NAVIGATION : This navigation is also responsive
+        <!-- User info -->
+        @{ Html.RenderPartial("_CurrentUser"); }
+        <!-- end user info -->
+        <!-- NAVIGATION : This navigation is also responsive
 
-    To make this navigation dynamic please make sure to link the node
-    (the reference to the nav > ul) after page load. Or the navigation
-    will not initialize.
-    -->
-    <nav>
-        <!-- NOTE: Notice the gaps after each icon usage <i></i>..
-        Please note that these links work a bit different than
-        traditional href="" links. See documentation for details.
+        To make this navigation dynamic please make sure to link the node
+        (the reference to the nav > ul) after page load. Or the navigation
+        will not initialize.
         -->
-        <!--<ul>
-            <li class="@Html.RouteIf("index", "active")">
-                <a href="@Url.Action("index", "home")" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
-            </li>
-        </ul>-->
-        <ul>
-            <li class="@Html.RouteIf("Home", "active")">
-                <a href="@Url.Action("Index", "Home")" title="Home"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
-            </li>
-            <li class="top-menu-invisible @Html.RouteIf("Clientes", "active")">
-                <a href="@Url.Action("Index", "Clientes")" title="Clientes"><i class="fa fa-lg fa-fw fa-male txt-color-black"></i> <span class="menu-item-parent">Clientes</span></a>
-            </li>
-            <li class="top-menu-invisible @Html.RouteIf("Empresas", "active")">
-                <a href="@Url.Action("Index", "Empresas")" title="Empresas"><i class="fa fa-lg fa-fw fa-building-o"></i> <span class="menu-item-parent">Empresas</span></a>
-            </li>
-            <li class="@Html.RouteIf("Usuarios", "active")">
-                <a href="@Url.Action("Index", "Usuarios", new {@id = ViewData["id"]})" title="Usuarios"><i class="fa fa-lg fa-fw fa-users txt-color-black"></i> <span class="menu-item-parent">Usuarios</span></a>
-            </li>
-            <li class="@Html.RouteIf("Dispersiones", "active")">
-                <a href="@Url.Action("Index", "Dispersiones", new {@id = ViewData["id"]})" title="Nomina" ><i class="fa fa-lg fa-fw fa-heart txt-color-black"></i> <span class="menu-item-parent">Dispersiones de fondos</span></a>
-            </li>
-            <li class="@Html.RouteIf("Prestamo", "active")">
-                <a href="@Url.Action("Index", "Prestamo", new {@id = ViewData["id"]})" title="Nomina" ><i class="fa fa-lg fa-fw fa-usd txt-color-black"></i> <span class="menu-item-parent">Préstamos</span></a>
-            </li>
-            <li class="@Html.RouteIf("NominaEmpleado", "active")">
-                <a href="@Url.Action("Index", "NominaEmpleado", new {@id = ViewData["id"]})" title="Nomina" ><i class="fa fa-lg fa-fw fa-credit-card txt-color-black"></i> <span class="menu-item-parent">Nómina de empleado</span></a>
-            </li>
-            <li class="@Html.RouteIf("Curriculum", "active")">
-                <a href="@Url.Action("Index", "Curriculum", new {@id = ViewData["id"]})" title="Nomina"><i class="fa fa-lg fa-fw fa-paperclip txt-color-black"></i> <span class="menu-item-parent">Curriculums</span></a>
-            </li>
-            <li class="@Html.RouteIf("Calc", "active")">
-                <a href="@Url.Action("Index", "Calc", new { @id = ViewData["id"] })" title="Nomina"><i class="fa fa-lg fa-fw fa-money txt-color-black"></i> <span class="menu-item-parent">Calculadora de Nómina</span></a>
-            </li>
-            <li class="@Html.RouteIf("Cuenta", "active")">
-                <a href="@Url.Action("Index", "Cuenta", new { @id = ViewData["id"] })" title="Nomina"><i class="fa fa-lg fa-fw fa-user txt-color-black"></i> <span class="menu-item-parent">Mi Cuenta</span></a>
-            </li>
-            <!--<li class="@Html.RouteIf("Incidencias", "active")">
-                <a href="@Url.Action("Index", "Incidencias", new {@id = ViewData["id"]})" title="Nomina"><i class="fa fa-lg fa-fw fa-exclamation-triangle txt-color-black"></i> <span class="menu-item-parent">Modulo de incidencias</span></a>
-            </li>
-            <li class="@Html.RouteIf("Administracion", "active")">
-                <a href="@Url.Action("Index", "Administracion", new { @id = ViewData["id"] })" title="Nomina" ><i class="fa fa-lg fa-fw fa-cogs txt-color-black"></i> <span class="menu-item-parent">Modulo administrativo</span></a>
-            </li>-->
-        </ul>
-    </nav>
-    <!--<span class="minifyme" data-action="minifyMenu">
-        <i class="fa fa-arrow-circle-left hit"></i>
-    </span>-->
+        <nav>
+            <!-- NOTE: Notice the gaps after each icon usage <i></i>..
+            Please note that these links work a bit different than
+            traditional href="" links. See documentation for details.
+            -->
+            <!--<ul>
+                <li class="@Html.RouteIf("index", "active")">
+                    <a href="@Url.Action("index", "home")" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+                </li>
+            </ul>-->
+            <ul>
+                <li class="@Html.RouteIf("Home", "active")">
+                    <a href="@Url.Action("Index", "Home")" title="Home"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
+                </li>
+                <li class="top-menu-invisible @Html.RouteIf("Clientes", "active")">
+                    <a href="@Url.Action("Index", "Clientes")" title="Clientes"><i class="fa fa-lg fa-fw fa-male txt-color-black"></i> <span class="menu-item-parent">Clientes</span></a>
+                </li>
+                <li class="top-menu-invisible @Html.RouteIf("Empresas", "active")">
+                    <a href="@Url.Action("Index", "Empresas")" title="Empresas"><i class="fa fa-lg fa-fw fa-building-o"></i> <span class="menu-item-parent">Empresas</span></a>
+                </li>
+                <li class="@Html.RouteIf("Usuarios", "active")">
+                    <a href="@Url.Action("Index", "Usuarios", new {@id = ViewData["id"]})" title="Usuarios"><i class="fa fa-lg fa-fw fa-users txt-color-black"></i> <span class="menu-item-parent">Usuarios</span></a>
+                </li>
+                <!--<li class="@Html.RouteIf("Dispersiones", "active")">
+                    <a href="@Url.Action("Index", "Dispersiones", new {@id = ViewData["id"]})" title="Nomina" ><i class="fa fa-lg fa-fw fa-heart txt-color-black"></i> <span class="menu-item-parent">Dispersiones de fondos</span></a>
+                </li>
+                <li class="@Html.RouteIf("Prestamo", "active")">
+                    <a href="@Url.Action("Index", "Prestamo", new {@id = ViewData["id"]})" title="Nomina" ><i class="fa fa-lg fa-fw fa-usd txt-color-black"></i> <span class="menu-item-parent">Préstamos</span></a>
+                </li>
+                <li class="@Html.RouteIf("NominaEmpleado", "active")">
+                    <a href="@Url.Action("Index", "NominaEmpleado", new {@id = ViewData["id"]})" title="Nomina" ><i class="fa fa-lg fa-fw fa-credit-card txt-color-black"></i> <span class="menu-item-parent">Nómina de empleado</span></a>
+                </li>-->
+                <li class="@Html.RouteIf("Curriculum", "active")">
+                    <a href="@Url.Action("Index", "Curriculum", new {@id = ViewData["id"]})" title="Nomina"><i class="fa fa-lg fa-fw fa-paperclip txt-color-black"></i> <span class="menu-item-parent">Curriculums</span></a>
+                </li>
+                <li class="@Html.RouteIf("Calc", "active")">
+                    <a href="@Url.Action("Index", "Calc", new { @id = ViewData["id"] })" title="Nomina"><i class="fa fa-lg fa-fw fa-money txt-color-black"></i> <span class="menu-item-parent">Calculadora de Nómina</span></a>
+                </li>
+                <!--<li class="@Html.RouteIf("Cuenta", "active")">
+                    <a href="@Url.Action("Index", "Cuenta", new { @id = ViewData["id"] })" title="Nomina"><i class="fa fa-lg fa-fw fa-user txt-color-black"></i> <span class="menu-item-parent">Mi Cuenta</span></a>
+                </li>-->
+                <!--<li class="@Html.RouteIf("Incidencias", "active")">
+                    <a href="@Url.Action("Index", "Incidencias", new {@id = ViewData["id"]})" title="Nomina"><i class="fa fa-lg fa-fw fa-exclamation-triangle txt-color-black"></i> <span class="menu-item-parent">Modulo de incidencias</span></a>
+                </li>
+                <li class="@Html.RouteIf("Administracion", "active")">
+                    <a href="@Url.Action("Index", "Administracion", new { @id = ViewData["id"] })" title="Nomina" ><i class="fa fa-lg fa-fw fa-cogs txt-color-black"></i> <span class="menu-item-parent">Modulo administrativo</span></a>
+                </li>-->
+            </ul>
+        </nav>
+        <!--<span class="minifyme" data-action="minifyMenu">
+            <i class="fa fa-arrow-circle-left hit"></i>
+        </span>-->
 
-</aside>
-<!-- END NAVIGATION -->
+    </aside>
+    <!-- END NAVIGATION -->
+}
