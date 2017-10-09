@@ -156,7 +156,8 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="startDate" name="startDate" placeholder="Fecha de Alta" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartDate == DateTime.MinValue ? "" : Model.StartDate.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="startDateVal" name="startDateVal" placeholder="Fecha de Alta" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartDate == DateTime.MinValue ? "" : Model.StartDate.ToString("dd/MM/yy"))" />
+                                <input type="hidden" id="startDate" name="startDate"/>
                             </label>
                         </section>
                         <section class="col col-6">
@@ -262,7 +263,8 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="doB" name="doB" placeholder="Fecha de Nacimiento" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.DoB == DateTime.MinValue ? "" : Model.DoB.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="doBVal" name="doBVal" placeholder="Fecha de Nacimiento" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.DoB == DateTime.MinValue ? "" : Model.DoB.ToString("dd/MM/yy"))"/>
+                                <input type="hidden" id="doB" name="doB" />
                             </label>
                         </section>
                         <section class="col col-6">
@@ -280,7 +282,8 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="ssRegistrationDate" name="ssRegistrationDate" placeholder="Fecha de alta en SS" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.SsRegistrationDate == DateTime.MinValue ? "" : Model.SsRegistrationDate.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="ssRegistrationDateVal" name="ssRegistrationDateVal" placeholder="Fecha de alta en SS" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.SsRegistrationDate == DateTime.MinValue ? "" : Model.SsRegistrationDate.ToString("dd/MM/yy"))"/>
+                                <input type="hidden" id="ssRegistrationDate" name="ssRegistrationDate" />
                             </label>
                         </section>
                     </div>
@@ -330,19 +333,22 @@
                         <section class="col col-4">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="startContractDate" name="startContractDate" placeholder="Inicio de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartContractDate == DateTime.MinValue ? "" : Model.StartContractDate.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="startContractDateVal" name="startContractDateVal" placeholder="Inicio de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartContractDate == DateTime.MinValue ? "" : Model.StartContractDate.ToString("dd/MM/yy"))"/>
+                                <input type="hidden" id="startContractDate" name="startContractDate" />
                             </label>
                         </section>
                         <section class="col col-4">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="endContractDate" name="endContractDate" placeholder="Fin de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.EndContractDate == null || Model.EndContractDate == DateTime.MinValue ? "" : ((DateTime) Model.EndContractDate).ToString("dd/MM/yy"))"/>
+                                <input type="text" id="endContractDateVal" name="endContractDateVal" placeholder="Fin de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.EndContractDate == null || Model.EndContractDate == DateTime.MinValue ? "" : ((DateTime) Model.EndContractDate).ToString("dd/MM/yy"))"/>
+                                <input type="hidden" id="endContractDate" name="endContractDate" />
                             </label>
                         </section>
                         <section class="col col-4">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="permanentContractDate" name="permanentContractDate" placeholder="Contrato Permanente" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.PermanentContractDate == null || Model.PermanentContractDate == DateTime.MinValue ? "" : ((DateTime) Model.PermanentContractDate).ToString("dd/MM/yy"))"/>
+                                <input type="text" id="permanentContractDateVal" name="permanentContractDateVal" placeholder="Contrato Permanente" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.PermanentContractDate == null || Model.PermanentContractDate == DateTime.MinValue ? "" : ((DateTime) Model.PermanentContractDate).ToString("dd/MM/yy"))"/>
+                                <input type="hidden" id="permanentContractDate" name="permanentContractDate" />
                             </label>
                         </section>
                     </div>
@@ -425,41 +431,53 @@
 </div><!-- /.modal-dialog -->
 
 <script type="text/javascript">
-    $('#startContractDate').datepicker({
+    $('#startContractDateVal').datepicker({
         dateFormat: 'dd/mm/yy',
         prevText: '<i class="fa fa-chevron-left"></i>',
         nextText: '<i class="fa fa-chevron-right"></i>',
+        altField: "#startContractDate",
+        altFormat: "mm/dd/yy",
         onSelect: function (selectedDate) {
-            $('#endContractDate').datepicker('option', 'minDate', selectedDate);
+            $('#endContractDateVal').datepicker('option', 'minDate', selectedDate);
         }
     });
-    $('#endContractDate').datepicker({
+    $('#endContractDateVal').datepicker({
         dateFormat: 'dd/mm/yy',
         prevText: '<i class="fa fa-chevron-left"></i>',
         nextText: '<i class="fa fa-chevron-right"></i>',
+        altField: "#endContractDate",
+        altFormat: "mm/dd/yy",
         onSelect: function (selectedDate) {
-            $('#startContractDate').datepicker('option', 'maxDate', selectedDate);
+            $('#startContractDateVal').datepicker('option', 'maxDate', selectedDate);
         }
     });
-    $('#startDate').datepicker({
+    $('#startDateVal').datepicker({
         dateFormat: 'dd/mm/yy',
         prevText: '<i class="fa fa-chevron-left"></i>',
-        nextText: '<i class="fa fa-chevron-right"></i>'
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        altField: "#startDate",
+        altFormat: "mm/dd/yy"
     });
-    $('#doB').datepicker({
+    $('#doBVal').datepicker({
         dateFormat: 'dd/mm/yy',
         prevText: '<i class="fa fa-chevron-left"></i>',
-        nextText: '<i class="fa fa-chevron-right"></i>'
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        altField: "#doB",
+        altFormat: "mm/dd/yy"
     });
-    $('#ssRegistrationDate').datepicker({
+    $('#ssRegistrationDateVal').datepicker({
         dateFormat: 'dd/mm/yy',
         prevText: '<i class="fa fa-chevron-left"></i>',
-        nextText: '<i class="fa fa-chevron-right"></i>'
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        altField: "#ssRegistrationDate",
+        altFormat: "mm/dd/yy"
     });
-    $('#permanentContractDate').datepicker({
+    $('#permanentContractDateVal').datepicker({
         dateFormat: 'dd/mm/yy',
         prevText: '<i class="fa fa-chevron-left"></i>',
-        nextText: '<i class="fa fa-chevron-right"></i>'
+        nextText: '<i class="fa fa-chevron-right"></i>',
+        altField: "#permanentContractDate",
+        altFormat: "mm/dd/yy"
     });
     $("#laX").on("click", function() {
         $("#newModal").modal('hide');
