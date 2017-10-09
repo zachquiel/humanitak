@@ -30,25 +30,28 @@ namespace SmartAdminMvc.Helpers {
                 new[] {234.02, 242.84, 7.16},
                 new[] {242.85, double.MaxValue, 0}
             };
-        public static double CalculateIsrFixed(double totalAmount, int totalDays) {
-            var tableVal = ChargeTable.First(c => c[0] * totalDays <= totalAmount && c[1] * totalDays >= totalAmount);
+        public static double CalculateIsrFixed(double totalAmount, double totalDays) {
+            var amount = totalAmount / totalDays;
+            var tableVal = ChargeTable.First(c => c[0] <= amount && c[1]  >= amount);
             return tableVal[2] * totalDays;
         }
 
-        public static double CalculateIsrPct(double totalAmount, int totalDays) {
-            var tableVal = ChargeTable.First(c => c[0] * totalDays <= totalAmount && c[1] * totalDays >= totalAmount);
-            var minLim = tableVal[0] * totalDays;
-            var baseVal = totalAmount - minLim;
+        public static double CalculateIsrPct(double totalAmount, double totalDays) {
+            var amount = totalAmount / totalDays;
+            var tableVal = ChargeTable.First(c => c[0] <= amount && c[1] >= amount);
+            var minLim = tableVal[0];
+            var baseVal = amount - minLim;
             var ratio = tableVal[3];
-            return baseVal * (ratio / 100);
+            return (baseVal * (ratio / 100)) * totalDays;
         }
 
-        public static double CalculateIsrSubsidy(double totalAmount, int totalDays) {
-            var subsidyVal = SubsidyTable.First(c => c[0] * totalDays <= totalAmount && c[1] * totalDays >= totalAmount);
+        public static double CalculateIsrSubsidy(double totalAmount, double totalDays) {
+            var amount = totalAmount / totalDays;
+            var subsidyVal = SubsidyTable.First(c => c[0] <= amount && c[1] >= amount);
             return subsidyVal[2] * totalDays;
         }
 
-        public static double CalculateIsr(double totalAmount, int totalDays) {
+        public static double CalculateIsr(double totalAmount, double totalDays) {
             var deduction = 0d;
             deduction += CalculateIsrFixed(totalAmount, totalDays);
             deduction += CalculateIsrPct(totalAmount, totalDays);
@@ -56,7 +59,7 @@ namespace SmartAdminMvc.Helpers {
             return totalAmount - deduction;
         }
 
-        public static double CalculateIsrDeduction(double totalAmount, int totalDays) {
+        public static double CalculateIsrDeduction(double totalAmount, double totalDays) {
             var deduction = 0d;
             deduction += CalculateIsrFixed(totalAmount, totalDays);
             deduction += CalculateIsrPct(totalAmount, totalDays);
@@ -90,8 +93,8 @@ namespace SmartAdminMvc.Helpers {
         }
 
         public static double DeductImss(double dailyAmount, bool evenMonth = true) {
-            var monthlyBeforeImss = dailyAmount * 30.4166;
-            var bimonthlyBeforeImss = dailyAmount * 60.8332;
+            var monthlyBeforeImss = dailyAmount * 30.42;//30.4166
+            var bimonthlyBeforeImss = dailyAmount * 60.84;//60.8332;
             var imss = 0d;
             if (dailyAmount >= 2001)
                 imss = evenMonth ? 785.20 : 2174.01;
@@ -106,7 +109,7 @@ namespace SmartAdminMvc.Helpers {
         }
 
         public static double CalculateDeductions(double dailyAmount, int totalDays, bool hasSocialSecurity, bool evenMonth = true) {
-            var multiplier = 30.4166;
+            var multiplier = 30.42;//30.4166
             var factor = 1;
             if (totalDays == 15) factor = 2;
             else if (totalDays == 10) factor = 3;
@@ -127,14 +130,9 @@ namespace SmartAdminMvc.Helpers {
             return isrDeduction + imssDeduction;
         }
 
-        public static SalaryComponentsViewModel GetCalculatedSalaryValues(double input, int totalDays, bool hasImss = true) {
-            var isr = CalculateIsr(input, totalDays);
-            var newInput = input;
-            while (Math.Abs(isr-input) > 0.0000001) {
-                newInput = input - isr + newInput;
-                isr = CalculateIsr(newInput, totalDays);
-            }
 
+        public static double GetDailySalary(double input, int totalDays, bool hasImss = true) {
+            var newInput = input;
             var divider = 30.4166;
             var factor = 1;
             if (totalDays == 15) factor = 2;
@@ -142,25 +140,63 @@ namespace SmartAdminMvc.Helpers {
             else if (totalDays == 7) factor = 4;
             else if (totalDays == 1) factor = 30;
             divider = divider / factor;
-
-            var dailyBeforeImss = newInput / divider;
+            var isr = CalculateIsr(input, divider);
+            var dailyBeforeImss = (newInput / divider) * 1.0452;
 
             var monthlyImss = hasImss ? CalculateImss(dailyBeforeImss) : 0;
             var bimonthlyImss = hasImss ? CalculateImss(dailyBeforeImss, false) : 0;
-            //imss = imss / divider;
             var proratedMonthlyImss = hasImss ? monthlyImss / factor : 0;
             var proratedBimonthlyImss = hasImss ? (bimonthlyImss / 2) / factor : 0;
             var proratedImss = hasImss ? proratedMonthlyImss + proratedBimonthlyImss : 0;
+            while (Math.Abs(isr + proratedImss -input) > 0.0000001) {
+                newInput = input - (isr + proratedImss) + newInput;
+                dailyBeforeImss = newInput / divider * 1.0452;
+                monthlyImss = hasImss ? CalculateImss(dailyBeforeImss) : 0;
+                bimonthlyImss = hasImss ? CalculateImss(dailyBeforeImss, false) : 0;
+                proratedMonthlyImss = hasImss ? monthlyImss / factor : 0;
+                proratedBimonthlyImss = hasImss ? (bimonthlyImss / 2) / factor : 0;
+                proratedImss = hasImss ? proratedMonthlyImss + proratedBimonthlyImss : 0;
+                isr = CalculateIsr(newInput, divider);
+            }
+            return newInput;
+        }
 
+        public static SalaryComponentsViewModel GetCalculatedSalaryValues(double input, int totalDays, bool hasImss = true) {
+            //var oldInput = input;
+            ////input = 1.04508 * input;
+            var newInput = input;
+            var divider = 30.4166;
+            var factor = 1;
+            if (totalDays == 15) factor = 2;
+            else if (totalDays == 10) factor = 3;
+            else if (totalDays == 7) factor = 4;
+            else if (totalDays == 1) factor = 30;
+            divider = divider / factor;
+            var gross = CalculateIsr(input, divider);
+            var monthlyImss = 0d;
+            var bimonthlyImss = 0d;
+            var proratedImss = 0d;
+            var net = gross - proratedImss;
+            while (Math.Abs(net - input) > 0.0000001) {
+                newInput = input - net + newInput;
+                var dailyBeforeImss = newInput / divider * 1.0452;
+                monthlyImss = hasImss ? CalculateImss(dailyBeforeImss) : 0;
+                bimonthlyImss = hasImss ? CalculateImss(dailyBeforeImss, false) : 0;
+                var proratedMonthlyImss = hasImss ? monthlyImss / factor : 0;
+                var proratedBimonthlyImss = hasImss ? (bimonthlyImss / 2) / factor : 0;
+                proratedImss = hasImss ? proratedMonthlyImss + proratedBimonthlyImss : 0;
+                gross = CalculateIsr(newInput, divider);
+                net = gross - proratedImss;
+            }
 
             var res = new SalaryComponentsViewModel {
-                FixedIsrDeduction = CalculateIsrFixed(newInput, totalDays),
-                PctIsrDeduction = CalculateIsrPct(newInput, totalDays),
-                IsrDeductionSubsidy = CalculateIsrSubsidy(newInput, totalDays),
+                FixedIsrDeduction = CalculateIsrFixed(newInput, divider),
+                PctIsrDeduction = CalculateIsrPct(newInput, divider),
+                IsrDeductionSubsidy = CalculateIsrSubsidy(newInput, divider),
                 Divider = divider,
                 MonthlyImss = monthlyImss,
                 BimonthlyImss = bimonthlyImss,
-                GrossSalary = newInput + proratedImss,
+                GrossSalary = newInput,// + proratedImss,
                 ProratedMonthlyImss = monthlyImss / factor,
                 ProratedBimonthlyImss = (bimonthlyImss / 2) / factor
             };
@@ -184,7 +220,7 @@ namespace SmartAdminMvc.Helpers {
             else if (totalDays == 1) factor = 30;
             divider = divider / factor;
 
-            var dailyBeforeImss = newInput / divider;
+            var dailyBeforeImss = (newInput / divider) * 1.0452;
 
             var monthlyImss = hasImss ? CalculateImss(dailyBeforeImss) : 0;
             var bimonthlyImss = hasImss ? CalculateImss(dailyBeforeImss, false) : 0;
@@ -195,9 +231,9 @@ namespace SmartAdminMvc.Helpers {
 
 
             var res = new SalaryComponentsViewModel {
-                FixedIsrDeduction = CalculateIsrFixed(newInput, totalDays),
-                PctIsrDeduction = CalculateIsrPct(newInput, totalDays),
-                IsrDeductionSubsidy = CalculateIsrSubsidy(newInput, totalDays),
+                FixedIsrDeduction = CalculateIsrFixed(newInput, divider),
+                PctIsrDeduction = CalculateIsrPct(newInput, divider),
+                IsrDeductionSubsidy = CalculateIsrSubsidy(newInput, divider),
                 Divider = divider,
                 MonthlyImss = monthlyImss,
                 BimonthlyImss = bimonthlyImss,
