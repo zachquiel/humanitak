@@ -138,7 +138,7 @@ namespace SmartAdminMvc.Controllers {
         [HttpPost]
         [Authorize]
         public PartialViewResult _Upsert(EmployeeViewModel viewModel) {
-            if (!ModelState.IsValid || viewModel == null) return _Upsert(0, 0);
+            if (viewModel == null) return _Upsert(0, 0);
             viewModel.Processed = true;
             var hasImss = !string.IsNullOrEmpty(viewModel.Ssn);
             var dailySalary = viewModel.DailySalary;

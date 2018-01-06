@@ -109,7 +109,7 @@ namespace SmartAdminMvc.Helpers {
         }
 
         public static double CalculateDeductions(double dailyAmount, int totalDays, bool hasSocialSecurity, bool evenMonth = true) {
-            var multiplier = 30.42;//30.4166
+            var multiplier = 30.4166;
             var factor = 1;
             if (totalDays == 15) factor = 2;
             else if (totalDays == 10) factor = 3;
