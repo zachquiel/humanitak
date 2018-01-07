@@ -105,7 +105,7 @@
                                         <td style="vertical-align: middle">@item.GroupName</td>
                                         <td style="vertical-align: middle">@item.SsRegistrationDate.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                         <td style="vertical-align: middle">@item.Email</td>
-                                        <td style="vertical-align: middle">@(item.PermanentContractDate == null ? "Temporal" : "Permanente")</td>
+                                        <td style="vertical-align: middle">@(item.PermanentContractDate != item.EndContractDate ? "Temporal" : "Permanente")</td>
                                         <td style="vertical-align: middle">@item.StartContractDate.ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper()</td>
                                         <td style="vertical-align: middle">@(item.EndContractDate != null ? ((DateTime)item.EndContractDate).ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper() : "")</td>
                                         <td style="vertical-align: middle">@(item.PermanentContractDate != null ? ((DateTime)item.PermanentContractDate).ToString("MMM dd yyyy", new CultureInfo("es-MX")).Replace(".", "").FirstCharToUpper() : "")</td>

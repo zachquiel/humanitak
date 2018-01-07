@@ -52,5 +52,6 @@ namespace SmartAdminMvc.ViewModels {
         public string CalculateSalary { get; set; }
         public int PaymentFrequency { get; set; }
         public string[] BankList { get; set; }
+        public string Duration { get; set; }
     }
 }

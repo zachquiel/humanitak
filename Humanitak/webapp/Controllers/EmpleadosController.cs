@@ -60,7 +60,8 @@ namespace SmartAdminMvc.Controllers {
                     Regime = "0",
                     CalculateSalary = "0",
                     HasSocialSecurity = "0",
-                    BankList = banks
+                    BankList = banks,
+                    Duration = ""
                 });
                 var vm = db.Employees.First(e => e.Id == employeeId).ToEmployeeViewModel(enterpriseId);
                 vm.Enterprises = mps;
@@ -144,7 +145,14 @@ namespace SmartAdminMvc.Controllers {
             var dailySalary = viewModel.DailySalary;
             if (viewModel.ComplementSalary > 0)
                 dailySalary = viewModel.CalculateSalary != null ? DeductionHelper.CalculateSalary(viewModel.DailySalary, viewModel.PaymentFrequency, hasImss) : viewModel.DailySalary;
-
+            if (viewModel.Duration == "0") {
+                viewModel.PermanentContractDate = viewModel.StartContractDate;
+                viewModel.EndContractDate = viewModel.StartContractDate;
+            }
+            else {
+                viewModel.PermanentContractDate = viewModel.StartContractDate;
+                viewModel.EndContractDate = viewModel.StartContractDate.AddDays(int.Parse("0" + viewModel.Duration));
+            }
             if (viewModel.Id == 0) {
                 //new
                 using (var db = new DataContext()) {
