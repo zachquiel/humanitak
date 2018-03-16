@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -92,6 +93,7 @@ namespace SmartAdminMvc.Controllers {
 
         [HttpPost]
         public async Task<PartialViewResult> _EditarMain(AccountUpdateViewModel viewModel) {
+            
             using (var db = new DataContext()) {
                 var entRefs = db.Clients.ToList().Select(client => client.ToClientReference()).ToArray();
                 viewModel.EnterpriseCatalog = entRefs;
@@ -109,16 +111,19 @@ namespace SmartAdminMvc.Controllers {
                 user.IsActive = true;
                 user.LastName = viewModel.LastName;
                 try {
+                    db.Entry(user.LinkedEnterprise).State = EntityState.Unchanged;
                     db.Users.AddOrUpdate(user);
                     db.SaveChanges();
-                        //await _manager.UpdateAsync(user);
+                    //var result = await _manager.UpdateAsync(user);
                     //if (!result.Succeeded) {
                     //    AddErrors(result);
                     //    foreach (var error in result.Errors)
                     //        viewModel.ProcessedMessage += error + Environment.NewLine;
                     //}
-                    viewModel.Success = true;
-                    viewModel.ProcessedMessage = "El usuario fue editado con éxito";
+                    //else {
+                        viewModel.Success = true;
+                        viewModel.ProcessedMessage = "El usuario fue editado con éxito";
+                    //}
                 }
                 catch (DbEntityValidationException ex) {
                     viewModel.ProcessedMessage = ex.Message;

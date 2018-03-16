@@ -90,13 +90,17 @@
                                                 <!--@Html.ActionLink("Días Pagados", "Dias", new {@id = item.Id })<br/>-->
                                             </td>
                                             <td style="vertical-align: middle">@item.Authorized</td>
-                                            @if (Session["User"] != null && ((User)Session["User"]).CanIssuePayments && item.Authorized != "Aprobada") {
+                                            @if (Session["User"] != null && ((User) Session["User"]).CanIssuePayments && item.Authorized != "Aprobada") {
                                                 <td style="vertical-align: middle">
                                                     <h3>
                                                         <a style="color: black; cursor: pointer" onclick="showModal('#authorizeModal', '#authorizeModalBody', '@item.Id')">
                                                             <i class="fa fa-check fa-fw editor_edit"></i>
                                                         </a>
                                                     </h3>
+                                                </td>
+                                            }
+                                            else {
+                                                <td style="vertical-align: middle">
                                                 </td>
                                             }
                                             <td style="vertical-align: middle">@item.Employees</td>

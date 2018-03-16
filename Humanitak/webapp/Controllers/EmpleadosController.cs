@@ -151,7 +151,7 @@ namespace SmartAdminMvc.Controllers {
             }
             else {
                 viewModel.PermanentContractDate = viewModel.StartContractDate;
-                viewModel.EndContractDate = viewModel.StartContractDate.AddDays(int.Parse("0" + viewModel.Duration));
+                viewModel.EndContractDate = viewModel.StartContractDate.AddDays(int.Parse("0" + viewModel.Duration)-1);
             }
             if (viewModel.Id == 0) {
                 //new
@@ -237,7 +237,8 @@ namespace SmartAdminMvc.Controllers {
                 emp.Group = group;
                 emp.DailySalary = dailySalary;
                 emp.ComplementSalary = viewModel.ComplementSalary;
-                emp.StartDate = viewModel.StartDate;
+                if (viewModel.StartDate != DateTime.MinValue) 
+                    emp.StartDate = viewModel.StartDate;
                 emp.Bank = viewModel.Bank;
                 emp.AccountNumber = viewModel.AccountNumber;
                 emp.OffDays = viewModel.OffDays;
@@ -249,16 +250,20 @@ namespace SmartAdminMvc.Controllers {
                 emp.State = viewModel.State;
                 emp.Phone = viewModel.Phone;
                 emp.HasSocialSecurity = viewModel.HasSocialSecurity != null;
-                emp.DoB = viewModel.DoB;
-                emp.SsRegistrationDate = viewModel.SsRegistrationDate;
+                if (viewModel.DoB != DateTime.MinValue)
+                    emp.DoB = viewModel.DoB;
+                if (viewModel.SsRegistrationDate != DateTime.MinValue)
+                    emp.SsRegistrationDate = viewModel.SsRegistrationDate;
                 emp.PlaceOfBirth = viewModel.PlaceOfBirth;
                 emp.IdNumber = viewModel.IdNumber;
                 emp.MaritalStatus = viewModel.MaritalStatus;
                 emp.PayingEnterprise = paying;
                 emp.SecondaryEnterprise = secondary;
-                emp.StartContractDate = viewModel.StartContractDate;
-                emp.EndContractDate = viewModel.EndContractDate;
-                emp.PermanentContractDate = viewModel.PermanentContractDate;
+                if (viewModel.StartContractDate != DateTime.MinValue) {
+                    emp.StartContractDate = viewModel.StartContractDate;
+                    emp.EndContractDate = viewModel.EndContractDate;
+                    emp.PermanentContractDate = viewModel.PermanentContractDate;
+                }
                 emp.WorkState = viewModel.WorkState;
                 emp.PatronalRegistryNo = viewModel.PatronalRegistryNo;
                 emp.Regime = viewModel.Regime;

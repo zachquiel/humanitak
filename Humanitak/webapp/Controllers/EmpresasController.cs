@@ -26,7 +26,8 @@ namespace SmartAdminMvc.Controllers {
             Session["Empresa"] = null;
             var list = new List<EnterpriseViewModel>();
             using (var db = new DataContext()) {
-                var user = (User)Session["User"];
+                var loggedUser = (User)Session["User"];
+                var user = db.Users.First(u => u.Id == loggedUser.Id);
                 var enterprises = user.LinkedEnterprise == null
                     ? db.Enterprises.ToList()
                     : db.Clients.First(c => c.Id == user.LinkedEnterprise.Id).Enterprises;

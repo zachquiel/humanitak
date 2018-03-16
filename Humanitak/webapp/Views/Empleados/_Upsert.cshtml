@@ -156,7 +156,7 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="startDateVal" name="startDateVal" placeholder="Fecha de Alta" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartDate == DateTime.MinValue ? "" : Model.StartDate.ToString("dd/MM/yy"))" />
+                                <input type="text" id="startDateVal" name="startDateVal" placeholder="Fecha de Alta" class="form-control" data-dateformat="dd/mm/yyyy" value="@(Model.StartDate == DateTime.MinValue ? "" : Model.StartDate.ToString("dd/mm/yyyy"))" />
                                 <input type="hidden" id="startDate" name="startDate"/>
                             </label>
                         </section>
@@ -263,7 +263,7 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="doBVal" name="doBVal" placeholder="Fecha de Nacimiento" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.DoB == DateTime.MinValue ? "" : Model.DoB.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="doBVal" name="doBVal" placeholder="Fecha de Nacimiento" class="form-control" data-dateformat="dd/mm/yyyy" value="@(Model.DoB == DateTime.MinValue ? "" : Model.DoB.ToString("dd/mm/yyyy"))"/>
                                 <input type="hidden" id="doB" name="doB" />
                             </label>
                         </section>
@@ -282,7 +282,7 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="ssRegistrationDateVal" name="ssRegistrationDateVal" placeholder="Fecha de alta en SS" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.SsRegistrationDate == DateTime.MinValue ? "" : Model.SsRegistrationDate.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="ssRegistrationDateVal" name="ssRegistrationDateVal" placeholder="Fecha de alta en SS" class="form-control" data-dateformat="dd/mm/yyyy" value="@(Model.SsRegistrationDate == DateTime.MinValue ? "" : Model.SsRegistrationDate.ToString("dd/mm/yyyy"))"/>
                                 <input type="hidden" id="ssRegistrationDate" name="ssRegistrationDate" />
                             </label>
                         </section>
@@ -333,7 +333,7 @@
                         <section class="col col-4">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="startContractDateVal" name="startContractDateVal" placeholder="Inicio de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.StartContractDate == DateTime.MinValue ? "" : Model.StartContractDate.ToString("dd/MM/yy"))"/>
+                                <input type="text" id="startContractDateVal" name="startContractDateVal" placeholder="Inicio de Contrato" class="form-control" data-dateformat="dd/mm/yyyy" value="@(Model.StartContractDate == DateTime.MinValue ? "" : Model.StartContractDate.ToString("dd/MM/yyyy"))"/>
                                 <input type="hidden" id="startContractDate" name="startContractDate" />
                             </label>
                         </section>
@@ -352,14 +352,14 @@
                         @*<section class="col col-4">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="endContractDateVal" name="endContractDateVal" placeholder="Fin de Contrato" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.EndContractDate == null || Model.EndContractDate == DateTime.MinValue ? "" : ((DateTime) Model.EndContractDate).ToString("dd/MM/yy"))"/>
+                                <input type="text" id="endContractDateVal" name="endContractDateVal" placeholder="Fin de Contrato" class="form-control" data-dateformat="dd/mm/yyyy" value="@(Model.EndContractDate == null || Model.EndContractDate == DateTime.MinValue ? "" : ((DateTime) Model.EndContractDate).ToString("dd/mm/yyyy"))"/>
                                 <input type="hidden" id="endContractDate" name="endContractDate" />
                             </label>
                         </section>
                         <section class="col col-4">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                <input type="text" id="permanentContractDateVal" name="permanentContractDateVal" placeholder="Contrato Permanente" class="form-control" data-dateformat="dd/mm/yy" value="@(Model.PermanentContractDate == null || Model.PermanentContractDate == DateTime.MinValue ? "" : ((DateTime) Model.PermanentContractDate).ToString("dd/MM/yy"))"/>
+                                <input type="text" id="permanentContractDateVal" name="permanentContractDateVal" placeholder="Contrato Permanente" class="form-control" data-dateformat="dd/mm/yyyy" value="@(Model.PermanentContractDate == null || Model.PermanentContractDate == DateTime.MinValue ? "" : ((DateTime) Model.PermanentContractDate).ToString("dd/mm/yyyy"))"/>
                                 <input type="hidden" id="permanentContractDate" name="permanentContractDate" />
                             </label>
                         </section>*@
